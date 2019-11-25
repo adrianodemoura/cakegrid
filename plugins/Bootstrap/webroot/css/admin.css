@@ -16,6 +16,10 @@
 {
 	/*border-bottom: 1px solid #aaa;*/
 }
+#cabecalho a
+{
+	color: #aaa;
+}
 
 #menu .nav-link
 {

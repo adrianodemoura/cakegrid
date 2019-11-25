@@ -40,37 +40,40 @@
 
 <div id="corpo" class="container">
 
-	<div id="flash" class="row">
+	<div id="flash" class="container">
     	<?= $this->Flash->render() ?>
 
     </div><!-- fim flash -->
 
-    <div id="cabecalho" class="row fundo-escuro py-1 rounded-bottom">
-        <div class="col-6">
-            <?= $this->Html->link($this->request->getSession()->read('Auth.User.email'), '/usuarios/info'); ?>
+    <div id="cabecalho" class="container fundo-escuro py-1 rounded-bottom">
+        <div class="row">
+            <div class="col-6">
+                <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/usuarios/info'); ?>
+            </div>
+            <div class="col-6 text-right">
+                <?= $this->Html->link('sair', '/usuarios/logout'); ?>
+            </div>
         </div>
-        <div class="col-6 text-right">
-            <?= $this->Html->link('sair', '/usuarios/logout'); ?>
-        </div>
-
     </div>
 
-    <div id="menu" class="row fundo-claro">
+    <div id="menu" class="container fundo-claro">
     	<?= $this->element('menu'); ?>
     </div>
 
-    <div id="conteudo" class="row border p-2">
+    <div id="conteudo" class="container border p-2">
         <?= $this->fetch('content') ?>
 
     </div><!-- fim conteudo -->
 
-    <div id="rodape" class="row fundo-claro py-2">
-        <div class="col-6">
-            <?= SISTEMA; ?>
-        </div>
+    <div id="rodape" class="container fundo-claro py-2">
+        <div class="row">
+            <div class="col-6">
+                <?= SISTEMA; ?>
+            </div>
 
-        <div class="col-6 text-right">
-            <?= date('d/m/Y H:i'); ?>
+            <div class="col-6 text-right">
+                <?= date('d/m/Y H:i'); ?>
+            </div>
         </div>
     </div>
 

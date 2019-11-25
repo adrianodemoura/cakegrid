@@ -1,46 +1,23 @@
-<?php ?>
+<?php 
+    $Menu = new Bootstrap\View\Helper\MenuHelper($this);
+    $permissoes = $this->request->getSession()->read('Auth.User.permissoes');
+?>
 <nav class="navbar navbar-expand-sm">
 
-  <!-- Links -->
-  <ul class="navbar-nav">
+<!-- Links -->
+<ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="<?= $this->Url->build('/', true); ?>">Início</a>
-    </li>
-    
-    <!-- Cadastros -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Cadastros</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="<?= $this->Url->build('/auditoria'); ?>">Auditoria</a>
-        <a class="dropdown-item" href="<?= $this->Url->build('/permissoes'); ?>">Permissões</a>
-        <a class="dropdown-item" href="<?= $this->Url->build('/usuarios'); ?>">Usuários</a>
-      </div>
+        <a class="nav-link" href="<?= $this->Url->build('/', true); ?>">Início</a>
     </li>
 
-    <!-- Ferramentas -->
+    <?php $menuPai=''; foreach($permissoes as $_url => $_arrProp) : if ($menuPai !== $_arrProp['menu']) : $menuPai = $_arrProp['menu']; ?>
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Ferramentas</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Enviar e-mail</a>
-      </div>
-    </li>
 
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><?= $menuPai ?></a>
 
-    <!-- Relatórios -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Relatórios</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Relatórios de Usuários</a>
-      </div>
+        <?= $Menu->getSubMenus($_arrProp['menu'], $permissoes); ?>
     </li>
+    <?php endif; endforeach; ?>
 
-    <!-- Ajuda -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Ajuda</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Manual</a>
-        <a class="dropdown-item" href="<?= $this->Url->build('/ajuda/sobre'); ?>">Sobre</a>
-      </div>
-    </li>
-  </ul>
+</ul>
 </nav>

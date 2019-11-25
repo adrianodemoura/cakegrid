@@ -31,7 +31,7 @@ class UsuariosTable extends Table
         parent::initialize($config);
 
         $this->setTable('usuarios');
-        $this->setDisplayField('email');
+        $this->setDisplayField('nome');
         $this->setPrimaryKey('id');
         $this->setEntityClass('Usuario');
     }
@@ -47,6 +47,11 @@ class UsuariosTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->email('nome',null,'e-mail inválido !')
+            ->requirePresence('nome', 'create')
+            ->notEmptyString('nome');
 
         $validator
             ->email('email',null,'e-mail inválido !')

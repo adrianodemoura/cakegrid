@@ -44,16 +44,22 @@ class InstalacaoCommand extends Command
             $email = @$args->getArgumentAt(0);
             $senha = @$args->getArgumentAt(1);
 
+            $totalUsuarios = $this->Usuarios->find()->count();
+            if ( $totalUsuarios>0 )
+            {
+                throw new Exception(__('A instalação já foi executada !'), 1);
+            }
             if ( !$email )
             {
-                throw new Exception(__("e-mail inválido !"), 1);
+                throw new Exception(__("e-mail inválido !"), 2);
             }
             if ( !$senha )
             {
-                throw new Exception(__("senha inválida !"), 2);
+                throw new Exception(__("senha inválida !"), 3);
             }
 
             $Usuario = $this->Usuarios->newEntity();
+            $Usuario->nome  = $email;
             $Usuario->email = $email;
             $Usuario->senha = $senha;
 
@@ -62,17 +68,17 @@ class InstalacaoCommand extends Command
                 $erros = $Usuario->getErrors();
                 $this->log($erros);
 
-                throw new Exception( __('Erro ao tentar salvar usuário, verifique os logs.'), 3);
+                throw new Exception( __('Erro ao tentar salvar usuário, verifique os logs.'), 4);
             }
 
-            echo "Usuário Administrador instalado com sucesso. abra o seu browser e acesse o sistema.";
+            echo "5] - Usuário Administrador instalado com sucesso. abra o seu browser e acesse o sistema.";
         } catch (Exception $e)
         {
-            echo $e->getCode().' - '.$e->getMessage();
+            echo $e->getCode().'] - '.$e->getMessage();
         }
 
 
-        echo "\n\n-- FIM \n\n";
+        echo "\n\n*] - FIM \n\n";
 
     }
 }

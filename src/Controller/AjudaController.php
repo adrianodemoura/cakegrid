@@ -16,15 +16,25 @@ class AjudaController extends AppController {
      */
     public function index()
     {
-        
     }
 
     /**
-     * Executa o logout da aplicação
+     * Exibe a tela manual
+     *
+     * @return  \Cake\Http\Response|null
+     */
+    public function manual()
+    {
+    }
+
+    /**
+     * Exibe a tela sobre
      *
      * @return 	\Cake\Http\Response|null
      */
     public function sobre()
     {
     }
+
+
 }

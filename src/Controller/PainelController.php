@@ -49,17 +49,16 @@ class PainelController extends AppController
                 try
                 {
                     $usuario = $this->Auth->identify();
-                    $this->log($usuario);
                     if ( !$usuario )
                     {
                         throw new Exception(__('Usuário ou senha inválido, tente novamenteeee !'), 1);
                     }
+                    $this->setUsuario($usuario);
 
-                    $this->Auth->setUser($usuario);
                     $this->Flash->sucesso( __('Usuário logado com sucesso !') );
                 } catch (Exception $e)
                 {
-                    //$this->Flash->erro( $e->getMessage() );
+                    $this->Flash->erro( $e->getMessage() );
                 }
             } else
             {
@@ -72,5 +71,70 @@ class PainelController extends AppController
 
         // populando a view
         $this->set(compact('tituloPagina', 'LoginForm'));
+    }
+
+    /**
+     * Configura a autorização do usuário
+     *
+     * @param   object  $usuario    Dados do Usuário, como id e e-mail
+     * @return  void
+     */
+    private function setUsuario($usuario=null)
+    {
+        // recupera as permissões do usuário e configura na sessão
+        $usuario['permissoes'] = 
+        [
+            '/auditorias/index' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Auditoria',
+                'url'       => '/auditorias/index',
+            ],
+            '/municipios/index' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Municípios',
+                'url'       => '/auditorias/index',
+            ],
+            '/permissoes/index' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Permissões',
+                'url'       => '/permissoes/index',
+            ],
+            '/usuarios/index' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Usuários',
+                'url'       => '/usuarios/index',
+            ],
+            '/ferramentas/index' => 
+            [
+                'menu'      => 'Ferramentas',
+                'title'     => 'Enviar e-mail',
+                'url'       => '/ferramentas/enviar-email',
+            ],
+            '/relatorios/usuarios' => 
+            [
+                'menu'      => 'Relatórios',
+                'title'     => 'Relatório de Usuários',
+                'url'       => '/relatorios/usuarios',
+            ],
+            '/ajuda/manual' => 
+            [
+                'menu'      => 'Ajuda',
+                'title'     => 'Manual',
+                'url'       => '/ajuda/manual',
+            ],
+            '/ajuda/sobre' => 
+            [
+                'menu'      => 'Ajuda',
+                'title'     => 'Sobre',
+                'url'       => '/ajuda/sobre',
+            ]
+        ];
+
+        // atualiza a sessão do usuário
+        $this->Auth->setUser($usuario);
     }
 }

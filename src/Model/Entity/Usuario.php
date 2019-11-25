@@ -8,6 +8,7 @@ use Cake\Auth\DefaultPasswordHasher;
  * Usuario Entity
  *
  * @property int $id
+ * @property string $nome
  * @property string $email
  * @property string $senha
  */
@@ -22,7 +23,9 @@ class Usuario extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected $_accessible = 
+    [
+        'nome'  => true,
         'email' => true,
         'senha' => true
     ];
