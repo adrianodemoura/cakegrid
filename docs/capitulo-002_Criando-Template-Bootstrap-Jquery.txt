@@ -1,0 +1,24 @@
+capitulo-002 - Criando um template com bootstrap e jquery
+
+Agora que temos o aplicação inicial instalada e rodando, vamos criar um template que será a cara da aplicação, Aqui vamos usar bootstrap e jquery.
+Acesse o console e sigua os comandos abaixo:
+
+$ cd ~/public_html/cakegrid
+$ bin/cake bake plugin Bootstrap
+
+Abra o arquvo app/src/AppController e inclusa as linhas abaixo dentro da action "initialize":
+
+// definindo o layout padrão
+$this->viewBuilder()->setTheme('Bootstrap');
+$this->viewBuilder()->setLayout('publico');
+
+Criando o layout publico:
+
+crie a seguinte estrutura de diretórios:
+
+app/plugins/Bootstrap/Template/Layout/publico.ctp
+app/plugins/Bootstrap/webroot/css
+app/plugins/Bootstrap/webroot/js
+
+Baixe o bootstrap e salve dentro do diretório css, e o jquery no diretório js
+Na mesma sequencia crie também os arquivos global.css e global.js

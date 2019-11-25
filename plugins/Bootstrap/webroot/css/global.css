@@ -1,0 +1,32 @@
+.ocultar,
+.hidden
+{
+	display: none;
+}
+
+.mensagem,
+.message
+{
+	color: #fff;
+	cursor: pointer;
+	padding: 3px 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	position: absolute;
+	top: 0px;
+	z-index: 10001;
+	text-align: center;
+}
+
+.sucesso,
+.success
+{
+	background-color: #a4fcba;
+	color: #333;
+}
+
+.erro,
+.error
+{
+	background-color: #fc9f9f;
+}

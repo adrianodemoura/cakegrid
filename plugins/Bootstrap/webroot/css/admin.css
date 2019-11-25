@@ -1,0 +1,22 @@
+.fundo-escuro
+{
+	background-color: #ccc;
+}
+.fundo-claro
+{
+	background-color: #eee;
+}
+
+#conteudo
+{
+	min-height: 500px;
+}
+
+#cabecalho
+{
+	border-bottom: 1px solid #aaa;
+}
+#rodape
+{
+	border-top: 1px solid #bbb;
+}

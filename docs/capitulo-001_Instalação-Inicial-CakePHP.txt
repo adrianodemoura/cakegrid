@@ -1,0 +1,87 @@
+Capítulo 1 - Instalação inicial do cakePHP.
+
+Neste capítulo iremos configurar a versão inicial do cakePHP.
+
+Abra o seu console e execute os comandos abaixo. 
+Lembrando que esta instalação leve em consideração que o seu servidor WEB já está corretamente instalado e rodando na sua máquina local.
+
+$ cd ~/public_html
+$ composer create-project --prefer-dist cakephp/app cakegrid
+Neste comando o composer irá instalar uma versão inicial da aplicação, ao final da instalação você deve ver algo como:
+
+Set Folder Permissions ? (Default to Y) [Y,n]? Y
+Permissions set on /home/adrianoc/public_html/cakegrid/tmp/cache
+Permissions set on /home/adrianoc/public_html/cakegrid/tmp/cache/models
+Permissions set on /home/adrianoc/public_html/cakegrid/tmp/cache/persistent
+Permissions set on /home/adrianoc/public_html/cakegrid/tmp/cache/views
+Permissions set on /home/adrianoc/public_html/cakegrid/tmp/sessions
+Permissions set on /home/adrianoc/public_html/cakegrid/tmp/tests
+Permissions set on /home/adrianoc/public_html/cakegrid/tmp
+Permissions set on /home/adrianoc/public_html/cakegrid/logs
+Updated Security.salt value in config/app.php
+
+$ setfacl -d -m u::rwX,g::rwX,o::rwX -R logs/
+$ setfacl -d -m u::rwX,g::rwX,o::rwX -R tmp/
+
+Ao confirmar com aconfigração do diretório de permissões, o composer irá configurar as permissões do diretório app/tmp e app/logs, este passo é necessário que a aplicação consiga escrever nestes diretórios.
+Na última linha você observar que o Security.salt foi atualizao, Aproveite este momento e dê uma boa olhada nos diretório e arquivos, principalmente config, para você se acostumar com a estrutura de diretórios, conhecer este padrão é importante.
+
+
+Agora que a base inicial instalada, é necessário a configuração do banco de dados e região. 
+Então abra o arquivo app/config/app.php e configure conforme orientção abaixo:
+
+Configurando a região:
+'defaultLocale' => env('APP_DEFAULT_LOCALE', 'pt_BR'),
+'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'America/Sao_Paulo'),
+
+Configuração do banco:
+'username' => 'cakegrid_us',
+'password' => 'cakegrid_67',
+'database' => 'cakegrid_bd',
+
+Comando para criar o banco de dados:
+Acesse o console do mysql e entre com o comando abaixo:
+> CREATE DATABASE cakegrid_bd CHARACTER SET utf8;
+> GRANT ALL PRIVILEGES ON cakegrid_bd.* TO cakegrid_us IDENTIFIED BY 'cakegrid_67' WITH GRANT OPTION;
+> FLUSH PRIVILEGES;
+
+* OBS, no exemplo aqui iremos usar o nome cakegrid_us, cakegrid_67 e cakegrid_bd para o banco, sinta a vontade de alterá-los.
+
+Agora vamos verificar se a instalação fo ok, acesse a página principal, colondo o link abaixo no navegador de sua preferência.
+
+http://localhost/~adrianoc/cakegrid
+
+Observe que da coluna "Database" deve aparecer a seguinte mensagem "CakePHP is able to connect to the database.". 
+Aproveite o momento e verifique também as colunas como "Enviroment", "Filesystem" e "Debugkit", se houver 
+algum notificação em vermelho, tente resolver os problemas, normalmente é só a conexão com o banco é necessária.
+
+Já que está tudo ok, vamos criar o controller principal da aplicação e configurar a rota default.
+Acesse o console e sigua os passos abaixo:
+
+$ cd ~/public_html/cakegrid
+$ bin/cake bake controller Painel
+
+Ao abrir os novos arquivo observe que o bake pensou que você estaria criando o CRUD de algum cadastro, vamos abrir o arquivo app/src/Controller/Painel.php e limpá-lo, deixe apenas a action "index" limpa como abaixo:
+
+public function index()
+{
+    //
+}
+
+Voce poderia usar o bake para criar os templates, mas também pode criar manualmente o arquivo index como abaixo:
+$ mkdir -p src/Template/Painel
+$ touch src/Template/Painel/index.ctp
+
+Agora abra o arquivo app/config/routes.php e configure a rota como abaixo:
+
+$routes->connect('/', ['controller' => 'Painel']);
+
+acesse novamente o link da aplicação:
+
+http://localhost/~adrianoc/cakegrid
+
+
+Se ocorreu tudo bem passe para o segundo capítulo, aonde iremos criar um template para usar bootstrap e jquery.
+
+Glosário:
+app = diretório de sua aplicação, neste exemplo: /home/adrianoc/public_html/cakegrid
