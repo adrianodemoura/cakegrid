@@ -2,6 +2,7 @@
     $Menu = new Bootstrap\View\Helper\MenuHelper($this);
     $permissoes = $this->request->getSession()->read('Auth.User.permissoes');
 ?>
+<div class="row">
 <nav class="navbar navbar-expand-sm">
 
 <!-- Links -->
@@ -21,3 +22,4 @@
 
 </ul>
 </nav>
+</div>

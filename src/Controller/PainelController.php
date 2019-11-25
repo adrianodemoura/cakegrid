@@ -36,7 +36,7 @@ class PainelController extends AppController
 
         if ( $Sessao->check('Auth.User') )
         {
-            $this->Flash->erro( __('O usuário já se encontra autenticado !') );
+            $this->Flash->error( __('O usuário já se encontra autenticado !') );
             return $this->redirect('/');
         }
 
@@ -44,30 +44,29 @@ class PainelController extends AppController
 
         if ( $this->request->is('post') )
         {
-            if ( $LoginForm->execute($this->request->getData()) )
+            try
             {
-                try
+                if ( !$LoginForm->execute($this->request->getData()) )
                 {
-                    $usuario = $this->Auth->identify();
-                    if ( !$usuario )
-                    {
-                        throw new Exception(__('Usuário ou senha inválido, tente novamenteeee !'), 1);
-                    }
-                    $this->setUsuario($usuario);
-
-                    $this->Flash->sucesso( __('Usuário logado com sucesso !') );
-                } catch (Exception $e)
-                {
-                    $this->Flash->erro( $e->getMessage() );
+                    throw new Exception(__('Parâmetro errado para login !'), 1);
                 }
-            } else
+
+                $usuario = $this->Auth->identify();
+                if ( !$usuario )
+                {
+                    throw new Exception(__('Usuário ou senha inválido, tente novamente !'), 2);
+                }
+                $this->setUsuario($usuario);
+
+                $this->Flash->success( __('Usuário logado com sucesso !') );
+                    
+            } catch (Exception $e)
             {
-                $this->Flash->erro( $LoginForm->errors() );
+                $this->Flash->error( $e->getMessage() );
             }
 
-            return $this->redirect( ['action'=>'index']);
+            return $this->redirect( ['action'=>'login']);
         }
-
 
         // populando a view
         $this->set(compact('tituloPagina', 'LoginForm'));

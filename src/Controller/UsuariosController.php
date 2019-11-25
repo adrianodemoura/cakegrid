@@ -28,7 +28,7 @@ class UsuariosController extends AppController
      */
     public function logout()
     {
-    	$this->Flash->sucesso( __('Logout efetuado com sucesso.') );
+    	$this->Flash->success( __('Logout efetuado com sucesso.') );
         return $this->redirect($this->Auth->logout());
     }
 }

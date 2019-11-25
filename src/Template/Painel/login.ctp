@@ -12,7 +12,7 @@
 <div class="d-flex vh-100">
  	<div class="d-flex w-100 justify-content-center align-self-center">
 
-		<div class="col-4 rounded-lg fundo-escuro py-2 px-5">
+		<div class="col-3 rounded-lg bordered bg-info py-2 px-5">
 			<?= $this->Form->create($LoginForm, ['class'=>'form']); ?>
 			<div class="row mt-2">
 				<?= $this->Form->control('email', $optionsLogin); ?>
@@ -22,7 +22,7 @@
 				<?= $this->Form->control('senha', $optionsSenha); ?>
 			</div>
 
-			<div class="row mt-3">
+			<div class="row mt-3 text-center">
 				<?= $this->Form->control('Enviar', $optionsEnviar); ?>
 				<?= $this->Form->control('Fechar', $optionsFechar); ?>
 			</div>
