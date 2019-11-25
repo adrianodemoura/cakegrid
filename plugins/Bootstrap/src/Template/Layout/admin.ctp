@@ -45,31 +45,32 @@
 
     </div><!-- fim flash -->
 
-    <div id="cabecalho" class="row fundo-escuro py-1">
+    <div id="cabecalho" class="row fundo-escuro py-1 rounded-bottom">
         <div class="col-6">
+            <?= $this->Html->link($this->request->getSession()->read('Auth.User.email'), '/usuarios/info'); ?>
         </div>
         <div class="col-6 text-right">
-            <?= $this->Html->link('Sair', '/usuarios/logout'); ?>
+            <?= $this->Html->link('sair', '/usuarios/logout'); ?>
         </div>
 
     </div>
 
-    <div id="menu" class="row">
+    <div id="menu" class="row fundo-claro">
     	<?= $this->element('menu'); ?>
     </div>
 
-    <div id="conteudo" class="row">
+    <div id="conteudo" class="row border p-2">
         <?= $this->fetch('content') ?>
 
     </div><!-- fim conteudo -->
 
     <div id="rodape" class="row fundo-claro py-2">
         <div class="col-6">
-
+            <?= SISTEMA; ?>
         </div>
 
         <div class="col-6 text-right">
-            <?= SISTEMA; ?>
+            <?= date('d/m/Y H:i'); ?>
         </div>
     </div>
 

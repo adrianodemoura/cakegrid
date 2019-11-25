@@ -9,14 +9,23 @@
 
 #conteudo
 {
-	min-height: 500px;
+	min-height: 300px;
 }
 
 #cabecalho
 {
-	border-bottom: 1px solid #aaa;
+	/*border-bottom: 1px solid #aaa;*/
+}
+
+#menu .nav-link
+{
+	color: #000;
+	/*padding: 0px !important;
+	padding-right: .15rem !important;*/
 }
 #rodape
 {
 	border-top: 1px solid #bbb;
+	font-size: 10px;
+	font-style: italic;
 }
