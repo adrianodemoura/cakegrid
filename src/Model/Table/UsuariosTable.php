@@ -49,7 +49,7 @@ class UsuariosTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->email('email')
+            ->email('email',null,'e-mail inválido !')
             ->requirePresence('email', 'create')
             ->notEmptyString('email');
 
@@ -71,7 +71,7 @@ class UsuariosTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['email']), 'Este e-mail já está em uso');
 
         return $rules;
     }
