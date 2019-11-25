@@ -1,6 +1,6 @@
 body
 {
-	/*background-image: url('../img/bg-site.jpg');*/
+	background-image: url('../img/bg01.png');
 	background-color: #ddd;
 }
 
@@ -20,12 +20,12 @@ body
 #cabecalho a
 {
 	color: #000;
+	font-weight: bold;
 }
 
 #menu
 {
 	background-color: #F4F4F4;
-	font-weight: bold;
 }
 #menu .navbar
 {

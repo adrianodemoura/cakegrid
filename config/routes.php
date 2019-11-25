@@ -63,9 +63,10 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
     $routes->connect('/',       ['controller' => 'Painel', 'action'=>'index']);
-    $routes->connect('login',   ['controller' => 'Painel', 'action'=>'login']);
+    $routes->connect('login',   ['controller' => 'Usuarios', 'action'=>'login']);
     $routes->connect('logout',  ['controller' => 'Usuarios', 'action'=>'logout']);
     $routes->connect('sair',    ['controller' => 'Usuarios', 'action'=>'logout']);
+    $routes->connect('permissoes', ['controller' => 'Usuarios', 'action'=>'permissoes']);
 
     /**
      * Connect catchall routes for all controllers.

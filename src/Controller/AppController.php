@@ -33,7 +33,7 @@ class AppController extends Controller {
         $paramsAuth = [];
         $paramsAuth['authenticate']         = ['Form'=>['fields'=>['username'=>'email', 'password'=>'senha'], 'userModel'=>'Usuarios']];
         $paramsAuth['authError']            = false;
-        $paramsAuth['loginAction']          = ['controller'=>'Painel', 'action'=>'login'];
+        $paramsAuth['loginAction']          = ['controller'=>'Usuarios', 'action'=>'login'];
         $paramsAuth['unauthorizedRedirect'] = $this->referer();
 
         $this->loadComponent('Auth', $paramsAuth);

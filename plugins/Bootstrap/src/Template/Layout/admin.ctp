@@ -45,7 +45,7 @@
 
     </div><!-- fim flash -->
 
-    <div id="cabecalho" class="container bg-white py-2 rounded-bottom">
+    <div id="cabecalho" class="container bg-white py-2 rounded-bottom shadow bottom">
         <div class="row">
             <div class="col-6">
                 <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/usuarios/info'); ?>
@@ -60,12 +60,12 @@
     	<?= $this->element('menu'); ?>
     </div>
 
-    <div id="conteudo" class="container bg-white p-2">
+    <div id="conteudo" class="container bg-white p-2 shadow left shadow right">
         <?= $this->fetch('content') ?>
 
     </div><!-- fim conteudo -->
 
-    <div id="rodape" class="container rounded-bottom py-2">
+    <div id="rodape" class="container rounded-bottom py-2 shadow bottom">
         <div class="row">
             <div class="col-6">
                 <?= SISTEMA; ?>

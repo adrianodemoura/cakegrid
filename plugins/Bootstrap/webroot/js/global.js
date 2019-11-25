@@ -4,7 +4,7 @@ $(document).ready(function()
 	{
 		$("#flash").delay(tempoFlash).promise().done(function()
 		{
-			//$(this).slideUp('slow');
+			$(this).slideUp('slow');
 		})
 	}
 
