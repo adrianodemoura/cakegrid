@@ -34,13 +34,18 @@ se tiver algum problema tente rodar:
 $ bin/cake migrations rollback`
 ```
 
-para verificar o status
+para verificar o status:
 ```sh
 $ bin/cake migrations status`
 ```
 
-Ao final da operação o banco terá a tabela usuários e municipios criada, e ainda com a tabela municípios já estará populada.
+Ao final desta operação o banco terá a tabela usuários e municipios criada, e ainda com a tabela municípios já estará populada.
 
-6. Execute o `bin/cake instalacao seu_email sua_senha`, este comando irá configurar o usuário administrador.
+6. Para terminar a instalação execute:
+
+```sh
+bin/cake instalacao seu_email sua_senha
+```
+Este comando irá configurar o usuário administrador.
 
 7. Acesse o link pelo browser, algo como: http://localhost/~seu-usuario/cakegrid
