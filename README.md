@@ -4,7 +4,10 @@
 
 1. Baixe o código
 
-2. Atualize as dependências rodando o comando `composer install`
+2. Atualize as dependências rodando o comando?
+```sh
+$ composer install
+```
 
 3. Se estiver usando LINUX, mude as permissões dos diretórios logs e temp:
 
@@ -14,7 +17,9 @@ $ setfacl -d -m u::rwX,g::rwX,o::rwX -R tmp/
 ```
 Este comando irá dar permissões de acesso ao diretório `logs` e `tmp`.
 
-4. Configure `defaultLocale`, `APP_DEFAULT_TIMEZONE` no arquivo `app/config/app.php`. Você pode copiar do arquivo app.default.php
+4. Configure `defaultLocale` com o valor `pt_BR`, `defaultTimeZone` com `America/Sao_Paulo` e ainda `SECURITY_SALT` no arquivo `app/config/app.php`.
+
+Você pode copiar do arquivo app.default.php
 
 5. Configure o banco de dados no arquivo `app/config/app.php` na tag `Datasources/default`, se necessário criar o banco, acesso o console do mariaDB e digite:
 
