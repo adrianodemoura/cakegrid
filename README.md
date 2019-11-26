@@ -9,6 +9,7 @@
 3. Se estiver usando LINUX, mude as permissões dos diretórios logs e temp:
 
 `$ setfacl -d -m u::rwX,g::rwX,o::rwX -R logs/`
+
 `$ setfacl -d -m u::rwX,g::rwX,o::rwX -R tmp/`
 
 4. Configure `defaultLocale`, `APP_DEFAULT_TIMEZONE` no arquivo `app/config/app.php`. Você pode copiar do arquivo app.default.php
@@ -17,13 +18,17 @@
 Se necessário criar o banco, acesso o console do mysql e digite:
 
 `> CREATE DATABASE cakegrid_bd CHARACTER SET utf8;`
+
 `> GRANT ALL PRIVILEGES ON cakegrid_bd.* TO cakegrid_us@localhost IDENTIFIED BY 'cakegrid_67' WITH GRANT OPTION;`
+
 `> FLUSH PRIVILEGES;`
 
 depois rode o comando:
 `$ bin/cake migrations migrate`
+
 se tiver algum problema tente rodar:
 `$ bin/cake migrations rollback`
+
 para verificar o status
 `$ bin/cake migrations status`
 
