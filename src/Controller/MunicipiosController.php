@@ -1,13 +1,14 @@
 <?php
 /**
+ * Class Municipios
  */
 namespace App\Controller;
 use App\Controller\AppController;
 use Exception;
 /**
- * Mantém o cadastro de auditorias
+ * Mantém o cadastro de municipios
  */
-class AuditoriasController extends AppController {
+class MunicipiosController extends AppController {
 	/**
 	 * Tela inicial do cadastro de auditorias
 	 */

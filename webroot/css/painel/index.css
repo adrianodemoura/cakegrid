@@ -1,5 +1,7 @@
-#divPainel
+#divPainelIndex
 {
-	/*background-color: #ddd;*/
+	min-height: 400px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url('./../../img/logo_transparente.png');
 }
-

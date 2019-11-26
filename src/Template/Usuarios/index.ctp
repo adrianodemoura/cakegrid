@@ -4,8 +4,12 @@
 	echo $this->Html->css( ['usuarios/index'], 		['block'=>true] );
 
 ?>
-<div class="container text-center mt-5">
 
-	estou aqui no página index de usuários
 
+<div class="container bg-light">
+	<h4>Usuários</h4>
+</div>
+
+<div class="container">
+grid aqui
 </div>

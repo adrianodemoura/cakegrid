@@ -7,11 +7,9 @@ use Exception;
 /**
  * Usuarios Controller
  *
- *
  * @method \App\Model\Entity\Usuario[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class UsuariosController extends AppController
-{
+class UsuariosController extends AppController {
     /**
      * Index method
      *
@@ -42,13 +40,7 @@ class UsuariosController extends AppController
             [
                 'menu'      => 'Cadastros',
                 'title'     => 'Municípios',
-                'url'       => '/auditorias/index',
-            ],
-            '/permissoes/index' => 
-            [
-                'menu'      => 'Cadastros',
-                'title'     => 'Permissões',
-                'url'       => '/permissoes/index',
+                'url'       => '/municipios/index',
             ],
             '/usuarios/index' => 
             [
@@ -98,7 +90,7 @@ class UsuariosController extends AppController
     }
 
     /**
-     * Exiba a tela de login
+     * Exibe a tela de login
      *
      * @return  \Cake\Http\Response|null
      */
@@ -144,9 +136,22 @@ class UsuariosController extends AppController
     }
 
     /**
+     * Exibe a tela de permissões
+     *
+     * @return  void
      */
     public function permissoes()
     {
-        
+        //
+    }
+
+    /**
+     * Exibe a tela de informações do 
+     *
+     * @return  void
+     */
+    public function info()
+    {
+        //
     }
 }
