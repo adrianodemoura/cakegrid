@@ -21,7 +21,7 @@ Este comando irá dar permissões de acesso ao diretório `logs` e `tmp`.
 
 Você pode copiar do arquivo app.default.php
 
-5. Configure o banco de dados no arquivo `app/config/app.php` na tag `Datasources/default`, se necessário criar o banco, acesso o console do mariaDB e digite:
+5. Ainda neste mesmo arquivo configure o banco de dados na tag `Datasources/default`, se necessário criar o banco, acesso o console do mariaDB e digite:
 
 ```sh
 > CREATE DATABASE cakegrid_bd CHARACTER SET utf8;
@@ -45,13 +45,12 @@ para verificar o status:
 $ bin/cake migrations status`
 ```
 
-Ao final desta operação o banco terá a tabela usuários e municipios criada, e ainda com a tabela municípios já estará populada.
+Ao final desta operação o banco terá a tabela usuários e municipios criadas e ainda a tabela municípios populada com todos os municípios do Brasil.
 
-6. Para terminar a instalação execute:
+6. Para terminar a instalação execute o comando abaixo para instalar o usuário Administrador:
 
 ```sh
 $ bin/cake instalacao seu_email sua_senha
 ```
-Este comando irá configurar o usuário administrador.
 
 7. Acesse o link pelo browser, algo como: http://localhost/~seu-usuario/cakegrid
