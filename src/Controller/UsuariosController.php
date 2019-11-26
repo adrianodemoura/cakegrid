@@ -96,6 +96,7 @@ class UsuariosController extends AppController {
      */
     public function login()
     {
+        $tituloPagina = 'Login';
         $Sessao = $this->request->getSession();
 
         if ( $Sessao->check('Auth.User') )
@@ -120,19 +121,37 @@ class UsuariosController extends AppController {
                 {
                     throw new Exception(__('Usuário ou senha inválido, tente novamente !'), 2);
                 }
+
+                // atualizando o último acesso do usuário
+                $agora = strtotime('now');
+                $this->Usuarios
+                    ->query()
+                    ->update()
+                    ->set( ['Usuarios.ultimo_acesso' => $agora] )
+                    ->where( ['Usuarios.id' => $usuario['id']])
+                    ->execute();
+
+                // configurando a sessão com os dados e permissões do usuário
                 $this->setUsuario($usuario);
 
+                // retornando pra página inicial
                 $this->Flash->success( __('Usuário logado com sucesso !') );
                 return $this->redirect('/');
             } catch (Exception $e)
             {
-                $this->Flash->error( $e->getMessage() );
+                $erro = $e->getMessage();
+                if ( $e->getCode() === 500)
+                {
+                    $erro = 'A instalação não foi executada ainda !';
+                }
+
+                $this->Flash->error( $erro );
                 return $this->redirect( ['action'=>'login']);
             }
         }
 
         // populando a view
-        $this->set(compact('tituloPagina', 'LoginForm'));
+        $this->set(compact('tituloPagina', 'LoginForm', 'tituloPagina'));
     }
 
     /**

@@ -27,7 +27,8 @@ class Usuario extends Entity
     [
         'nome'  => true,
         'email' => true,
-        'senha' => true
+        'senha' => true,
+        'ultimo_acesso' => true
     ];
 
     /**

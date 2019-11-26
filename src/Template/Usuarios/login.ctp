@@ -29,12 +29,7 @@
 
 			<div class="mt-3">
 				<div class="row">
-					<div class="col-6 text-right">
-						<?= $this->Form->control('Enviar', $optionsEnviar); ?>
-					</div>
-					<div class="col-6 text-left">
-						<?= $this->Form->control('Fechar', $optionsFechar); ?>
-					</div>
+					<?= $this->Form->control('Enviar', $optionsEnviar); ?>
 				</div>
 			</div>
 		<?= $this->Form->end(); ?>

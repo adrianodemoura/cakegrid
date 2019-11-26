@@ -34,6 +34,7 @@ class Base extends AbstractMigration {
             ->addColumn('nome',          'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('email',         'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('senha',         'string', ['default' => '', 'limit' => 100, 'null' => false])
+            ->addColumn('ultimo_acesso', 'timestamp', ['default' => 0, 'null' => false])
             ->addColumn('municipio_id', 'integer',['default' => 3106200, 'limit' => 11, 'null' => false])
             ->addIndex(['municipio_id'])
             ->create();
