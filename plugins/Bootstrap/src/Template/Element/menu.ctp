@@ -11,7 +11,7 @@
         <a class="nav-link" href="<?= $this->Url->build('/', true); ?>">Início</a>
     </li>
 
-    <?php $menuPai=''; foreach($permissoes as $_url => $_arrProp) : if ($menuPai !== $_arrProp['menu']) : $menuPai = $_arrProp['menu']; ?>
+    <?php $menuPai=''; foreach($permissoes as $_url => $_arrProp) : if (empty(@$_arrProp['menu'])) continue; if ($menuPai !== $_arrProp['menu']) : $menuPai = $_arrProp['menu']; ?>
     <li class="nav-item dropdown">
 
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><?= $menuPai ?></a>

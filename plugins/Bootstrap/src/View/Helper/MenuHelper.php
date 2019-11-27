@@ -46,7 +46,7 @@ class MenuHelper extends Helper
     	{
     		if ($_arrProp['menu'] === $menuPai)
     		{
-    			$html .= "<a class='dropdown-item' href='". $this->Url->build($_arrProp['url'], true)."'>".$_arrProp['title']."</a>";
+    			$html .= "<a class='dropdown-item' href='". $this->Url->build($_arrProp['url'], true)."'>".$_arrProp['titulo']."</a>";
     		}
     	}
     	$html .= "</div><!-- fim menu $menuPai -->";

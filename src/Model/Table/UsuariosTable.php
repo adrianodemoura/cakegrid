@@ -1,6 +1,8 @@
 <?php
+/**
+ * Class UsuariosTable
+ */
 namespace App\Model\Table;
-
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -9,21 +11,10 @@ use Cake\Event\Event;
 use Cake\Datasource\EntityInterface;
 use ArrayObject;
 use Exception;
-
 /**
- * Usuarios Model
- *
- * @method \App\Model\Entity\Usuario get($primaryKey, $options = [])
- * @method \App\Model\Entity\Usuario newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Usuario[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Usuario|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Usuario saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Usuario patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Usuario[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Usuario findOrCreate($search, callable $callback = null, $options = [])
+ * Mantém a tabela de usuários.
  */
-class UsuariosTable extends Table
-{
+class UsuariosTable extends Table {
     /**
      * Initialize method
      *
@@ -91,7 +82,6 @@ class UsuariosTable extends Table
         {
             throw new Exception(__('Impossivel excluir Usuario Administrador !'), 1);
         }
-        \Cake\Log\Log\write('debug', $options);
     }
 
     /**
@@ -107,52 +97,60 @@ class UsuariosTable extends Table
             '/auditorias/index' => 
             [
                 'menu'      => 'Cadastros',
-                'title'     => 'Auditoria',
+                'titulo'    => 'Auditoria',
                 'url'       => '/auditorias/index',
             ],
             '/municipios/index' => 
             [
                 'menu'      => 'Cadastros',
-                'title'     => 'Municípios',
+                'titulo'    => 'Municípios',
                 'url'       => '/municipios/index',
             ],
             '/usuarios/index' => 
             [
                 'menu'      => 'Cadastros',
-                'title'     => 'Usuários',
+                'titulo'    => 'Usuários',
                 'url'       => '/usuarios/index',
-            ],
-            '/usuarios/info' => 
-            [
-                'menu'      => 'Cadastros',
-                'title'     => 'Usuários',
-                'url'       => '/usuarios/info',
             ],
             '/ferramentas/enviaremail' => 
             [
                 'menu'      => 'Ferramentas',
-                'title'     => 'Enviar e-mail',
+                'titulo'    => 'Enviar e-mail',
                 'url'       => '/ferramentas/enviar-email',
             ],
             '/relatorios/usuarios' => 
             [
                 'menu'      => 'Relatórios',
-                'title'     => 'Relatório de Usuários',
+                'titulo'    => 'Relatório de Usuários',
                 'url'       => '/relatorios/usuarios',
             ],
             '/ajuda/manual' => 
             [
                 'menu'      => 'Ajuda',
-                'title'     => 'Manual',
+                'titulo'    => 'Manual',
                 'url'       => '/ajuda/manual',
             ],
             '/ajuda/sobre' => 
             [
                 'menu'      => 'Ajuda',
-                'title'     => 'Sobre',
+                'titulo'    => 'Sobre',
                 'url'       => '/ajuda/sobre',
             ]
         ];
+
+        $Recursos = \Cake\ORM\TableRegistry::get('Recursos');
+
+        $lista = $Recursos->find()
+            ->where( ['Recursos.ativo'=>1] )
+            ->order( ['Recursos.menu', 'Recursos.titulo'])
+            ->toArray();
+        $permissoes = [];
+        foreach($lista as $_l => $_objRecurso)
+        {
+            $indice = strtolower(str_replace('-','',$_objRecurso->url));
+            $permissoes[$indice] = ['menu'=>$_objRecurso->menu, 'titulo'=>$_objRecurso->titulo, 'url'=>$_objRecurso->url];
+        }
+        //\Cake\Log\Log::write('debug', $permissoes);
 
         return $permissoes;
     }

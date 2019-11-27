@@ -20,8 +20,13 @@ class PainelController extends AppController
     public function index()
     {
     	// variáveis locais
-        $tituloPagina = SISTEMA.' - Página Inicial';
+        $tituloPagina   = SISTEMA.' - Página Inicial';
+        $Sessao         = $this->request->getSession();
 
         $this->set(compact('tituloPagina'));
+
+        $this->loadModel('Usuarios');
+
+        $permissoes = $this->Usuarios->getPermissoes( $Sessao->read('Auth.User.id') );
     }
 }

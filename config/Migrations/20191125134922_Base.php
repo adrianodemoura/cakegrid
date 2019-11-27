@@ -29,7 +29,7 @@ class Base extends AbstractMigration {
             ->create();
         $this->updateMunicipios();
 
-        // tabela usuaários
+        // tabela usuários
         $this->table('usuarios')
             ->addColumn('nome',         'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('email',        'string', ['default' => '', 'limit' => 100, 'null' => false])
@@ -43,6 +43,17 @@ class Base extends AbstractMigration {
         $this->table('usuarios')
             ->addForeignKey('municipio_id', 'municipios', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
+
+        // tabela de recursos
+        $this->table('recursos')
+            ->addColumn('url',          'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
+            ->addColumn('titulo',       'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
+            ->addColumn('menu',         'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
+            ->addColumn('ativo',        'boolean',  ['default' => true, 'null' => false])
+            ->addIndex(['url'])
+            ->addIndex(['ativo'])
+            ->create();
+        $this->updateRecursos();
     }
  
     /**
@@ -53,6 +64,7 @@ class Base extends AbstractMigration {
         $this->table('usuarios')->dropForeignKey('municipio_id')->save();
         $this->table('municipios')->drop()->save();
         $this->table('usuarios')->drop()->save();
+        $this->table('recursos')->drop()->save();
     }
 
     /**
@@ -87,6 +99,35 @@ class Base extends AbstractMigration {
         }
         $this->execute('delete from municipios');
         $table = $this->table('municipios');
+        $table->insert($data)->save();
+    }
+
+    /**
+     * Atualiza a tabela de recursos
+     *
+     * @return  void
+     */
+    private function updateRecursos()
+    {
+        $this->execute('delete from recursos');
+        $table = $this->table('recursos');
+
+        $data    = [];
+        $data[0] = ['url'=>'/painel/index',         'titulo'=> utf8_decode('Página inicial')];
+
+        $data[1] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=> utf8_decode('Usuários')];
+        $data[2] = ['url'=>'/usuarios/info',        'titulo'=>utf8_decode('Informações do Usuário')];
+        $data[3] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>utf8_decode('Municípios')];
+        $data[4] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>utf8_decode('Auditorias')];
+
+        $data[5] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
+        
+        $data[6] = ['url'=>'/relatorios/usuarios',  'menu'=>utf8_decode('Relatórios'), 'titulo'=>utf8_decode('Usuários')];
+        
+        $data[7] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
+        $data[8] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
+
+
         $table->insert($data)->save();
     }
 }
