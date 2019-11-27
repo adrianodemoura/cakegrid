@@ -5,6 +5,10 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Event\Event;
+use Cake\Datasource\EntityInterface;
+use ArrayObject;
+use Exception;
 
 /**
  * Usuarios Model
@@ -79,5 +83,14 @@ class UsuariosTable extends Table
         $rules->add($rules->isUnique(['email']), 'Este e-mail já está em uso');
 
         return $rules;
+    }
+
+    public function beforeDelete(Event $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity['id'] === 1)
+        {
+            throw new Exception(__('Impossivel excluir Usuario Administrador !'), 1);
+        }
+        \Cake\Log\Log\write('debug', $options);
     }
 }

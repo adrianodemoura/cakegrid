@@ -62,6 +62,7 @@ class InstalacaoCommand extends Command
             $Usuario->nome  = $email;
             $Usuario->email = $email;
             $Usuario->senha = $senha;
+            $Usuario->ativo = 1;
             $Usuario->ultimo_acesso = strtotime('now');
 
             if ( !$this->Usuarios->save($Usuario) )

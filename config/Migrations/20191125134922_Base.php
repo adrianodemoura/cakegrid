@@ -31,12 +31,14 @@ class Base extends AbstractMigration {
 
         // tabela usuaários
         $this->table('usuarios')
-            ->addColumn('nome',          'string', ['default' => '', 'limit' => 100, 'null' => false])
-            ->addColumn('email',         'string', ['default' => '', 'limit' => 100, 'null' => false])
-            ->addColumn('senha',         'string', ['default' => '', 'limit' => 100, 'null' => false])
-            ->addColumn('ultimo_acesso', 'timestamp', ['default' => 0, 'null' => false])
+            ->addColumn('nome',         'string', ['default' => '', 'limit' => 100, 'null' => false])
+            ->addColumn('email',        'string', ['default' => '', 'limit' => 100, 'null' => false])
+            ->addColumn('senha',        'string', ['default' => '', 'limit' => 100, 'null' => false])
+            ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
+            ->addColumn('ultimo_acesso','timestamp', ['default' => 0, 'null' => false])
             ->addColumn('municipio_id', 'integer',['default' => 3106200, 'limit' => 11, 'null' => false])
             ->addIndex(['municipio_id'])
+            ->addIndex(['ativo'])
             ->create();
         $this->table('usuarios')
             ->addForeignKey('municipio_id', 'municipios', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])

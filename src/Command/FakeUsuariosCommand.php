@@ -47,6 +47,8 @@ class FakeUsuariosCommand extends Command
             $Usuario = $this->Usuarios->newEntity();
             $Usuario->email = $email;
             $Usuario->senha = $senha;
+            $Usuario->ativo = rand(0,1);
+            $Usuario->ultimo_acesso = rand(10000000,20000000);
 
             if ( !$this->Usuarios->save($Usuario) )
             {

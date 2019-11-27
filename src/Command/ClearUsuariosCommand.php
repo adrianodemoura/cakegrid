@@ -5,6 +5,7 @@ use Cake\Console\Arguments;
 use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Exception;
 
 /**
  * ClearUsuarios command.
@@ -37,10 +38,24 @@ class ClearUsuariosCommand extends Command
     {
         $this->loadModel('Usuarios');
 
-        if ( !$this->Usuarios->deleteAll(['Usuarios.id >' => 1]) )
+        try
         {
-            throw new Exception(__('Erro ao tentar limpar usuários !'), 1);
-        }
+            //$entity = $this->Usuarios->get(1);
+            //$this->Usuarios->delete($entity);
+
+            $totalExcluidos = $this->Usuarios->deleteAll( ['Usuarios.id >' => 1] );
+            if ( $totalExcluidos>0) 
+            {
+                echo "\n$totalExcluidos registro(s) excluído(s) com sucesso !\n";
+            } else
+            {
+                echo "\nNehum usuário foi excluiído !\n";
+            }
+
+        } catch (Exception $e)
+        {
+            echo "\n".$e->getCode().' - '.$e->getMessage()."\n\n";
+        }        
 
         $totalUsuarios = $this->Usuarios->find()->count();
 
