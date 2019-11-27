@@ -1,6 +1,6 @@
 <?php 
-    $Menu = new Bootstrap\View\Helper\MenuHelper($this);
-    $permissoes = $this->request->getSession()->read('Auth.User.permissoes');
+    $Menu       = new Bootstrap\View\Helper\MenuHelper($this);
+    $permissoes = @$this->request->getSession()->read('Auth.User.Permissoes');
 ?>
 <div class="row">
 <nav class="navbar navbar-expand-sm">

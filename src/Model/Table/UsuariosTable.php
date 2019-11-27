@@ -93,4 +93,67 @@ class UsuariosTable extends Table
         }
         \Cake\Log\Log\write('debug', $options);
     }
+
+    /**
+     * Retorna as permissões do usuários.
+     *
+     * @param   integer     $idUsuario      id do usuário.
+     * @return  array       $permissoes     Permissões do usuário.
+     */
+    public function getPermissoes($idUsuario=0)
+    {
+        $permissoes =
+        [
+            '/auditorias/index' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Auditoria',
+                'url'       => '/auditorias/index',
+            ],
+            '/municipios/index' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Municípios',
+                'url'       => '/municipios/index',
+            ],
+            '/usuarios/index' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Usuários',
+                'url'       => '/usuarios/index',
+            ],
+            '/usuarios/info' => 
+            [
+                'menu'      => 'Cadastros',
+                'title'     => 'Usuários',
+                'url'       => '/usuarios/info',
+            ],
+            '/ferramentas/enviaremail' => 
+            [
+                'menu'      => 'Ferramentas',
+                'title'     => 'Enviar e-mail',
+                'url'       => '/ferramentas/enviar-email',
+            ],
+            '/relatorios/usuarios' => 
+            [
+                'menu'      => 'Relatórios',
+                'title'     => 'Relatório de Usuários',
+                'url'       => '/relatorios/usuarios',
+            ],
+            '/ajuda/manual' => 
+            [
+                'menu'      => 'Ajuda',
+                'title'     => 'Manual',
+                'url'       => '/ajuda/manual',
+            ],
+            '/ajuda/sobre' => 
+            [
+                'menu'      => 'Ajuda',
+                'title'     => 'Sobre',
+                'url'       => '/ajuda/sobre',
+            ]
+        ];
+
+        return $permissoes;
+    }
 }

@@ -25,11 +25,17 @@ class UsuariosController extends AppController {
      * @param   object  $usuario    Dados do Usuário, como id e e-mail
      * @return  void
      */
-    private function setUsuario($usuario=null)
+    private function setPermissoesUsuario($usuario=null)
     {
         // recupera as permissões do usuário e configura na sessão
         $usuario['permissoes'] = 
         [
+            '/painel/index' => 
+            [
+                'menu'      => '',
+                'title'     => 'Página Inicial',
+                'url'       => '/painel/index',
+            ],
             '/auditorias/index' => 
             [
                 'menu'      => 'Cadastros',
@@ -132,7 +138,8 @@ class UsuariosController extends AppController {
                     ->execute();
 
                 // configurando a sessão com os dados e permissões do usuário
-                $this->setUsuario($usuario);
+                $usuario['Permissoes'] = $this->Usuarios->getPermissoes( $usuario['id']);
+                $this->Auth->setUser( $usuario );
 
                 // retornando pra página inicial
                 $this->Flash->success( __('Usuário logado com sucesso !') );
@@ -140,10 +147,7 @@ class UsuariosController extends AppController {
             } catch (Exception $e)
             {
                 $erro = $e->getMessage();
-                if ( $e->getCode() === 500)
-                {
-                    $erro = 'A instalação não foi executada ainda !';
-                }
+                if ( $e->getCode() === 500) { $erro = 'A instalação não foi executada ainda !'; }
 
                 $this->Flash->error( $erro );
                 return $this->redirect( ['action'=>'login']);
@@ -172,5 +176,15 @@ class UsuariosController extends AppController {
     public function info()
     {
         //
+    }
+
+    /**
+     * Exibe a tela para usuários sem permissão.
+     *
+     * @return  void
+     */
+    public function acessoNegado()
+    {
+
     }
 }
