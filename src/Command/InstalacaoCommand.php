@@ -5,6 +5,7 @@ use Cake\Console\Arguments;
 use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Console\ShellDispatcher;
 use Exception;
 
 /**
@@ -74,6 +75,8 @@ class InstalacaoCommand extends Command
             }
 
             echo "5] - Usuário Administrador instalado com sucesso. abra o seu browser e acesse o sistema.";
+
+            $this->limparCache();
         } catch (Exception $e)
         {
             echo $e->getCode().'] - '.$e->getMessage();
@@ -81,6 +84,23 @@ class InstalacaoCommand extends Command
 
 
         echo "\n\n*] - FIM \n\n";
+    }
 
+    /**
+     * Executa a limpeza do cache
+     *
+     * @void
+     */
+    private function limparCache()
+    {
+        $shell  = new ShellDispatcher();
+        $output = $shell->run(['cake', 'cache', 'clear_all']);
+        if (!$output)
+        {
+            echo __("\nO Cache foi limpo com sucesso !\n");
+        } else
+        {
+            echo __("\nErro ao tentar limpar o cache !\n");
+        }
     }
 }

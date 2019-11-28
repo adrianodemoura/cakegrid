@@ -55,7 +55,7 @@ class Base extends AbstractMigration {
             ->create();
         $this->updateRecursos();
 
-        // limpando o cache
+        echo "\n";
     }
  
     /**
@@ -67,6 +67,8 @@ class Base extends AbstractMigration {
         $this->table('municipios')->drop()->save();
         $this->table('usuarios')->drop()->save();
         $this->table('recursos')->drop()->save();
+
+        echo "\n";
     }
 
     /**
