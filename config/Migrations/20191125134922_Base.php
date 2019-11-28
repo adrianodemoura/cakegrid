@@ -54,6 +54,8 @@ class Base extends AbstractMigration {
             ->addIndex(['ativo'])
             ->create();
         $this->updateRecursos();
+
+        // limpando o cache
     }
  
     /**
@@ -113,19 +115,20 @@ class Base extends AbstractMigration {
         $table = $this->table('recursos');
 
         $data    = [];
-        $data[0] = ['url'=>'/painel/index',         'titulo'=> utf8_decode('Página inicial')];
+        $data[0] = ['url'=>'/painel/index',         'titulo'=> 'Página inicial'];
 
-        $data[1] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=> utf8_decode('Usuários')];
-        $data[2] = ['url'=>'/usuarios/info',        'titulo'=>utf8_decode('Informações do Usuário')];
-        $data[3] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>utf8_decode('Municípios')];
-        $data[4] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>utf8_decode('Auditorias')];
+        $data[1] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=> 'Usuários'];
+        $data[2] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>'Municípios'];
+        $data[3] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>'Auditorias'];
+        $data[4] = ['url'=>'/permissoes/index',     'menu'=>'Cadastros', 'titulo'=>'Permissões'];
+        $data[5] = ['url'=>'/usuarios/info',        'titulo'=>'Informações do Usuário'];
 
-        $data[5] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
+        $data[6] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
         
-        $data[6] = ['url'=>'/relatorios/usuarios',  'menu'=>utf8_decode('Relatórios'), 'titulo'=>utf8_decode('Usuários')];
+        $data[7] = ['url'=>'/relatorios/usuarios',  'menu'=>'Relatórios', 'titulo'=>'Usuários'];
         
-        $data[7] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
-        $data[8] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
+        $data[8] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
+        $data[9] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
 
 
         $table->insert($data)->save();

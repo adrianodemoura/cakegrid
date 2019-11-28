@@ -185,6 +185,5 @@ class UsuariosController extends AppController {
      */
     public function acessoNegado()
     {
-
     }
 }

@@ -53,4 +53,8 @@ Ao final desta operação o banco terá a tabela usuários e municipios criadas 
 $ bin/cake instalacao seu_email sua_senha
 ```
 
+```sh
+$ bin/cake cache clear_all
+```
+
 7. Acesse o link pelo browser, algo como: http://localhost/~seu-usuario/cakegrid
