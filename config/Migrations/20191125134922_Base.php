@@ -29,6 +29,18 @@ class Base extends AbstractMigration {
             ->create();
         $this->updateMunicipios();
 
+        $this->table('papeis')
+            ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
+            ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
+            ->create(['nome']);
+        $this->updatePapeis();
+
+        $this->table('unidades')
+            ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
+            ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
+            ->create(['nome']);
+        $this->updateUnidades();
+
         // tabela usuários
         $this->table('usuarios')
             ->addColumn('nome',         'string', ['default' => '', 'limit' => 100, 'null' => false])
@@ -55,6 +67,18 @@ class Base extends AbstractMigration {
             ->create();
         $this->updateRecursos();
 
+        $this->table('associacoes')
+            ->addColumn('usuario_id',   'integer',  ['limit'=>11])
+            ->addColumn('papel_id',     'integer',  ['limit'=>11])
+            ->addColumn('unidade_id',   'integer',  ['limit'=>11])
+            ->create();
+        $this->table('associacoes')
+            ->addForeignKey('usuario_id',   'usuarios', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('papel_id',     'papeis', 'id',     ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('unidade_id',   'unidades', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->update();
+        $this->updateAssociacoes();
+
         echo "\n";
     }
  
@@ -63,12 +87,67 @@ class Base extends AbstractMigration {
      */
     public function down()
     {
+        $this->table('associacoes')->drop()->save();
         $this->table('usuarios')->dropForeignKey('municipio_id')->save();
         $this->table('municipios')->drop()->save();
         $this->table('usuarios')->drop()->save();
         $this->table('recursos')->drop()->save();
+        $this->table('papeis')->drop()->save();
+        $this->table('unidades')->drop()->save();
 
         echo "\n";
+    }
+
+    /**
+     */
+    private function updateAssociacoes()
+    {
+        $this->execute('delete from associacoes');
+        $table = $this->table('associacoes');
+
+        $data   = [];
+        $data[] = ['usuario_id'=>1, 'papel_id'=>1, 'unidade_id'=>1];
+        $data[] = ['usuario_id'=>1, 'papel_id'=>1, 'unidade_id'=>2];
+        $data[] = ['usuario_id'=>1, 'papel_id'=>1, 'unidade_id'=>3];
+
+        $table->insert($data)->save();
+    }
+
+    /**
+     * Atualiza a tabela de papeis
+     *
+     * @return  void
+     */
+    private function updatePapeis()
+    {
+        $this->execute('delete from papeis');
+        $table = $this->table('papeis');
+
+        $data   = [];
+        $data[] = ['nome'=>'ADMINISTRADOR'];
+        $data[] = ['nome'=>'SUPERVISOR'];
+        $data[] = ['nome'=>'USUÁRIO'];
+        $data[] = ['nome'=>'VISITANTE'];
+
+        $table->insert($data)->save();
+    }
+
+    /**
+     * Atualiza a tabela de papeis
+     *
+     * @return  void
+     */
+    private function updateUnidades()
+    {
+        $this->execute('delete from unidades');
+        $table = $this->table('unidades');
+
+        $data   = [];
+        $data[] = ['nome'=>'GERAL'];
+        $data[] = ['nome'=>'REGIONAL NORTE'];
+        $data[] = ['nome'=>'REGIONAL LESTE'];
+
+        $table->insert($data)->save();
     }
 
     /**
