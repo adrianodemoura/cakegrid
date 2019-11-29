@@ -96,7 +96,7 @@ class UsuariosTable extends Table {
 
         $lista = $Recursos->find()
             ->where( ['Recursos.ativo'=>1] )
-            ->order( ['Recursos.menu', 'Recursos.titulo'])
+            ->order( ['Recursos.id', 'Recursos.menu', 'Recursos.titulo'])
             ->toArray();
         $permissoes = [];
         foreach($lista as $_l => $_objRecurso)

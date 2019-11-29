@@ -1,14 +1,12 @@
 <?php
-	$tituloPagina = isset($tituloPagina)
-        ? $tituloPagina 
-        : SISTEMA . ' :: '.$this->request->getParam('controller'); 
+	$tituloPagina = isset($tituloPagina) ? $tituloPagina : SISTEMA . ' :: '.$this->request->getParam('controller'); 
     $varJs['SISTEMA']   = "'".SISTEMA."'";
     $varJs['BASE']      = "'".$this->Url->build('/', true)."'";
     $varJs['URL']       = "'".$this->Url->build(null, true)."'";
     $varJs['tempoFlash']= isset($tempoFlash) ? $tempoFlash : 3000;
     $varJs['txtAguarde']= isset($txtAguarde) ? $txtAguarde : "'Aguarde ...'";
-    $aqui = "plugin / controller / action";
-    $aqui = str_replace('plugin /', $this->request->plugin, $aqui);
+    $aqui = "plugin > controller > action";
+    $aqui = str_replace('plugin >', $this->request->plugin, $aqui);
     $aqui = str_replace('controller', $this->request->controller, $aqui);
     $aqui = str_replace('action', $this->request->action, $aqui);
 ?>

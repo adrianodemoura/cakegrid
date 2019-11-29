@@ -116,22 +116,23 @@ class Base extends AbstractMigration {
         $this->execute('delete from recursos');
         $table = $this->table('recursos');
 
-        $data    = [];
-        $data[0] = ['url'=>'/painel/index',         'titulo'=> 'Página inicial'];
+        $data   = [];
+        $data[] = ['url'=>'/painel/index',         'titulo'=> 'Página inicial'];
 
-        $data[1] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=> 'Usuários'];
-        $data[2] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>'Municípios'];
-        $data[3] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>'Auditorias'];
-        $data[4] = ['url'=>'/permissoes/index',     'menu'=>'Cadastros', 'titulo'=>'Permissões'];
-        $data[5] = ['url'=>'/usuarios/info',        'titulo'=>'Informações do Usuário'];
+        $data[] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=> 'Usuários'];
+        $data[] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>'Municípios'];
+        $data[] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>'Auditorias'];
+        $data[] = ['url'=>'/usuarios/permissoes',  'titulo'=>'Permissões'];
+        $data[] = ['url'=>'/usuarios/info',        'titulo'=>'Informações do Usuário'];
 
-        $data[6] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
-        
-        $data[7] = ['url'=>'/relatorios/usuarios',  'menu'=>'Relatórios', 'titulo'=>'Usuários'];
-        
-        $data[8] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
-        $data[9] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
+        $data[] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
+        $data[] = ['url'=>'/ferramentas/recarregar-permissoes', 'menu'=>'Ferramentas', 'titulo'=>'Recarregar as Permissões'];
+        $data[] = ['url'=>'/ferramentas/alterar-unidade', 'menu'=>'Ferramentas', 'titulo'=>'Alterar Unidade'];
 
+        $data[] = ['url'=>'/relatorios/usuarios',  'menu'=>'Relatórios', 'titulo'=>'Usuários'];
+
+        $data[] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
+        $data[] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
 
         $table->insert($data)->save();
     }

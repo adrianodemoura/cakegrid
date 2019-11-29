@@ -34,4 +34,35 @@ class FerramentasController extends AppController {
 
         return $this->redirect('/');
     }
+
+    /**
+     * Recarregar as permissões
+     *
+     * @return  \Cake\Network\Response|null
+     */
+    public function recarregarPermissoes()
+    {
+        $Sessao     = $this->request->getSession();
+        $idUsuario  = $Sessao->read('Auth.User.id');
+
+        $this->loadModel('Usuarios');
+
+        $permissoes = $this->Usuarios->getPermissoes( $idUsuario );
+
+        $Sessao->write('Auth.User.Permissoes', $permissoes);
+
+        $this->Flash->success(__('As permissões foram atualizadas com sucesso !'));
+
+        return $this->redirect('/');
+    }
+
+    /**
+     * Exibe a tela para alterar a Unidade
+     *
+     * @return  \Cake\Network\Response|null
+     */
+    public function alterarUnidade()
+    {
+        
+    }
 }
