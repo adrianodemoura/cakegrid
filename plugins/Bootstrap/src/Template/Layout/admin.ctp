@@ -7,6 +7,10 @@
     $varJs['URL']       = "'".$this->Url->build(null, true)."'";
     $varJs['tempoFlash']= isset($tempoFlash) ? $tempoFlash : 3000;
     $varJs['txtAguarde']= isset($txtAguarde) ? $txtAguarde : "'Aguarde ...'";
+    $aqui = "plugin / controller / action";
+    $aqui = str_replace('plugin /', $this->request->plugin, $aqui);
+    $aqui = str_replace('controller', $this->request->controller, $aqui);
+    $aqui = str_replace('action', $this->request->action, $aqui);
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,7 +61,14 @@
     </div>
 
     <div id="menu" class="container rounded-top mt-3">
-    	<?= $this->element('menu'); ?>
+        <div class="row">
+            <div class="col-8">
+    	       <?= $this->element('menu'); ?>
+           </div>
+           <div class="col-4 mt-2 text-right">
+                <small class="font-italic">Você está aqui: <?= $aqui; ?></small>
+           </div>
+        </div>
     </div>
 
     <div id="conteudo" class="container bg-white p-2 shadow left shadow right">
