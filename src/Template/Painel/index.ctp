@@ -6,4 +6,3 @@
 <div id='divPainelIndex' class="d-flex justify-content-center align-items-center">
 	Bem vindo ao <?= SISTEMA; ?>
 </div>
-

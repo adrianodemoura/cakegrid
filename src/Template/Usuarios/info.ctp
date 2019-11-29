@@ -1,6 +1,6 @@
 <?php
 	//echo $this->Html->script( ['usuarios/info'],	['block'=>true] );
-	//echo $this->Html->css( ['usuarios/infos'], 		['block'=>true] );
+	//echo $this->Html->css( ['usuarios/info'], 	['block'=>true] );
 	$Sessao = $this->request->getSession();
 	$listaSimNao = [0=>'Não', 1=>'Sim'];
 ?>

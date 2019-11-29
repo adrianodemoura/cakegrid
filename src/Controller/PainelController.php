@@ -21,12 +21,7 @@ class PainelController extends AppController
     {
     	// variáveis locais
         $tituloPagina   = SISTEMA.' - Página Inicial';
-        $Sessao         = $this->request->getSession();
 
-        $this->set(compact('tituloPagina'));
-
-        $this->loadModel('Usuarios');
-
-        $permissoes = $this->Usuarios->getPermissoes( $Sessao->read('Auth.User.id') );
+        $this->set( compact( 'tituloPagina' ) );
     }
 }

@@ -92,52 +92,6 @@ class UsuariosTable extends Table {
      */
     public function getPermissoes($idUsuario=0)
     {
-        $permissoes =
-        [
-            '/auditorias/index' => 
-            [
-                'menu'      => 'Cadastros',
-                'titulo'    => 'Auditoria',
-                'url'       => '/auditorias/index',
-            ],
-            '/municipios/index' => 
-            [
-                'menu'      => 'Cadastros',
-                'titulo'    => 'Municípios',
-                'url'       => '/municipios/index',
-            ],
-            '/usuarios/index' => 
-            [
-                'menu'      => 'Cadastros',
-                'titulo'    => 'Usuários',
-                'url'       => '/usuarios/index',
-            ],
-            '/ferramentas/enviaremail' => 
-            [
-                'menu'      => 'Ferramentas',
-                'titulo'    => 'Enviar e-mail',
-                'url'       => '/ferramentas/enviar-email',
-            ],
-            '/relatorios/usuarios' => 
-            [
-                'menu'      => 'Relatórios',
-                'titulo'    => 'Relatório de Usuários',
-                'url'       => '/relatorios/usuarios',
-            ],
-            '/ajuda/manual' => 
-            [
-                'menu'      => 'Ajuda',
-                'titulo'    => 'Manual',
-                'url'       => '/ajuda/manual',
-            ],
-            '/ajuda/sobre' => 
-            [
-                'menu'      => 'Ajuda',
-                'titulo'    => 'Sobre',
-                'url'       => '/ajuda/sobre',
-            ]
-        ];
-
         $Recursos = \Cake\ORM\TableRegistry::get('Recursos');
 
         $lista = $Recursos->find()

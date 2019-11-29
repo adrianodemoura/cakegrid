@@ -129,12 +129,12 @@ class UsuariosController extends AppController {
                 }
 
                 // atualizando o último acesso do usuário
-                $agora = strtotime('now');
+                $agora = date('Y-m-d H:i:s', strtotime('now'));
                 $this->Usuarios
                     ->query()
                     ->update()
                     ->set( ['Usuarios.ultimo_acesso' => $agora] )
-                    ->where( ['Usuarios.id' => $usuario['id']])
+                    ->where( ['Usuarios.id' => $usuario['id']] )
                     ->execute();
 
                 // configurando a sessão com os dados e permissões do usuário
