@@ -5,6 +5,7 @@
  * @package     cakegrid.Config.Migrations
  */
 use Migrations\AbstractMigration;
+use Cake\Auth\DefaultPasswordHasher;
 /**
  * Mantém o banco de dados inicial.
  *
@@ -29,11 +30,21 @@ class Base extends AbstractMigration {
             ->create();
         $this->updateMunicipios();
 
-        $this->table('papeis')
+        $this->table('sistemas')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
             ->create(['nome']);
+        $this->updateSistemas();
+
+        $this->table('papeis')
+            ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
+            ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
+            ->addColumn('sistema_id',   'integer',  ['default' => 1, 'null' => false])
+            ->create(['nome']);
         $this->updatePapeis();
+        $this->table('papeis')
+            ->addForeignKey('sistema_id', 'sistemas', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->update();
 
         $this->table('unidades')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
@@ -55,27 +66,33 @@ class Base extends AbstractMigration {
         $this->table('usuarios')
             ->addForeignKey('municipio_id', 'municipios', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
+        $this->updateUsuarios();
 
-        // tabela de recursos
         $this->table('recursos')
             ->addColumn('url',          'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
             ->addColumn('titulo',       'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
             ->addColumn('menu',         'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
             ->addColumn('ativo',        'boolean',  ['default' => true, 'null' => false])
+            ->addColumn('sistema_id',   'integer',  ['default' => 1, 'null' => false])
             ->addIndex(['url'])
             ->addIndex(['ativo'])
             ->create();
         $this->updateRecursos();
+        $this->table('recursos')
+            ->addForeignKey('sistema_id', 'sistemas', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->update();
 
-        $this->table('associacoes')
+        $this->table('vinculacoes')
             ->addColumn('usuario_id',   'integer',  ['limit'=>11])
             ->addColumn('papel_id',     'integer',  ['limit'=>11])
             ->addColumn('unidade_id',   'integer',  ['limit'=>11])
+            ->addColumn('sistema_id',   'integer',  ['limit'=>11])
             ->create();
-        $this->table('associacoes')
+        $this->table('vinculacoes')
             ->addForeignKey('usuario_id',   'usuarios', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
-            ->addForeignKey('papel_id',     'papeis', 'id',     ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('papel_id',     'papeis',   'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('unidade_id',   'unidades', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('sistema_id',   'sistemas', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
 
         echo "\n";
@@ -86,15 +103,49 @@ class Base extends AbstractMigration {
      */
     public function down()
     {
-        $this->table('associacoes')->drop()->save();
+        $this->table('vinculacoes')->drop()->save();
         $this->table('usuarios')->dropForeignKey('municipio_id')->save();
         $this->table('municipios')->drop()->save();
         $this->table('usuarios')->drop()->save();
         $this->table('recursos')->drop()->save();
         $this->table('papeis')->drop()->save();
         $this->table('unidades')->drop()->save();
+        $this->table('sistemas')->drop()->save();
 
         echo "\n";
+    }
+
+    /**
+     * Atualiza a atabela de usuaŕios. Cria o usuário administrador.
+     *
+     * @return  void
+     */
+    private function updateUsuarios()
+    {
+        $this->execute('delete from usuarios');
+        $table      = $this->table('usuarios');
+        $senhaAdmin = (new DefaultPasswordHasher)->hash('admin1234');
+
+        $data       = [];
+        $data[]     = ['nome'=>'Administrador '.SISTEMA, 'email'=>'admin@admin.com.br', 'senha'=>$senhaAdmin, 'ultimo_acesso'=>date('Y-m-d H:i:s')];
+
+        $table->insert($data)->save();
+    }
+
+    /**
+     * Atualiza a tabela de sistema.
+     *
+     * @return  void
+     */
+    private function updateSistemas()
+    {
+        $this->execute('delete from sistemas');
+        $table = $this->table('sistemas');
+
+        $data   = [];
+        $data[] = ['nome'=>SISTEMA];
+
+        $table->insert($data)->save();
     }
 
     /**
