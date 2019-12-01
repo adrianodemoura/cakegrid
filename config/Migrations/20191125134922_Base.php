@@ -77,7 +77,6 @@ class Base extends AbstractMigration {
             ->addForeignKey('papel_id',     'papeis', 'id',     ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('unidade_id',   'unidades', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
-        $this->updateAssociacoes();
 
         echo "\n";
     }
@@ -96,21 +95,6 @@ class Base extends AbstractMigration {
         $this->table('unidades')->drop()->save();
 
         echo "\n";
-    }
-
-    /**
-     */
-    private function updateAssociacoes()
-    {
-        $this->execute('delete from associacoes');
-        $table = $this->table('associacoes');
-
-        $data   = [];
-        $data[] = ['usuario_id'=>1, 'papel_id'=>1, 'unidade_id'=>1];
-        $data[] = ['usuario_id'=>1, 'papel_id'=>1, 'unidade_id'=>2];
-        $data[] = ['usuario_id'=>1, 'papel_id'=>1, 'unidade_id'=>3];
-
-        $table->insert($data)->save();
     }
 
     /**
@@ -143,9 +127,9 @@ class Base extends AbstractMigration {
         $table = $this->table('unidades');
 
         $data   = [];
-        $data[] = ['nome'=>'GERAL'];
-        $data[] = ['nome'=>'REGIONAL NORTE'];
-        $data[] = ['nome'=>'REGIONAL LESTE'];
+        $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA)];
+        $data[] = ['nome'=>'UNIDADE OESTE'];
+        $data[] = ['nome'=>'UNIDADE LESTE'];
 
         $table->insert($data)->save();
     }

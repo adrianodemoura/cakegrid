@@ -44,6 +44,8 @@ use Cake\Mailer\TransportFactory;
 use Cake\Utility\Inflector;
 use Cake\Utility\Security;
 
+require __DIR__ . '/constants.php';
+
 /**
  * Uncomment block of code below if you want to use `.env` file during development.
  * You should copy `config/.env.default to `config/.env` and set/modify the
@@ -199,5 +201,3 @@ Type::build('timestamp')->useImmutable();
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
-
-define('SISTEMA', 'cakeGrid');
