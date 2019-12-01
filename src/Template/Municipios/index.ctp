@@ -1,8 +1,6 @@
 <?php
-
-	echo $this->Html->script( ['municipios/index'],	['block'=>true] );
-	echo $this->Html->css( ['municipios/index'], 	['block'=>true] );
-
+	//echo $this->Html->script( ['municipios/index'],	['block'=>true] );
+	//echo $this->Html->css( ['municipios/index'], 	['block'=>true] );
 ?>
 
 <div class="container bg-light">

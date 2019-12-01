@@ -82,18 +82,29 @@ class Base extends AbstractMigration {
             ->addForeignKey('sistema_id', 'sistemas', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
 
+        $this->table('papeis_recursos')
+            ->addColumn('papel_id',   'integer',  ['limit'=>11])
+            ->addColumn('recurso_id', 'integer',  ['limit'=>11])
+            ->create();
+        $this->table('papeis_recursos')
+            ->addForeignKey('papel_id',   'papeis',   'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('recurso_id', 'recursos', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->update();
+        $this->updatePapeisRecursos();
+
         $this->table('vinculacoes')
+            ->addColumn('sistema_id',   'integer',  ['limit'=>11])
+            ->addColumn('unidade_id',   'integer',  ['limit'=>11])
             ->addColumn('usuario_id',   'integer',  ['limit'=>11])
             ->addColumn('papel_id',     'integer',  ['limit'=>11])
-            ->addColumn('unidade_id',   'integer',  ['limit'=>11])
-            ->addColumn('sistema_id',   'integer',  ['limit'=>11])
             ->create();
         $this->table('vinculacoes')
+            ->addForeignKey('sistema_id',   'sistemas', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('unidade_id',   'unidades', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('usuario_id',   'usuarios', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('papel_id',     'papeis',   'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
-            ->addForeignKey('unidade_id',   'unidades', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
-            ->addForeignKey('sistema_id',   'sistemas', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
+        $this->updateVinculacoes();
 
         echo "\n";
     }
@@ -107,6 +118,7 @@ class Base extends AbstractMigration {
         $this->table('usuarios')->dropForeignKey('municipio_id')->save();
         $this->table('municipios')->drop()->save();
         $this->table('usuarios')->drop()->save();
+        $this->table('papeis_recursos')->drop()->save();
         $this->table('recursos')->drop()->save();
         $this->table('papeis')->drop()->save();
         $this->table('unidades')->drop()->save();
@@ -247,6 +259,44 @@ class Base extends AbstractMigration {
 
         $data[] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
         $data[] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
+
+        $table->insert($data)->save();
+    }
+
+    /**
+     * Atualiza as vinculações.
+     *
+     * @return  void
+     */
+    private function updateVinculacoes()
+    {
+        $this->execute('delete from vinculacoes');
+        $table = $this->table('vinculacoes');
+
+        $data   = [];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'papel_id'=>1];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'papel_id'=>2];
+
+        $table->insert($data)->save();
+    }
+
+    /**
+     * Atualiza as updatePapeisRecursos.
+     *
+     * @return  void
+     */
+    private function updatePapeisRecursos()
+    {
+        $this->execute('delete from papeis_recursos');
+        $table = $this->table('papeis_recursos');
+
+        $data   = [];
+        for( $i=1; $i<13; $i++)
+        {
+            $data[] = ['papel_id'=>1, 'recurso_id'=>$i];
+            $data[] = ['papel_id'=>1, 'recurso_id'=>$i];
+            $data[] = ['papel_id'=>1, 'recurso_id'=>$i];
+        }
 
         $table->insert($data)->save();
     }

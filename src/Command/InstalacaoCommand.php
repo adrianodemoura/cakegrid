@@ -59,6 +59,8 @@ class InstalacaoCommand extends Command
                 throw new Exception(__("senha inválida !"), 3);
             }
 
+            throw new Exception(__('Cancelado'), 1);
+
             $Usuario = $this->Usuarios->newEntity();
             $Usuario->nome  = $email;
             $Usuario->email = $email;
