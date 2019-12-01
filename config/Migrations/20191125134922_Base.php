@@ -48,6 +48,7 @@ class Base extends AbstractMigration {
 
         $this->table('unidades')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
+            ->addColumn('cnpj',         'float',  ['default' => 0, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
             ->create(['nome']);
         $this->updateUnidades();
