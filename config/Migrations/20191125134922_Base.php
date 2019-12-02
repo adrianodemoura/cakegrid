@@ -246,7 +246,7 @@ class Base extends AbstractMigration {
         $data   = [];
         $data[] = ['url'=>'/painel/index',         'titulo'=> 'Página inicial'];
 
-        $data[] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=> 'Usuários'];
+        $data[] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=>'Usuários'];
         $data[] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>'Municípios'];
         $data[] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>'Auditorias'];
         $data[] = ['url'=>'/usuarios/permissoes',  'titulo'=>'Permissões'];

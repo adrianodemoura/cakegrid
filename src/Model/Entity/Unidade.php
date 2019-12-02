@@ -4,16 +4,16 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Recurso Entity
+ * Unidade Entity
  *
  * @property int $id
- * @property string $url
- * @property string $titulo
- * @property string $menu
+ * @property string $nome
+ * @property float $cnpj
  * @property bool $ativo
- * @property int $sistema_id
+ *
+ * @property \App\Model\Entity\Vinculaco[] $vinculacoes
  */
-class Recurso extends Entity
+class Unidade extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -25,10 +25,9 @@ class Recurso extends Entity
      * @var array
      */
     protected $_accessible = [
-        'url' => true,
-        'titulo' => true,
-        'menu' => true,
+        'nome' => true,
+        'cnpj' => true,
         'ativo' => true,
-        'sistema_id' => true
+        'vinculacoes' => true
     ];
 }

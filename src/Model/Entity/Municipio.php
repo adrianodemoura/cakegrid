@@ -4,16 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Recurso Entity
+ * Municipio Entity
  *
  * @property int $id
- * @property string $url
- * @property string $titulo
- * @property string $menu
- * @property bool $ativo
- * @property int $sistema_id
+ * @property string $nome
+ * @property string $uf
+ * @property string $codi_estd
+ * @property string $desc_estd
+ *
+ * @property \App\Model\Entity\Usuario[] $usuarios
  */
-class Recurso extends Entity
+class Municipio extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -25,10 +26,10 @@ class Recurso extends Entity
      * @var array
      */
     protected $_accessible = [
-        'url' => true,
-        'titulo' => true,
-        'menu' => true,
-        'ativo' => true,
-        'sistema_id' => true
+        'nome' => true,
+        'uf' => true,
+        'codi_estd' => true,
+        'desc_estd' => true,
+        'usuarios' => true
     ];
 }

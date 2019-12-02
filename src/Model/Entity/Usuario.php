@@ -11,6 +11,9 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string $nome
  * @property string $email
  * @property string $senha
+ * @property bool $ativo
+ * @property \Cake\I18n\FrozenTime $ultimo_acesso
+ * @property int $municipio_id
  */
 class Usuario extends Entity
 {
@@ -23,12 +26,13 @@ class Usuario extends Entity
      *
      * @var array
      */
-    protected $_accessible = 
-    [
-        'nome'  => true,
+    protected $_accessible = [
+        'nome' => true,
         'email' => true,
         'senha' => true,
-        'ultimo_acesso' => true
+        'ativo' => true,
+        'ultimo_acesso' => true,
+        'municipio_id' => true
     ];
 
     /**

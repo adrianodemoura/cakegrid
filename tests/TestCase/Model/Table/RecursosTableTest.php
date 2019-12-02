@@ -1,21 +1,21 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\UsuariosTable;
+use App\Model\Table\RecursosTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\UsuariosTable Test Case
+ * App\Model\Table\RecursosTable Test Case
  */
-class UsuariosTableTest extends TestCase
+class RecursosTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\UsuariosTable
+     * @var \App\Model\Table\RecursosTable
      */
-    public $Usuarios;
+    public $Recursos;
 
     /**
      * Fixtures
@@ -23,7 +23,7 @@ class UsuariosTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Usuarios'
+        'app.Recursos'
     ];
 
     /**
@@ -34,8 +34,8 @@ class UsuariosTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Usuarios') ? [] : ['className' => UsuariosTable::class];
-        $this->Usuarios = TableRegistry::getTableLocator()->get('Usuarios', $config);
+        $config = TableRegistry::getTableLocator()->exists('Recursos') ? [] : ['className' => RecursosTable::class];
+        $this->Recursos = TableRegistry::getTableLocator()->get('Recursos', $config);
     }
 
     /**
@@ -45,7 +45,7 @@ class UsuariosTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Usuarios);
+        unset($this->Recursos);
 
         parent::tearDown();
     }
@@ -76,26 +76,6 @@ class UsuariosTableTest extends TestCase
      * @return void
      */
     public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test beforeDelete method
-     *
-     * @return void
-     */
-    public function testBeforeDelete()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test getPermissoes method
-     *
-     * @return void
-     */
-    public function testGetPermissoes()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

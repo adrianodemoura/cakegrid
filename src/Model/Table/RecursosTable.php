@@ -5,14 +5,21 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Event\Event;
-/*use Cake\Datasource\EntityInterface;
-use ArrayObject;
-use Exception;*/
 
 /**
- * Usuarios Model
- * Mantém a tabela recursos
+ * Recursos Model
+ *
+ * @property &\Cake\ORM\Association\BelongsTo $Sistemas
+ * @property &\Cake\ORM\Association\BelongsToMany $Papeis
+ *
+ * @method \App\Model\Entity\Recurso get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Recurso newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\Recurso[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Recurso|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Recurso saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Recurso patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Recurso[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Recurso findOrCreate($search, callable $callback = null, $options = [])
  */
 class RecursosTable extends Table
 {
@@ -30,6 +37,16 @@ class RecursosTable extends Table
         $this->setDisplayField('titulo');
         $this->setPrimaryKey('id');
         $this->setEntityClass('Recurso');
+
+        $this->belongsTo('Sistemas', [
+            'foreignKey' => 'sistema_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsToMany('Papeis', [
+            'foreignKey' => 'recurso_id',
+            'targetForeignKey' => 'papei_id',
+            'joinTable' => 'papeis_recursos'
+        ]);
     }
 
     /**
@@ -45,14 +62,23 @@ class RecursosTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->email('titulo',null,'titulo inválido !')
-            ->requirePresence('titulo', 'create')
+            ->scalar('url')
+            ->maxLength('url', 100)
+            ->notEmptyString('url');
+
+        $validator
+            ->scalar('titulo')
+            ->maxLength('titulo', 100)
             ->notEmptyString('titulo');
 
         $validator
-            ->email('url',null,'url inválida !')
-            ->requirePresence('url', 'create')
-            ->notEmptyString('url');
+            ->scalar('menu')
+            ->maxLength('menu', 100)
+            ->notEmptyString('menu');
+
+        $validator
+            ->boolean('ativo')
+            ->notEmptyString('ativo');
 
         return $validator;
     }
@@ -66,9 +92,8 @@ class RecursosTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        //$rules->add($rules->isUnique(['email']), 'Este e-mail já está em uso');
+        $rules->add($rules->existsIn(['sistema_id'], 'Sistemas'));
 
         return $rules;
     }
-
 }

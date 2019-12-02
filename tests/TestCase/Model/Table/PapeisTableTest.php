@@ -1,21 +1,21 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\UsuariosTable;
+use App\Model\Table\PapeisTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\UsuariosTable Test Case
+ * App\Model\Table\PapeisTable Test Case
  */
-class UsuariosTableTest extends TestCase
+class PapeisTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\UsuariosTable
+     * @var \App\Model\Table\PapeisTable
      */
-    public $Usuarios;
+    public $Papeis;
 
     /**
      * Fixtures
@@ -23,7 +23,9 @@ class UsuariosTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Usuarios'
+        'app.Papeis',
+        'app.Sistemas',
+        'app.Recursos'
     ];
 
     /**
@@ -34,8 +36,8 @@ class UsuariosTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Usuarios') ? [] : ['className' => UsuariosTable::class];
-        $this->Usuarios = TableRegistry::getTableLocator()->get('Usuarios', $config);
+        $config = TableRegistry::getTableLocator()->exists('Papeis') ? [] : ['className' => PapeisTable::class];
+        $this->Papeis = TableRegistry::getTableLocator()->get('Papeis', $config);
     }
 
     /**
@@ -45,7 +47,7 @@ class UsuariosTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Usuarios);
+        unset($this->Papeis);
 
         parent::tearDown();
     }
@@ -76,26 +78,6 @@ class UsuariosTableTest extends TestCase
      * @return void
      */
     public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test beforeDelete method
-     *
-     * @return void
-     */
-    public function testBeforeDelete()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test getPermissoes method
-     *
-     * @return void
-     */
-    public function testGetPermissoes()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
