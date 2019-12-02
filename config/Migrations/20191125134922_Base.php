@@ -20,7 +20,6 @@ class Base extends AbstractMigration {
      */
     public function up()
     {
-        // tabela municípios
         $this->table('municipios')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
             ->addColumn('uf',           'string', ['default' => '-', 'limit' => 2, 'null' => false])
@@ -53,7 +52,6 @@ class Base extends AbstractMigration {
             ->create(['nome']);
         $this->updateUnidades();
 
-        // tabela usuários
         $this->table('usuarios')
             ->addColumn('nome',         'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('email',        'string', ['default' => '', 'limit' => 100, 'null' => false])
@@ -107,6 +105,19 @@ class Base extends AbstractMigration {
             ->update();
         $this->updateVinculacoes();
 
+        $this->table('auditorias')
+            ->addColumn('codigo_sistema',   'string',   ['default'=>'', 'limit'=>20,  'null'=>false])
+            ->addColumn('ip',               'string',   ['default'=>'', 'limit'=>20,  'null'=>false])
+            ->addColumn('motivo',           'string',   ['default'=>'', 'limit'=>50, 'null'=>false])
+            ->addColumn('descricao',        'string',   ['default'=>'', 'limit'=>250, 'null'=>false])
+            ->addColumn('usuario_id',       'integer',  ['default'=>0,'null'=>false])
+            ->addColumn('data',             'timestamp',['default' => 0, 'null' => false])
+            ->create();
+        $this->table('auditorias')
+            ->addIndex(['codigo_sistema'])
+            ->addIndex(['motivo'])
+            ->update();
+
         echo "\n";
     }
  
@@ -115,6 +126,7 @@ class Base extends AbstractMigration {
      */
     public function down()
     {
+        $this->table('auditorias')->drop()->save();
         $this->table('vinculacoes')->drop()->save();
         $this->table('usuarios')->dropForeignKey('municipio_id')->save();
         $this->table('municipios')->drop()->save();

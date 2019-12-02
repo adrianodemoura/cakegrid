@@ -20,12 +20,14 @@ class FerramentasController extends AppController {
      */
     public function limparCache()
     {
-
     	$shell 	= new \Cake\Console\ShellDispatcher();
         $output = $shell->run(['cake', 'cache', 'clear_all']);
 
         if (0 === $output)
         {
+            $this->loadModel('Auditorias');
+            $this->Auditorias->auditar('cache', 'Limpei o cache do sistema');
+
         	$this->Flash->success(__('O Cache foi limpo com sucesso !'));
         } else
         {

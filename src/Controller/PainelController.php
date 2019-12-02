@@ -33,6 +33,11 @@ class PainelController extends AppController
      */
     public function logout()
     {
+        $this->loadModel('Auditorias');
+
+        // auditando o acesso do usuário
+        $this->Auditorias->auditar('acessos', 'O Usuário saiu do sistema');
+
         $this->Flash->success( __('Logout efetuado com sucesso.') );
         return $this->redirect($this->Auth->logout());
     }
@@ -60,6 +65,7 @@ class PainelController extends AppController
             try
             {
                 $this->loadModel('Usuarios');
+                $this->loadModel('Auditorias');
 
                 if ( !$LoginForm->execute($this->request->getData()) )
                 {
@@ -84,6 +90,9 @@ class PainelController extends AppController
                 // configurando a sessão com os dados e permissões do usuário
                 $usuario['Permissoes'] = $this->Usuarios->getPermissoes( $usuario['id']);
                 $this->Auth->setUser( $usuario );
+
+                // auditando o acesso do usuário
+                $this->Auditorias->auditar('acessos', 'O Usuário entrou no sistema');
 
                 // retornando pra página inicial
                 $this->Flash->success( __('Usuário logado com sucesso !') );
