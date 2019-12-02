@@ -1,6 +1,6 @@
 <?php
-	//echo $this->Html->script( ['usuarios/acesso-negado'],	['block'=>true] );
-	//echo $this->Html->css( ['usuarios/acesso-negado'],	['block'=>true] );
+	//echo $this->Html->script( ['painel/acesso-negado'],	['block'=>true] );
+	//echo $this->Html->css( ['painel/acesso-negado'],		['block'=>true] );
 	$Sessao = $this->request->getSession();
 ?>
 

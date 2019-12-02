@@ -42,7 +42,7 @@ class AppController extends Controller {
         $paramsAuth['authorize']            = 'Controller';
         $paramsAuth['authenticate']         = ['Form'=>['fields'=>['username'=>'email', 'password'=>'senha'], 'userModel'=>'Usuarios']];
         $paramsAuth['authError']            = __('Você não possui permissão para acessar '.$pca);
-        $paramsAuth['loginAction']          = ['controller'=>'Usuarios', 'action'=>'login'];
+        $paramsAuth['loginAction']          = ['controller'=>'Painel', 'action'=>'login'];
         $paramsAuth['unauthorizedRedirect'] = $this->referer();
         $this->loadComponent('Auth', $paramsAuth);
 
@@ -67,7 +67,7 @@ class AppController extends Controller {
         $this->viewBuilder()->setLayout('admin');
 
         // pcas sem permissão
-        $pcasSemPermissao = ['/painel/index', '/usuarios/logout', '/usuarios/acessonegado'];
+        $pcasSemPermissao = ['/painel/index', '/painel/logout', '/painel/acesso-negado'];
 
         // permitindo alguns pcas
         if ( in_array($this->pca, $pcasSemPermissao) || isset($user['Permissoes'][$this->pca]) )

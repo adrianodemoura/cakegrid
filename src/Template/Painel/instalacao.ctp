@@ -1,7 +1,7 @@
 <?php
 
-	echo $this->Html->script( ['usuarios/instalacao'],	['block'=>true] );
-	echo $this->Html->css( ['usuarios/instalacao'], 	['block'=>true] );
+	echo $this->Html->script( ['painel/instalacao'],	['block'=>true] );
+	echo $this->Html->css( ['painel/instalacao'], 		['block'=>true] );
 
 	$optionsNome 	= ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'nome','name'=>'nome', 'id'=>'inNome', 'class'=>'form-control', 'autofocus'=>true, 'default'=>'Administrador Aplicação'];
 	$optionsEmail 	= ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'e-mail','name'=>'email', 'id'=>'inEmail', 'class'=>'form-control', 'default'=>'admin@admin.com.br'];

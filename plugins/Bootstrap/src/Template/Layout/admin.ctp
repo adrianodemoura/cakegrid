@@ -50,10 +50,10 @@
     <div id="cabecalho" class="container bg-white py-2 rounded-bottom shadow bottom">
         <div class="row">
             <div class="col-6">
-                <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/usuarios/info'); ?>
+                <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/info'); ?>
             </div>
             <div class="col-6 text-right">
-                <?= $this->Html->link('sair', '/usuarios/logout'); ?>
+                <?= $this->Html->link('sair', '/logout'); ?>
             </div>
         </div>
     </div>

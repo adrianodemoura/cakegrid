@@ -249,8 +249,8 @@ class Base extends AbstractMigration {
         $data[] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=>'Usuários'];
         $data[] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>'Municípios'];
         $data[] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>'Auditorias'];
-        $data[] = ['url'=>'/usuarios/permissoes',  'titulo'=>'Permissões'];
-        $data[] = ['url'=>'/usuarios/info',        'titulo'=>'Informações do Usuário'];
+        $data[] = ['url'=>'/painel/permissoes',    'titulo'=>'Permissões'];
+        $data[] = ['url'=>'/painel/info',          'titulo'=>'Informações do Usuário'];
 
         $data[] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
         $data[] = ['url'=>'/ferramentas/recarregar-permissoes', 'menu'=>'Ferramentas', 'titulo'=>'Recarregar as Permissões'];

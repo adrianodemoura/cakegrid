@@ -62,11 +62,12 @@ Router::scope('/', function (RouteBuilder $routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-    $routes->connect('/',       ['controller' => 'Painel', 'action'=>'index']);
-    $routes->connect('login',   ['controller' => 'Usuarios', 'action'=>'login']);
-    $routes->connect('logout',  ['controller' => 'Usuarios', 'action'=>'logout']);
-    $routes->connect('sair',    ['controller' => 'Usuarios', 'action'=>'logout']);
-    $routes->connect('permissoes', ['controller' => 'Usuarios', 'action'=>'permissoes']);
+    $routes->connect('/',           ['controller' => 'Painel', 'action'=>'index']);
+    $routes->connect('login',       ['controller' => 'Painel', 'action'=>'login']);
+    $routes->connect('info',        ['controller' => 'Painel', 'action'=>'info']);
+    $routes->connect('logout',      ['controller' => 'Painel', 'action'=>'logout']);
+    $routes->connect('sair',        ['controller' => 'Painel', 'action'=>'logout']);
+    $routes->connect('permissoes',  ['controller' => 'Painel', 'action'=>'permissoes']);
 
     /**
      * Connect catchall routes for all controllers.

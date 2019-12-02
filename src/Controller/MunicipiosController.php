@@ -14,10 +14,5 @@ class MunicipiosController extends AppController {
 	 */
 	public function index()
 	{
-		$this->loadModel('Municipios');
-
-		$listaMunicipios = $this->Municipios->getLista();
-
-		$this->log($listaMunicipios);
 	}
 }

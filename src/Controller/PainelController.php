@@ -1,14 +1,15 @@
 <?php
+/**
+ * Controller Painel
+ *
+ * @package     cakegrid.Controller
+ * @author      Adriano Moura
+ */
 namespace App\Controller;
-
 use App\Controller\AppController;
 use Exception;
-
 /**
- * Painel Controller
- *
- *
- * @method \App\Model\Entity\Painel[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * Mantém o painel do sistema.
  */
 class PainelController extends AppController
 {
@@ -23,5 +24,110 @@ class PainelController extends AppController
         $tituloPagina   = SISTEMA.' - Página Inicial';
 
         $this->set( compact( 'tituloPagina' ) );
+    }
+
+    /**
+     * Executa o logout da aplicação
+     *
+     * @return  \Cake\Http\Response|null
+     */
+    public function logout()
+    {
+        $this->Flash->success( __('Logout efetuado com sucesso.') );
+        return $this->redirect($this->Auth->logout());
+    }
+
+    /**
+     * Exibe a tela de login
+     *
+     * @return  \Cake\Http\Response|null
+     */
+    public function login()
+    {
+        $tituloPagina = 'Login';
+        $Sessao = $this->request->getSession();
+
+        if ( $Sessao->check('Auth.User') )
+        {
+            $this->Flash->error( __('O usuário já se encontra autenticado !') );
+            return $this->redirect('/');
+        }
+
+        $LoginForm = new \App\Form\LoginForm();
+
+        if ( $this->request->is('post') )
+        {
+            try
+            {
+                $this->loadModel('Usuarios');
+
+                if ( !$LoginForm->execute($this->request->getData()) )
+                {
+                    throw new Exception(__('Parâmetro errado para login !'), 1);
+                }
+
+                $usuario = $this->Auth->identify();
+                if ( !$usuario )
+                {
+                    throw new Exception(__('Usuário ou senha inválido, tente novamente !'), 2);
+                }
+
+                // atualizando o último acesso do usuário
+                $agora = date('Y-m-d H:i:s', strtotime('now'));
+                $this->Usuarios
+                    ->query()
+                    ->update()
+                    ->set( ['Usuarios.ultimo_acesso' => $agora] )
+                    ->where( ['Usuarios.id' => $usuario['id']] )
+                    ->execute();
+
+                // configurando a sessão com os dados e permissões do usuário
+                $usuario['Permissoes'] = $this->Usuarios->getPermissoes( $usuario['id']);
+                $this->Auth->setUser( $usuario );
+
+                // retornando pra página inicial
+                $this->Flash->success( __('Usuário logado com sucesso !') );
+                return $this->redirect('/');
+            } catch (Exception $e)
+            {
+                $erro = $e->getMessage();
+                if ( $e->getCode() === 500) { $erro = 'A instalação não foi executada ainda !'; }
+
+                $this->Flash->error( $erro );
+                return $this->redirect( ['action'=>'login']);
+            }
+        }
+
+        // populando a view
+        $this->set(compact('tituloPagina', 'LoginForm', 'tituloPagina'));
+    }
+
+    /**
+     * Exibe a tela de permissões
+     *
+     * @return  void
+     */
+    public function permissoes()
+    {
+        //
+    }
+
+    /**
+     * Exibe a tela de informações do 
+     *
+     * @return  void
+     */
+    public function info()
+    {
+        //
+    }
+
+    /**
+     * Exibe a tela para usuários sem permissão.
+     *
+     * @return  void
+     */
+    public function acessoNegado()
+    {
     }
 }

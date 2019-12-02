@@ -1,7 +1,7 @@
 <?php
 
-	echo $this->Html->script( ['usuarios/login'],	['block'=>true] );
-	echo $this->Html->css( ['usuarios/login'], 		['block'=>true] );
+	echo $this->Html->script( ['painel/login'],		['block'=>true] );
+	echo $this->Html->css( ['painel/login'], 		['block'=>true] );
 
 	$optionsLogin = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'e-mail','name'=>'email', 'id'=>'inEmail', 'class'=>'form-control', 'autofocus'=>true, 'default'=>'admin@admin.com.br'];
 	$optionsSenha = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'senha', 'name'=>'senha', 'id'=>'inSenha', 'class'=>'form-control', 'type'=>'password', 'default'=>'admin1234'];
