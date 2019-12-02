@@ -37,6 +37,8 @@ class MunicipiosTable extends Table
         $this->setPrimaryKey('id');
         $this->setEntityClass('Municipio');
 
+        $this->addBehavior('Lista');
+
         $this->hasMany('Usuarios', [
             'foreignKey' => 'municipio_id'
         ]);

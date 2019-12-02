@@ -72,7 +72,6 @@ class AppController extends Controller {
         // permitindo alguns pcas
         if ( in_array($this->pca, $pcasSemPermissao) || isset($user['Permissoes'][$this->pca]) )
         {
-            //$this->log('permissão ok para: '.$this->pca);
             return true;
         }
 
