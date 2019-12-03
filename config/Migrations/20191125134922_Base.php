@@ -27,20 +27,17 @@ class Base extends AbstractMigration {
             ->addColumn('desc_estd',    'string', ['default' => '-', 'limit' => 50, 'null' => false])
             ->addIndex(['uf', 'nome'])
             ->create();
-        $this->updateMunicipios();
 
         $this->table('sistemas')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
             ->create(['nome']);
-        $this->updateSistemas();
 
         $this->table('papeis')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
             ->addColumn('sistema_id',   'integer',  ['default' => 1, 'null' => false])
             ->create(['nome']);
-        $this->updatePapeis();
         $this->table('papeis')
             ->addForeignKey('sistema_id', 'sistemas', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
@@ -50,14 +47,13 @@ class Base extends AbstractMigration {
             ->addColumn('cnpj',         'float',  ['default' => 0, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
             ->create(['nome']);
-        $this->updateUnidades();
 
         $this->table('usuarios')
             ->addColumn('nome',         'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('email',        'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('senha',        'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
-            ->addColumn('ultimo_acesso','timestamp', ['default' => 0, 'null' => false])
+            ->addColumn('ultimo_acesso','timestamp', ['default'=>date('Y-m-d H:i:s'), 'null' => false])
             ->addColumn('municipio_id', 'integer',['default' => 3106200, 'limit' => 11, 'null' => false])
             ->addIndex(['municipio_id'])
             ->addIndex(['ativo'])
@@ -65,7 +61,6 @@ class Base extends AbstractMigration {
         $this->table('usuarios')
             ->addForeignKey('municipio_id', 'municipios', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
-        $this->updateUsuarios();
 
         $this->table('recursos')
             ->addColumn('url',          'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
@@ -76,7 +71,6 @@ class Base extends AbstractMigration {
             ->addIndex(['url'])
             ->addIndex(['ativo'])
             ->create();
-        $this->updateRecursos();
         $this->table('recursos')
             ->addForeignKey('sistema_id', 'sistemas', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
@@ -89,7 +83,6 @@ class Base extends AbstractMigration {
             ->addForeignKey('papel_id',   'papeis',   'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('recurso_id', 'recursos', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
-        $this->updatePapeisRecursos();
 
         $this->table('vinculacoes')
             ->addColumn('sistema_id',   'integer',  ['limit'=>11])
@@ -103,7 +96,6 @@ class Base extends AbstractMigration {
             ->addForeignKey('usuario_id',   'usuarios', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('papel_id',     'papeis',   'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
-        $this->updateVinculacoes();
 
         $this->table('auditorias')
             ->addColumn('codigo_sistema',   'string',   ['default'=>'', 'limit'=>20,  'null'=>false])
@@ -111,12 +103,23 @@ class Base extends AbstractMigration {
             ->addColumn('motivo',           'string',   ['default'=>'', 'limit'=>50, 'null'=>false])
             ->addColumn('descricao',        'string',   ['default'=>'', 'limit'=>250, 'null'=>false])
             ->addColumn('usuario_id',       'integer',  ['default'=>0,'null'=>false])
-            ->addColumn('data',             'timestamp',['default' => 0, 'null' => false])
+            ->addColumn('data',             'timestamp',['default'=>date('Y-m-d H:i:s'), 'null' => false])
             ->create();
         $this->table('auditorias')
             ->addIndex(['codigo_sistema'])
             ->addIndex(['motivo'])
             ->update();
+
+        // atualizando os dados.
+        $this->updateMunicipios();
+        $this->updateSistemas();
+        $this->updatePapeis();
+        $this->updateUnidades();
+        $this->updateUsuarios();
+        $this->updateRecursos();
+        $this->updatePapeisRecursos();
+        $this->updateVinculacoes();
+        $this->updateAuditorias();
 
         echo "\n";
     }
@@ -141,6 +144,20 @@ class Base extends AbstractMigration {
     }
 
     /**
+     */
+    private function updateAuditorias()
+    {
+        $this->execute('delete from auditorias');
+        $table      = $this->table('auditorias');
+        //\Cake\Log\Log::write('debug', $_SERVER);
+
+        $data       = [];
+        $data[]     = ['codigo_sistema'=>SISTEMA, 'ip'=>gethostbyname(gethostname()), 'motivo'=>'instalacao', 'descricao'=>'A instalação do sistema '.SISTEMA.' foi realizada', 'usuario_id'=>1, 'data'=>date('Y-m-d H:i:s')];
+
+        $table->insert($data)->save();
+    }
+
+    /**
      * Atualiza a atabela de usuaŕios. Cria o usuário administrador.
      *
      * @return  void
@@ -152,7 +169,7 @@ class Base extends AbstractMigration {
         $senhaAdmin = (new DefaultPasswordHasher)->hash('admin1234');
 
         $data       = [];
-        $data[]     = ['nome'=>'Administrador '.SISTEMA, 'email'=>'admin@admin.com.br', 'senha'=>$senhaAdmin, 'ultimo_acesso'=>date('Y-m-d H:i:s')];
+        $data[]     = ['nome'=>'Administrador '.SISTEMA, 'email'=>'admin@admin.com.br', 'senha'=>$senhaAdmin];
 
         $table->insert($data)->save();
     }
