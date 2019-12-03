@@ -107,7 +107,7 @@ class Base extends AbstractMigration {
 
         $this->table('auditorias')
             ->addColumn('codigo_sistema',   'string',   ['default'=>'', 'limit'=>20,  'null'=>false])
-            ->addColumn('ip',               'string',   ['default'=>'', 'limit'=>20,  'null'=>false])
+            ->addColumn('ip',               'string',   ['default'=>'', 'limit'=>15,  'null'=>false])
             ->addColumn('motivo',           'string',   ['default'=>'', 'limit'=>50, 'null'=>false])
             ->addColumn('descricao',        'string',   ['default'=>'', 'limit'=>250, 'null'=>false])
             ->addColumn('usuario_id',       'integer',  ['default'=>0,'null'=>false])
