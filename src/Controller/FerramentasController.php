@@ -57,14 +57,4 @@ class FerramentasController extends AppController {
 
         return $this->redirect('/');
     }
-
-    /**
-     * Exibe a tela para alterar a Unidade
-     *
-     * @return  \Cake\Network\Response|null
-     */
-    public function alterarUnidade()
-    {
-        
-    }
 }

@@ -117,8 +117,8 @@ class Base extends AbstractMigration {
         $this->updateUnidades();
         $this->updateUsuarios();
         $this->updateRecursos();
-        $this->updatePapeisRecursos();
         $this->updateVinculacoes();
+        $this->updatePapeisRecursos();
         $this->updateAuditorias();
 
         echo "\n";
@@ -149,10 +149,12 @@ class Base extends AbstractMigration {
     {
         $this->execute('delete from auditorias');
         $table      = $this->table('auditorias');
-        //\Cake\Log\Log::write('debug', $_SERVER);
-
         $data       = [];
         $data[]     = ['codigo_sistema'=>SISTEMA, 'ip'=>gethostbyname(gethostname()), 'motivo'=>'instalacao', 'descricao'=>'A instalação do sistema '.SISTEMA.' foi realizada', 'usuario_id'=>1, 'data'=>date('Y-m-d H:i:s')];
+        if ( strpos(strtolower($_SERVER['OS']), 'windows') > -1 )
+        {
+            $data[0]['descricao'] = utf8_decode($data[0]['descricao']);
+        }
 
         $table->insert($data)->save();
     }
@@ -202,9 +204,6 @@ class Base extends AbstractMigration {
 
         $data   = [];
         $data[] = ['nome'=>'ADMINISTRADOR'];
-        $data[] = ['nome'=>'SUPERVISOR'];
-        $data[] = ['nome'=>'USUÁRIO'];
-        $data[] = ['nome'=>'VISITANTE'];
 
         $table->insert($data)->save();
     }
@@ -221,8 +220,6 @@ class Base extends AbstractMigration {
 
         $data   = [];
         $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA)];
-        $data[] = ['nome'=>'UNIDADE OESTE'];
-        $data[] = ['nome'=>'UNIDADE LESTE'];
 
         $table->insert($data)->save();
     }
@@ -283,12 +280,24 @@ class Base extends AbstractMigration {
 
         $data[] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
         $data[] = ['url'=>'/ferramentas/recarregar-permissoes', 'menu'=>'Ferramentas', 'titulo'=>'Recarregar as Permissões'];
-        $data[] = ['url'=>'/ferramentas/alterar-unidade', 'menu'=>'Ferramentas', 'titulo'=>'Alterar Unidade'];
 
         $data[] = ['url'=>'/relatorios/usuarios',  'menu'=>'Relatórios', 'titulo'=>'Usuários'];
 
         $data[] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
         $data[] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
+
+        // se estais rodando da kaka do windows, coisa que não recomendo.
+        if ( strpos(strtolower($_SERVER['OS']), 'windows') > -1 )
+        {
+            foreach($data as $_l => $_arrFields)
+            {
+                $data[$_l]['titulo']= utf8_decode($data[$_l]['titulo']);
+                if ( isset($_arrFields['menu']) )
+                {
+                    $data[$_l]['menu']  = utf8_decode($data[$_l]['menu']);
+                }
+            }
+        }
 
         $table->insert($data)->save();
     }
@@ -305,7 +314,6 @@ class Base extends AbstractMigration {
 
         $data   = [];
         $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'papel_id'=>1];
-        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'papel_id'=>2];
 
         $table->insert($data)->save();
     }
@@ -317,17 +325,26 @@ class Base extends AbstractMigration {
      */
     private function updatePapeisRecursos()
     {
-        $this->execute('delete from papeis_recursos');
-        $table = $this->table('papeis_recursos');
+        //$idSistema = @$this->fetchAll("SELECT id FROM sistemas WHERE nome='".SISTEMA."'")[0]['id'];
+        $idSistema  = 1;
+
+        $arrPapeis      = $this->fetchAll('select id from papeis where id=1 order by 1');
+        $arrRecursos    = $this->fetchAll('select id from recursos order by 1');
+        //\Cake\Log\Log::write('debug', $arrRecursos);
 
         $data   = [];
-        for( $i=1; $i<13; $i++)
+        $l      = 0;
+        foreach($arrRecursos as $_l => $_arrFields)
         {
-            $data[] = ['papel_id'=>1, 'recurso_id'=>$i];
-            $data[] = ['papel_id'=>1, 'recurso_id'=>$i];
-            $data[] = ['papel_id'=>1, 'recurso_id'=>$i];
+            foreach($arrPapeis as $_l2 => $_arrFields2)
+            {
+                $data[$l]['recurso_id'] = $_arrFields['id'];
+                $data[$l]['papel_id']   = $_arrFields2['id'];
+                $l++;
+            }
         }
 
+        $table  = $this->table('papeis_recursos');
         $table->insert($data)->save();
     }
 }
