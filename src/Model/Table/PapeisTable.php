@@ -38,14 +38,18 @@ class PapeisTable extends Table
         $this->setPrimaryKey('id');
         $this->setEntityClass('Papel');
 
-        $this->belongsTo('Sistemas', [
-            'foreignKey' => 'sistema_id',
-            'joinType' => 'INNER'
+        $this->belongsTo('Sistemas',        ['foreignKey' => 'sistema_id']);
+        $this->belongsToMany('Recursos',    
+        [
+            'foreignKey'        => 'papei_id',
+            'targetForeignKey'  => 'recurso_id',
+            'joinTable'         => 'papeis_recursos'
         ]);
-        $this->belongsToMany('Recursos', [
-            'foreignKey' => 'papei_id',
-            'targetForeignKey' => 'recurso_id',
-            'joinTable' => 'papeis_recursos'
+        $this->belongsToMany('Usuarios',    
+        [
+            'foreignKey'        => 'papei_id',
+            'targetForeignKey'  => 'usuarios_id',
+            'joinTable'         => 'vinculacoes'
         ]);
     }
 

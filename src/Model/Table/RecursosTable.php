@@ -1,28 +1,19 @@
 <?php
+/**
+ * Recursos Model
+ *
+ * @package     cakeGrid.Model.Table
+ * @author      Adriano Moura
+ */
 namespace App\Model\Table;
-
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
 /**
- * Recursos Model
- *
- * @property &\Cake\ORM\Association\BelongsTo $Sistemas
- * @property &\Cake\ORM\Association\BelongsToMany $Papeis
- *
- * @method \App\Model\Entity\Recurso get($primaryKey, $options = [])
- * @method \App\Model\Entity\Recurso newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Recurso[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Recurso|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Recurso saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Recurso patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Recurso[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Recurso findOrCreate($search, callable $callback = null, $options = [])
+ * mantém a tabela recursos.
  */
-class RecursosTable extends Table
-{
+class RecursosTable extends Table {
     /**
      * Initialize method
      *
@@ -38,14 +29,11 @@ class RecursosTable extends Table
         $this->setPrimaryKey('id');
         $this->setEntityClass('Recurso');
 
-        $this->belongsTo('Sistemas', [
-            'foreignKey' => 'sistema_id',
-            'joinType' => 'INNER'
-        ]);
+        $this->belongsTo('Sistemas', ['foreignKey' => 'sistema_id']);
         $this->belongsToMany('Papeis', [
-            'foreignKey' => 'recurso_id',
-            'targetForeignKey' => 'papei_id',
-            'joinTable' => 'papeis_recursos'
+            'foreignKey'        => 'recurso_id',
+            'targetForeignKey'  => 'papel_id',
+            'joinTable'         => 'papeis_recursos'
         ]);
     }
 

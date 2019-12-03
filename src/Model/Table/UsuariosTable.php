@@ -1,6 +1,11 @@
 <?php
+/**
+ * Usuarios Model
+ *
+ * @package     cakeGrid.Model.Tabel
+ * @author      Adriano Moura
+ */
 namespace App\Model\Table;
-
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -9,24 +14,10 @@ use Cake\Event\Event;
 use Cake\Datasource\EntityInterface;
 use ArrayObject;
 use Exception;
-
 /**
- * Usuarios Model
- *
- * @property &\Cake\ORM\Association\BelongsTo $Municipios
- * @property &\Cake\ORM\Association\HasMany $Vinculacoes
- *
- * @method \App\Model\Entity\Usuario get($primaryKey, $options = [])
- * @method \App\Model\Entity\Usuario newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Usuario[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Usuario|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Usuario saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Usuario patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Usuario[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Usuario findOrCreate($search, callable $callback = null, $options = [])
+ * mantém a tabela de usuários
  */
-class UsuariosTable extends Table
-{
+class UsuariosTable extends Table {
     /**
      * Initialize method
      *
@@ -42,12 +33,12 @@ class UsuariosTable extends Table
         $this->setPrimaryKey('id');
         $this->setEntityClass('Usuario');
 
-        $this->belongsTo('Municipios', [
-            'foreignKey' => 'municipio_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->hasMany('Vinculacoes', [
-            'foreignKey' => 'usuario_id'
+        $this->belongsTo('Municipios',  ['foreignKey' => 'municipio_id']);
+        $this->belongsToMany('Papeis',
+        [
+            'foreignKey'        => 'usuario_id',
+            'targetForeignKey'  => 'papel_id',
+            'joinTable'         => 'vinculacoes'
         ]);
     }
 
@@ -126,19 +117,30 @@ class UsuariosTable extends Table
      */
     public function getPermissoes($idUsuario=0)
     {
-        $Recursos = \Cake\ORM\TableRegistry::get('Recursos');
+        $permissoes     = ['papeis'=>[], 'permissoes'=>[]];
+        $dataUsuario    = $this->get($idUsuario, ['contain'=>['Papeis']]);
+        $Recursos       = \Cake\ORM\TableRegistry::get('Recursos');
 
-        $lista = $Recursos->find()
-            ->where( ['Recursos.ativo'=>1] )
-            ->order( ['Recursos.id', 'Recursos.menu', 'Recursos.titulo'])
-            ->toArray();
-        $permissoes = [];
-        foreach($lista as $_l => $_objRecurso)
+        foreach($dataUsuario['papeis'] as $_l => $_arrFields)
         {
-            $indice = strtolower(str_replace('-','',$_objRecurso->url));
-            $permissoes[$indice] = ['menu'=>$_objRecurso->menu, 'titulo'=>$_objRecurso->titulo, 'url'=>$_objRecurso->url];
+            $idPapel = $_arrFields['id'];
+            $permissoes['papeis'][$idPapel] = $_arrFields['nome'];
+            $lista = $Recursos->find()
+                ->contain( ['Sistemas', 'Papeis'] )
+                ->where( ['Sistemas.nome'=>SISTEMA, 'Recursos.ativo'=>1] )
+                ->order( ['Recursos.id', 'Recursos.menu', 'Recursos.titulo'] )
+                ->toArray();
+            foreach($lista as $_l => $_objRecurso)
+            {
+                $indice = strtolower(str_replace('-','',$_objRecurso->url));
+                $permissoes['permissoes'][$indice] =
+                [
+                    'menu'      => $_objRecurso->menu, 
+                    'titulo'    => $_objRecurso->titulo,
+                    'url'       => $_objRecurso->url
+                ];
+            }
         }
-        //\Cake\Log\Log::write('debug', $permissoes);
 
         return $permissoes;
     }

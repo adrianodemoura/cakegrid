@@ -204,6 +204,7 @@ class Base extends AbstractMigration {
 
         $data   = [];
         $data[] = ['nome'=>'ADMINISTRADOR'];
+        $data[] = ['nome'=>'SUPERVISOR'];
 
         $table->insert($data)->save();
     }
@@ -220,6 +221,7 @@ class Base extends AbstractMigration {
 
         $data   = [];
         $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA)];
+        $data[] = ['nome'=> strtoupper('UNIDADE SECUNDÁRIA '.SISTEMA)];
 
         $table->insert($data)->save();
     }
@@ -314,6 +316,8 @@ class Base extends AbstractMigration {
 
         $data   = [];
         $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'papel_id'=>1];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'papel_id'=>2];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>2, 'papel_id'=>1];
 
         $table->insert($data)->save();
     }
@@ -328,7 +332,8 @@ class Base extends AbstractMigration {
         //$idSistema = @$this->fetchAll("SELECT id FROM sistemas WHERE nome='".SISTEMA."'")[0]['id'];
         $idSistema  = 1;
 
-        $arrPapeis      = $this->fetchAll('select id from papeis where id=1 order by 1');
+        //$arrPapeis      = $this->fetchAll('select id from papeis where id=1 order by 1');
+        $arrPapeis      = $this->fetchAll('select id from papeis order by 1');
         $arrRecursos    = $this->fetchAll('select id from recursos order by 1');
         //\Cake\Log\Log::write('debug', $arrRecursos);
 
