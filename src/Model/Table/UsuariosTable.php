@@ -117,13 +117,19 @@ class UsuariosTable extends Table {
      */
     public function getPermissoes($idUsuario=0)
     {
-        $permissoes     = ['perfis'=>[], 'unidades'=>[], 'permissoes'=>[]];
+        $permissoes     = [];
         $Vinculacoes    = \Cake\ORM\TableRegistry::get('vinculacoes');
         $dataVinculacoes= $Vinculacoes->find()
             ->where( ['Vinculacoes.usuario_id'=>$idUsuario])
             ->contain( ['Unidades', 'Perfis'] )
             ->toArray();
-        \Cake\Log\Log::write('debug', $dataVinculacoes);
+
+        foreach($dataVinculacoes as $_l => $_objVinculacao)
+        {
+            $papel = $_objVinculacao->perfi->nome.' - '.$_objVinculacao->unidade->nome;
+            $permissoes[$papel] = [];
+        }
+        //\Cake\Log\Log::write('debug', $permissoes);
 
         /*foreach($dataUsuario['papeis'] as $_l => $_arrFields)
         {

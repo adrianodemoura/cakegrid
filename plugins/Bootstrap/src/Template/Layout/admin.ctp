@@ -6,8 +6,8 @@
     $varJs['URL']       = "'".$this->Url->build(null, true)."'";
     $varJs['tempoFlash']= isset($tempoFlash) ? $tempoFlash : 3000;
     $varJs['txtAguarde']= isset($txtAguarde) ? $txtAguarde : "'Aguarde ...'";
-    $aqui = "plugin > controller > action";
-    $aqui = str_replace('plugin >', $this->request->getParam('plugin'), $aqui);
+    $aqui = "plugin / controller / action";
+    $aqui = str_replace('plugin /', $this->request->getParam('plugin'), $aqui);
     $aqui = str_replace('controller', $this->request->getParam('controller'), $aqui);
     $aqui = str_replace('action', $this->request->getParam('action'), $aqui);
 ?>
@@ -50,10 +50,12 @@
 
     <div id="cabecalho" class="container bg-white py-2 rounded-bottom shadow bottom">
         <div class="row">
-            <div class="col-6">
-                <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/info'); ?>
+            <div class="col-10">
+                <span class="font-weight-bold">Usuário:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/info'); ?>
+                <span class="mx-2">|</span>
+                <span class="font-weight-bold">Papel:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.PapelAtivo'), '/info'); ?>
             </div>
-            <div class="col-6 text-right">
+            <div class="col-2 text-right">
                 <?= $this->Html->link('sair', '/logout'); ?>
             </div>
         </div>

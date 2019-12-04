@@ -28,6 +28,9 @@ class AppController extends Controller {
      */
     public function initialize()
     {
+        // recuperando a sessão
+        $Sessao = $this->request->getSession();
+
         // configurando o pca
         $pca = '/'.$this->request->getParam('controller').'/'.$this->request->getParam('action');
         if ( !empty($this->request->getParam('plugin')) ) { $pca = '/'.$this->request->getParam('plugin').$pca; }
@@ -51,6 +54,20 @@ class AppController extends Controller {
 
         // definindo o layout padrão
         $this->viewBuilder()->setLayout('publico');
+
+        // se o papel ainda não foi definido.
+        if ( $Sessao->check('Auth.User.id') && !$Sessao->check('Auth.User.PapelAtivo') )
+        {
+            $Sessao->delete('Flash');
+            $Sessao->delete('flash');
+            $this->Flash->error( __('O Papel ainda não foi definido !') );
+
+            // se o papel não foi escolhido ainda, força sua escolha.
+            if ( !in_array(strtolower($this->pca), ['/painel/escolherpapel', '/painel/logout']) )
+            {
+                return $this->redirect( ['controller'=>'Painel', 'action'=>'escolherPapel'] );
+            }
+        }
     }
 
     /**
@@ -63,17 +80,17 @@ class AppController extends Controller {
         // recuperando a sessão
         $Sessao = $this->request->getSession();
 
-        // alteando o layout administrativo.
+        // alterando o layout administrativo.
         $this->viewBuilder()->setLayout('admin');
 
         // permitindo alguns pcas
-        $pcasSemPermissao = ['/painel/logout', '/painel/acessonegado'];
+        $pcasSemPermissao = ['/painel/logout', '/painel/acessonegado', '/painel/index', '/painel/escolherpapel'];
         if ( in_array(strtolower($this->pca), $pcasSemPermissao) || isset($user['Permissoes'][strtolower($this->pca)]) )
         {
             return true;
+        } else
+        {
+            return false;
         }
-
-        $this->Flash->error( __('Acesso negado para '.$this->pca) );
-        return false;
     }
 }

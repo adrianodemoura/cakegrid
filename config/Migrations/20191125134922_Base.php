@@ -188,6 +188,15 @@ class Base extends AbstractMigration {
         $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA)];
         $data[] = ['nome'=> strtoupper('UNIDADE SECUNDÁRIA '.SISTEMA)];
 
+        // se estais rodando da kaka do windows, coisa que não recomendo.
+        if ( strpos(strtolower(@$_SERVER['OS']), 'windows') > -1 )
+        {
+            foreach($data as $_l => $_arrFields)
+            {
+                $data[$_l]['nome'] = utf8_decode($data[$_l]['nome']);
+            }
+        }
+
         $table->insert($data)->save();
     }
 

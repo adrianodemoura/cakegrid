@@ -1,6 +1,6 @@
 <?php
 /**
- * Login Form.
+ * Escolher Papel Form.
  *
  * @package     cakeGrid.Form
  */
@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
 /**
  * Mantém o formulário de Login.
  */
-class LoginForm extends Form {
+class EscolherPapelForm extends Form {
     /**
      * Builds the schema for the modelless form
      *
@@ -21,8 +21,7 @@ class LoginForm extends Form {
     protected function _buildSchema(Schema $schema)
     {
         return $schema
-            ->addField('email', 'string')
-            ->addField('senha', 'string');
+            ->addField('papel', 'string');
     }
 
     /**
@@ -35,8 +34,7 @@ class LoginForm extends Form {
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->add('email', 'length', ['rule' => ['minLength', 10], 'message' => __('O campo e-mail é obrigatório !')])
-            ->add('senha', 'length', ['rule' => ['minLength', 8], 'message' => __('O campo senha é obrigatório !')]);
+            ->add('papel', 'length', ['rule' => ['minLength', 1], 'message' => __('O Papel é obrigatório !')]);
 
         return $validator;
     }
