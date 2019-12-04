@@ -43,7 +43,7 @@ class AppController extends Controller {
         $paramsAuth['authenticate']         = ['Form'=>['fields'=>['username'=>'email', 'password'=>'senha'], 'userModel'=>'Usuarios']];
         $paramsAuth['authError']            = __('Você não possui permissão para acessar '.$pca);
         $paramsAuth['loginAction']          = ['controller'=>'Painel', 'action'=>'login'];
-        $paramsAuth['unauthorizedRedirect'] = $this->referer();
+        $paramsAuth['unauthorizedRedirect'] = ['controller'=>'Painel', 'action'=>'acessoNegado'];
         $this->loadComponent('Auth', $paramsAuth);
 
         // definindo o tema padrão
@@ -60,25 +60,20 @@ class AppController extends Controller {
      */
     public function isAuthorized($user = null)
     {
-        //return true;
         // recuperando a sessão
         $Sessao = $this->request->getSession();
 
         // alteando o layout administrativo.
         $this->viewBuilder()->setLayout('admin');
 
-        // pcas sem permissão
-        $pcasSemPermissao = ['/painel/logout', '/painel/acessonegado'];
-
         // permitindo alguns pcas
+        $pcasSemPermissao = ['/painel/logout', '/painel/acessonegado'];
         if ( in_array(strtolower($this->pca), $pcasSemPermissao) || isset($user['Permissoes'][strtolower($this->pca)]) )
         {
             return true;
         }
 
-        //$this->log($user['Permissoes']);
         $this->Flash->error( __('Acesso negado para '.$this->pca) );
-
-        return $this->redirect( ['controller'=>'Painel', 'action'=>'acessoNegado'] );
+        return false;
     }
 }

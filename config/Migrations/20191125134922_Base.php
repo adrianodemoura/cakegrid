@@ -254,7 +254,6 @@ class Base extends AbstractMigration {
         $data[] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
 
         // se estais rodando da kaka do windows, coisa que não recomendo.
-        \Cake\Log\Log::write('debug', $_SERVER);
         if ( strpos(strtolower(@$_SERVER['OS']), 'windows') > -1 )
         {
             foreach($data as $_l => $_arrFields)

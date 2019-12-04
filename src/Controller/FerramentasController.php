@@ -48,10 +48,11 @@ class FerramentasController extends AppController {
         $idUsuario  = $Sessao->read('Auth.User.id');
 
         $this->loadModel('Usuarios');
+        $this->log('passei aqui ao recarregar permissões');
 
         $permissoes = $this->Usuarios->getPermissoes( $idUsuario );
 
-        $Sessao->write('Auth.User.Papeis',      $permissoes['papeis']);
+        $Sessao->write('Auth.User.Perfis',      $permissoes['perfis']);
         $Sessao->write('Auth.User.Unidades',    $permissoes['unidades']);
         $Sessao->write('Auth.User.Permissoes',  $permissoes['permissoes']);
 
