@@ -28,7 +28,6 @@ class Auditoria extends Entity
      * @var array
      */
     protected $_accessible = [
-        'codigo_sistema' => true,
         'ip' => true,
         'motivo' => true,
         'descricao' => true,

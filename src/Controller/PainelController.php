@@ -88,7 +88,10 @@ class PainelController extends AppController
                     ->execute();
 
                 // configurando a sessão com os dados e permissões do usuário
-                $usuario['Permissoes'] = $this->Usuarios->getPermissoes( $usuario['id']);
+                $permissoes = $this->Usuarios->getPermissoes( $usuario['id'] );
+                $usuario['Perfis']      = $permissoes['perfis'];
+                $usuario['Unidades']    = $permissoes['unidades'];
+                $usuario['Permissoes']  = $permissoes['permissoes'];
                 $this->Auth->setUser( $usuario );
 
                 // auditando o acesso do usuário
@@ -138,5 +141,9 @@ class PainelController extends AppController
      */
     public function acessoNegado()
     {
+        $Sessao     = $this->request->getSession();
+        $pcaNegada  = $Sessao->read('Flash.flash.0.message');
+
+        $this->set( compact('pcaNegada') );
     }
 }

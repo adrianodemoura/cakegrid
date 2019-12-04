@@ -29,8 +29,8 @@ class AppController extends Controller {
     public function initialize()
     {
         // configurando o pca
-        $pca = strtolower( '/'.$this->request->getParam('controller').'/'.$this->request->getParam('action') );
-        if ( !empty($this->request->getParam('plugin')) ) { $pca = strtolower('/'.$this->request->getParam('plugin')).$pca; }
+        $pca = '/'.$this->request->getParam('controller').'/'.$this->request->getParam('action');
+        if ( !empty($this->request->getParam('plugin')) ) { $pca = '/'.$this->request->getParam('plugin').$pca; }
         $this->pca = $pca;
 
         parent::initialize();
@@ -60,6 +60,7 @@ class AppController extends Controller {
      */
     public function isAuthorized($user = null)
     {
+        //return true;
         // recuperando a sessão
         $Sessao = $this->request->getSession();
 
@@ -67,17 +68,17 @@ class AppController extends Controller {
         $this->viewBuilder()->setLayout('admin');
 
         // pcas sem permissão
-        $pcasSemPermissao = ['/painel/index', '/painel/logout', '/painel/acesso-negado'];
+        $pcasSemPermissao = ['/painel/logout', '/painel/acessonegado'];
 
         // permitindo alguns pcas
-        if ( in_array($this->pca, $pcasSemPermissao) || isset($user['Permissoes'][$this->pca]) )
+        if ( in_array(strtolower($this->pca), $pcasSemPermissao) || isset($user['Permissoes'][strtolower($this->pca)]) )
         {
             return true;
         }
 
-        $this->log('acesso negado para: '.$this->pca);
+        //$this->log($user['Permissoes']);
         $this->Flash->error( __('Acesso negado para '.$this->pca) );
 
-        return $this->redirect( ['controller'=>'Usuarios', 'action'=>'acessoNegado'] );
+        return $this->redirect( ['controller'=>'Painel', 'action'=>'acessoNegado'] );
     }
 }

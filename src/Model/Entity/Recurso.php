@@ -28,7 +28,6 @@ class Recurso extends Entity
         'url' => true,
         'titulo' => true,
         'menu' => true,
-        'ativo' => true,
-        'sistema_id' => true
+        'ativo' => true
     ];
 }

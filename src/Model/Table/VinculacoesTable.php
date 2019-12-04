@@ -40,21 +40,21 @@ class VinculacoesTable extends Table
         $this->setPrimaryKey('id');
         $this->setEntityClass('Vinculacao');
 
-        $this->belongsTo('Sistemas', [
-            'foreignKey' => 'sistema_id',
-            'joinType' => 'INNER'
+        $this->belongsTo('Unidades',
+        [
+            'foreignKey'    => 'unidade_id',
+            'joinType'      => 'INNER'
         ]);
-        $this->belongsTo('Unidades', [
-            'foreignKey' => 'unidade_id',
-            'joinType' => 'INNER'
+        $this->belongsTo('Usuarios',
+        [
+            'foreignKey'    => 'usuario_id',
+            'joinType'      => 'INNER'
         ]);
-        $this->belongsTo('Usuarios', [
-            'foreignKey' => 'usuario_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->belongsTo('Papeis', [
-            'foreignKey' => 'papel_id',
-            'joinType' => 'INNER'
+        $this->belongsTo('Perfis',
+        [
+            'foreignKey'    => 'perfil_id',
+            'joinType'      => 'INNER',
+            'className'     => 'Perfis'
         ]);
     }
 
@@ -82,10 +82,9 @@ class VinculacoesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['sistema_id'], 'Sistemas'));
-        $rules->add($rules->existsIn(['unidade_id'], 'Unidades'));
         $rules->add($rules->existsIn(['usuario_id'], 'Usuarios'));
-        $rules->add($rules->existsIn(['papel_id'], 'Papeis'));
+        $rules->add($rules->existsIn(['unidade_id'], 'Unidades'));
+        $rules->add($rules->existsIn(['perfil_id'], 'Perfis'));
 
         return $rules;
     }

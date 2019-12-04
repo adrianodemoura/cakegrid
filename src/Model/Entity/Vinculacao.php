@@ -7,12 +7,10 @@ use Cake\ORM\Entity;
  * Vinculacao Entity
  *
  * @property int $id
- * @property int $sistema_id
  * @property int $unidade_id
  * @property int $usuario_id
  * @property int $papel_id
  *
- * @property \App\Model\Entity\Sistema $sistema
  * @property \App\Model\Entity\Unidade $unidade
  * @property \App\Model\Entity\Usuario $usuario
  * @property \App\Model\Entity\Papel $papei
@@ -29,13 +27,11 @@ class Vinculacao extends Entity
      * @var array
      */
     protected $_accessible = [
-        'sistema_id' => true,
         'unidade_id' => true,
         'usuario_id' => true,
         'papel_id' => true,
-        'sistema' => true,
         'unidade' => true,
         'usuario' => true,
-        'papei' => true
+        'papel' => true
     ];
 }

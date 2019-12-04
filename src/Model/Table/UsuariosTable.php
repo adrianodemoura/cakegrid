@@ -34,10 +34,10 @@ class UsuariosTable extends Table {
         $this->setEntityClass('Usuario');
 
         $this->belongsTo('Municipios',  ['foreignKey' => 'municipio_id']);
-        $this->belongsToMany('Papeis',
+        $this->belongsToMany('Perfis',
         [
             'foreignKey'        => 'usuario_id',
-            'targetForeignKey'  => 'papel_id',
+            'targetForeignKey'  => 'perfil_id',
             'joinTable'         => 'vinculacoes'
         ]);
     }
@@ -117,11 +117,15 @@ class UsuariosTable extends Table {
      */
     public function getPermissoes($idUsuario=0)
     {
-        $permissoes     = ['papeis'=>[], 'permissoes'=>[]];
-        $dataUsuario    = $this->get($idUsuario, ['contain'=>['Papeis']]);
-        $Recursos       = \Cake\ORM\TableRegistry::get('Recursos');
+        $permissoes     = ['perfis'=>[], 'unidades'=>[], 'permissoes'=>[]];
+        $Vinculacoes    = \Cake\ORM\TableRegistry::get('vinculacoes');
+        $dataVinculacoes= $Vinculacoes->find()
+            ->where( ['Vinculacoes.usuario_id'=>$idUsuario])
+            ->contain( ['Unidades', 'Perfis'] )
+            ->toArray();
+        \Cake\Log\Log::write('debug', $dataVinculacoes);
 
-        foreach($dataUsuario['papeis'] as $_l => $_arrFields)
+        /*foreach($dataUsuario['papeis'] as $_l => $_arrFields)
         {
             $idPapel = $_arrFields['id'];
             $permissoes['papeis'][$idPapel] = $_arrFields['nome'];
@@ -140,7 +144,7 @@ class UsuariosTable extends Table {
                     'url'       => $_objRecurso->url
                 ];
             }
-        }
+        }*/
 
         return $permissoes;
     }

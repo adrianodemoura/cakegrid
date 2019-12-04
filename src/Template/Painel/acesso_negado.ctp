@@ -1,7 +1,6 @@
 <?php
 	//echo $this->Html->script( ['painel/acesso-negado'],	['block'=>true] );
 	//echo $this->Html->css( ['painel/acesso-negado'],		['block'=>true] );
-	$Sessao = $this->request->getSession();
 ?>
 
 
@@ -10,5 +9,5 @@
 </div>
 
 <div class="container">
-	Acesso negado
+	<?= $pcaNegada ?>
 </div>

@@ -55,11 +55,6 @@ class AuditoriasTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->scalar('codigo_sistema')
-            ->maxLength('codigo_sistema', 20)
-            ->notEmptyString('codigo_sistema');
-
-        $validator
             ->scalar('ip')
             ->maxLength('ip', 20)
             ->notEmptyString('ip');
@@ -91,7 +86,6 @@ class AuditoriasTable extends Table
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        $entity['codigo_sistema']   = SISTEMA;
         $entity['ip']               = IP;
         $entity['data']             = date('Y-m-d H:i:s');
         $entity['usuario_id']       = $_SESSION['Auth']['User']['id'];

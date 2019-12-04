@@ -1,9 +1,6 @@
 <?php
 /**
- * Recursos Model
- *
- * @package     cakeGrid.Model.Table
- * @author      Adriano Moura
+ * Perfis Table
  */
 namespace App\Model\Table;
 use Cake\ORM\Query;
@@ -11,9 +8,9 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 /**
- * mantém a tabela recursos.
+ * maném a tabela perfis.
  */
-class RecursosTable extends Table {
+class PerfisTable extends Table {
     /**
      * Initialize method
      *
@@ -24,15 +21,22 @@ class RecursosTable extends Table {
     {
         parent::initialize($config);
 
-        $this->setTable('recursos');
-        $this->setDisplayField('titulo');
+        $this->setTable('Perfis');
+        $this->setDisplayField('nome');
         $this->setPrimaryKey('id');
-        $this->setEntityClass('Recurso');
+        $this->setEntityClass('Perfil');
 
-        $this->belongsToMany('Perfis', [
-            'foreignKey'        => 'recurso_id',
-            'targetForeignKey'  => 'perfil_id',
+        $this->belongsToMany('Recursos',
+        [
+            'foreignKey'        => 'perfil_id',
+            'targetForeignKey'  => 'recurso_id',
             'joinTable'         => 'perfis_recursos'
+        ]);
+        $this->belongsToMany('Usuarios',
+        [
+            'foreignKey'        => 'perfil_id',
+            'targetForeignKey'  => 'usuario_id',
+            'joinTable'         => 'vinculacoes'
         ]);
     }
 
@@ -49,19 +53,9 @@ class RecursosTable extends Table {
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->scalar('url')
-            ->maxLength('url', 100)
-            ->notEmptyString('url');
-
-        $validator
-            ->scalar('titulo')
-            ->maxLength('titulo', 100)
-            ->notEmptyString('titulo');
-
-        $validator
-            ->scalar('menu')
-            ->maxLength('menu', 100)
-            ->notEmptyString('menu');
+            ->scalar('nome')
+            ->maxLength('nome', 100)
+            ->notEmptyString('nome');
 
         $validator
             ->boolean('ativo')

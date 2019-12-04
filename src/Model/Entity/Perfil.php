@@ -1,21 +1,13 @@
 <?php
-namespace App\Model\Entity;
-
-use Cake\ORM\Entity;
-
 /**
- * Sistema Entity
- *
- * @property int $id
- * @property string $nome
- * @property bool $ativo
- *
- * @property \App\Model\Entity\Papei[] $papeis
- * @property \App\Model\Entity\Recurso[] $recursos
- * @property \App\Model\Entity\Vinculaco[] $vinculacoes
+ * Papel Entity
  */
-class Sistema extends Entity
-{
+namespace App\Model\Entity;
+use Cake\ORM\Entity;
+/**
+ * mantém o objeto perfil
+ */
+class Perfil extends Entity {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -28,8 +20,6 @@ class Sistema extends Entity
     protected $_accessible = [
         'nome' => true,
         'ativo' => true,
-        'papeis' => true,
-        'recursos' => true,
-        'vinculacoes' => true
+        'recursos' => true
     ];
 }
