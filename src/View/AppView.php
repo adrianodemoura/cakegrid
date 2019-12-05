@@ -36,5 +36,7 @@ class AppView extends View
      */
     public function initialize()
     {
+        /* Adiciona fa icons como default */
+        //$this->Html->setTemplates(['icon' => '<i class="fa fa-{{type}}{{attrs.class}}"{{attrs}}></i>']);
     }
 }

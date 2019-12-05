@@ -38,17 +38,18 @@ class FerramentasController extends AppController {
     }
 
     /**
-     * Recarregar as permissões
+     * Recarregar as permissões do Usuário
      *
+     * @param   integer     $idUSuario  Id do usuário, recuperado da sessão.
      * @return  \Cake\Network\Response|null
      */
     public function recarregarPermissoes()
     {
         $Sessao     = $this->request->getSession();
+
         $idUsuario  = $Sessao->read('Auth.User.id');
 
         $this->loadModel('Usuarios');
-        $this->log('passei aqui ao recarregar permissões');
 
         $Sessao->write('Auth.User.Permissoes', $this->Usuarios->getPermissoes( $idUsuario ) );
 

@@ -32,9 +32,9 @@ class AppController extends Controller {
         $Sessao = $this->request->getSession();
 
         // configurando o pca
-        $pca = '/'.$this->request->getParam('controller').'/'.$this->request->getParam('action');
+        /*$pca = '/'.$this->request->getParam('controller').'/'.$this->request->getParam('action');
         if ( !empty($this->request->getParam('plugin')) ) { $pca = '/'.$this->request->getParam('plugin').$pca; }
-        $this->pca = $pca;
+        $this->pca = $pca;*/
         $this->pca = '/'.strtolower($this->request->url);
 
         parent::initialize();
@@ -45,7 +45,7 @@ class AppController extends Controller {
         $paramsAuth = [];
         $paramsAuth['authorize']            = 'Controller';
         $paramsAuth['authenticate']         = ['Form'=>['fields'=>['username'=>'email', 'password'=>'senha'], 'userModel'=>'Usuarios']];
-        $paramsAuth['authError']            = __('Você não possui permissão para acessar '.$pca);
+        $paramsAuth['authError']            = __('Você não possui permissão para acessar '.$this->pca);
         $paramsAuth['loginAction']          = ['controller'=>'Painel', 'action'=>'login'];
         $paramsAuth['unauthorizedRedirect'] = ['controller'=>'Painel', 'action'=>'acessoNegado'];
         $this->loadComponent('Auth', $paramsAuth);
@@ -56,7 +56,7 @@ class AppController extends Controller {
         // definindo o layout padrão
         $this->viewBuilder()->setLayout('publico');
 
-        // se o papel ainda não foi definido.
+        // Se o usuário está logado, mas ainda não foi definido o papel. força sua escolha.
         if ( $Sessao->check('Auth.User.id') && !$Sessao->check('Auth.User.PapelAtivo') )
         {
             $Sessao->delete('Flash');
@@ -80,7 +80,7 @@ class AppController extends Controller {
     {
         // recuperando a sessão
         $Sessao     = $this->request->getSession();
-        $papelAtivo = @$Sessao->read('Auth.User.PapelAtivo');
+        $papelAtivo = $Sessao->read('Auth.User.PapelAtivo');
         
         // alterando o layout administrativo.
         $this->viewBuilder()->setLayout('admin');

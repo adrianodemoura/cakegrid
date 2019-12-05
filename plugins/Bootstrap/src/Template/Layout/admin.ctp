@@ -30,7 +30,7 @@
     </script>
 <?php endif; ?>    
 
-    <?= $this->Html->css(['bootstrap.4.3.1.min', 'global', 'admin']) ?>
+    <?= $this->Html->css(['bootstrap.4.3.1.min', 'fontawesome.all.min', 'global', 'admin']) ?>
     <?= $this->Html->script(['jquery-3.4.1.min', 'bootstrap.4.3.1.min', 'global', 'admin']) ?>
 
     <?= $this->fetch('meta') ?>
