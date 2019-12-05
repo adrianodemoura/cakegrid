@@ -10,9 +10,9 @@ use Cake\Auth\DefaultPasswordHasher;
  * Mantém o banco de dados inicial.
  *
  * $ bin/cake migrations create Base // este comando irá criar as tabelas, não rode aqui.
+ * $ bin/cake migrations status
  * $ bin/cake migrations migrate
  * $ bin/cake migrations rollback
- * $ bin/cake migrations status
  */
 class Base extends AbstractMigration {
     /**
@@ -170,6 +170,7 @@ class Base extends AbstractMigration {
         $data   = [];
         $data[] = ['nome'=>'ADMINISTRADOR'];
         $data[] = ['nome'=>'SUPERVISOR'];
+        $data[] = ['nome'=>'VISITANTE'];
 
         $table->insert($data)->save();
     }
@@ -246,21 +247,22 @@ class Base extends AbstractMigration {
         $table = $this->table('recursos');
 
         $data   = [];
-        $data[] = ['url'=>'/painel/index',         'titulo'=> 'Página inicial'];
+        $data[] = ['url'=>'/painel/index',          'titulo'=> 'Página inicial'];
+        $data[] = ['url'=>'/painel/info',           'titulo'=>'Informações do Usuário'];
 
-        $data[] = ['url'=>'/usuarios/index',       'menu'=>'Cadastros', 'titulo'=>'Usuários'];
-        $data[] = ['url'=>'/municipios/index',     'menu'=>'Cadastros', 'titulo'=>'Municípios'];
-        $data[] = ['url'=>'/auditorias/index',     'menu'=>'Cadastros', 'titulo'=>'Auditorias'];
-        $data[] = ['url'=>'/painel/permissoes',    'titulo'=>'Permissões'];
-        $data[] = ['url'=>'/painel/info',          'titulo'=>'Informações do Usuário'];
+        $data[] = ['url'=>'/usuarios/index',        'menu'=>'Cadastros', 'titulo'=>'Usuários'];
+        $data[] = ['url'=>'/municipios/index',      'menu'=>'Cadastros', 'titulo'=>'Municípios'];
+        $data[] = ['url'=>'/auditorias/index',      'menu'=>'Cadastros', 'titulo'=>'Auditorias'];
 
         $data[] = ['url'=>'/ferramentas/limpar-cache', 'menu'=>'Ferramentas', 'titulo'=>'Limpar Cache'];
         $data[] = ['url'=>'/ferramentas/recarregar-permissoes', 'menu'=>'Ferramentas', 'titulo'=>'Recarregar as Permissões'];
+        $data[] = ['url'=>'/ferramentas/trocar-papel', 'menu'=>'Ferramentas', 'titulo'=>'Trocar Papel'];
 
-        $data[] = ['url'=>'/relatorios/usuarios',  'menu'=>'Relatórios', 'titulo'=>'Usuários'];
+        $data[] = ['url'=>'/relatorios/index',      'titulo'=>'Usuários'];
+        $data[] = ['url'=>'/relatorios/usuarios',   'menu'=>'Relatórios', 'titulo'=>'Usuários'];
 
-        $data[] = ['url'=>'/ajuda/manual',         'menu'=>'Ajuda', 'titulo'=>'Manual'];
-        $data[] = ['url'=>'/ajuda/sobre',          'menu'=>'Ajuda', 'titulo'=>'Sobre'];
+        $data[] = ['url'=>'/ajuda/manual',          'menu'=>'Ajuda', 'titulo'=>'Manual'];
+        $data[] = ['url'=>'/ajuda/sobre',           'menu'=>'Ajuda', 'titulo'=>'Sobre'];
 
         // se estais rodando da kaka do windows, coisa que não recomendo.
         if ( strpos(strtolower(@$_SERVER['OS']), 'windows') > -1 )
@@ -292,6 +294,7 @@ class Base extends AbstractMigration {
         $data[] = ['usuario_id'=>1, 'unidade_id'=>1, 'perfil_id'=>1];
         $data[] = ['usuario_id'=>1, 'unidade_id'=>1, 'perfil_id'=>2];
         $data[] = ['usuario_id'=>1, 'unidade_id'=>2, 'perfil_id'=>1];
+        $data[] = ['usuario_id'=>1, 'unidade_id'=>2, 'perfil_id'=>3];
 
         $table->insert($data)->save();
     }
@@ -303,17 +306,21 @@ class Base extends AbstractMigration {
      */
     private function updatePerfisRecursos()
     {
-        //$arrPapeis      = $this->fetchAll('select id from papeis where id=1 order by 1');
-        $arrPapeis      = $this->fetchAll('select id from perfis order by 1');
-        $arrRecursos    = $this->fetchAll('select id from recursos order by 1');
-        //\Cake\Log\Log::write('debug', $arrRecursos);
+        $arrRecursos    = $this->fetchAll('select id, menu, url from recursos order by 1');
+        $arrPerfis      = $this->fetchAll('select id from perfis order by 1');
+        $naoVisitante   = ['/ferramentas/limpar-cache'];
 
-        $data   = [];
-        $l      = 0;
+        $data           = [];
+        $l              = 0;
         foreach($arrRecursos as $_l => $_arrFields)
         {
-            foreach($arrPapeis as $_l2 => $_arrFields2)
+            foreach($arrPerfis as $_l2 => $_arrFields2)
             {
+                if ( $_arrFields2['id'] == 3 && in_array($_arrFields['url'], $naoVisitante) )
+                {
+                    continue;
+                }
+
                 $data[$l]['recurso_id'] = $_arrFields['id'];
                 $data[$l]['perfil_id']  = $_arrFields2['id'];
                 $l++;

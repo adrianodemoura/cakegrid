@@ -6,10 +6,7 @@
     $varJs['URL']       = "'".$this->Url->build(null, true)."'";
     $varJs['tempoFlash']= isset($tempoFlash) ? $tempoFlash : 3000;
     $varJs['txtAguarde']= isset($txtAguarde) ? $txtAguarde : "'Aguarde ...'";
-    $aqui = "plugin / controller / action";
-    $aqui = str_replace('plugin /', $this->request->getParam('plugin'), $aqui);
-    $aqui = str_replace('controller', $this->request->getParam('controller'), $aqui);
-    $aqui = str_replace('action', $this->request->getParam('action'), $aqui);
+    $aqui = str_replace('/', ' > ',$this->request->url);
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,7 +50,7 @@
             <div class="col-10">
                 <span class="font-weight-bold">Usuário:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/painel/info'); ?>
                 <span class="mx-2">|</span>
-                <span class="font-weight-bold">Papel:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.PapelAtivo'), '/painel/escolher-papel'); ?>
+                <span class="font-weight-bold">Papel:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.PapelAtivo'), '/ferramentas/trocar-papel'); ?>
             </div>
             <div class="col-2 text-right">
                 <?= $this->Html->link('sair', '/logout'); ?>

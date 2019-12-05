@@ -3,8 +3,8 @@
 	$listaPapeis 	= [];
 	foreach($Sessao->read('Auth.User.Permissoes') as $_Papel => $_arrPermissoes) { $listaPapeis[$_Papel] = $_Papel;}
 
-	$optionsPapeis = ['required'=>'required', 'label'=>['text'=>'Papel', 'class'=>'required'], 'name'=>'papel', 'id'=>'inPapel', 'class'=>'form-control', 'autofocus'=>true, 'options'=>$listaPapeis, 'default'=>$Sessao->read('Auth.User.PapelAtivo')];
-	$optionsEnviar = ['name'=>'inEnviar', 'id'=>'btnEnviar', 'div'=>null, 'type'=>'submit', 'class'=>'btn btn-secondary btn-aguarde'];
+	$optionsPapeis = ['required'=>'required', 'label'=>['text'=>'PAPEL - UNIDADE', 'class'=>'required'], 'name'=>'papel', 'id'=>'inPapel', 'class'=>'form-control', 'autofocus'=>true, 'options'=>$listaPapeis, 'default'=>$Sessao->read('Auth.User.PapelAtivo')];
+	$optionsEnviar = ['name'=>'inEnviar', 'id'=>'btnEnviar', 'div'=>null, 'type'=>'submit', 'class'=>'btn btn-secondary btn-aguarde mx-3'];
 
 ?>
 

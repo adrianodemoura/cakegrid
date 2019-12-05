@@ -57,4 +57,38 @@ class FerramentasController extends AppController {
 
         return $this->redirect('/');
     }
+
+    /**
+     * Exibe a tela para trocar de papel
+     *
+     * @return  \Cake\Http\Response|null
+     */
+    public function trocarPapel()
+    {
+        $tituloPagina       = 'Escolhendo o Papel';
+        $Sessao             = $this->request->getSession();
+        $EscolherPapelForm  = new \App\Form\EscolherPapelForm();
+
+        if ( $this->request->is('post') )
+        {
+            try
+            {
+                if ( !$EscolherPapelForm->execute($this->request->getData()) )
+                {
+                    throw new Exception(__('Erro ao escolher Papel !'), 1);
+                }
+
+                $Sessao->write('Auth.User.PapelAtivo', $this->request->data['papel']);
+
+                $this->Flash->success( __('Papel Atualizado com sucesso !') );
+            } catch (Exception $e)
+            {
+                $this->Flash->error( $e->getMessage() );
+            }
+            return $this->redirect( '/' );
+        }
+
+        // populando a view
+        $this->set( compact('tituloPagina', 'EscolherPapelForm') );
+    }
 }

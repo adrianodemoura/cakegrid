@@ -69,9 +69,9 @@ class AppController extends Controller {
             $this->Flash->error( __('O Papel ainda não foi definido !') );
 
             // se o papel não foi escolhido ainda, força sua escolha.
-            if ( !in_array(strtolower($this->pca), ['/painel/escolher-papel', '/painel/logout']) )
+            if ( !in_array(strtolower($this->pca), ['/ferramentas/trocar-papel', '/painel/logout']) )
             {
-                return $this->redirect( ['controller'=>'Painel', 'action'=>'escolherPapel'] );
+                return $this->redirect( ['controller'=>'Ferramentas', 'action'=>'trocarPapel'] );
             }
         }
     }
@@ -92,7 +92,7 @@ class AppController extends Controller {
         $this->viewBuilder()->setLayout('admin');
 
         // permitindo alguns pcas
-        $pcasSemPermissao = ['/painel/index', '/painel/logout', '/painel/acesso-negado', '/painel/escolher-papel'];
+        $pcasSemPermissao = ['/painel/index', '/painel/logout', '/painel/acesso-negado', '/ferramentas/trocar-papel'];
         if ( in_array($this->pca, $pcasSemPermissao) || isset($user['Permissoes'][$papelAtivo][$this->pca]) )
         {
             //$this->log('tem permissão: '.$this->pca);

@@ -113,16 +113,6 @@ class PainelController extends AppController
     }
 
     /**
-     * Exibe a tela de permissões
-     *
-     * @return  void
-     */
-    public function permissoes()
-    {
-        //
-    }
-
-    /**
      * Exibe a tela de informações do 
      *
      * @return  void
@@ -143,38 +133,5 @@ class PainelController extends AppController
         $pcaNegada  = $Sessao->read('Flash.flash.0.message');
 
         $this->set( compact('pcaNegada') );
-    }
-
-    /**
-     * Exibe a tela para escolher um papel
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function escolherPapel()
-    {
-        $tituloPagina       = 'Escolhendo o Papel';
-        $Sessao             = $this->request->getSession();
-        $EscolherPapelForm  = new \App\Form\EscolherPapelForm();
-
-        if ( $this->request->is('post') )
-        {
-            try
-            {
-                if ( !$EscolherPapelForm->execute($this->request->getData()) )
-                {
-                    throw new Exception(__('Erro ao escolher Papel !'), 1);
-                }
-
-                $Sessao->write('Auth.User.PapelAtivo', $this->request->data['papel']);
-
-            } catch (Exception $e)
-            {
-                $this->Flash->error( $e->getMessage() );
-                return $this->redirect( ['action'=>'index']);
-            }
-        }
-
-        // populando a view
-        $this->set( compact('tituloPagina', 'EscolherPapelForm') );
     }
 }
