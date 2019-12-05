@@ -20,7 +20,6 @@ class PainelController extends AppController
      */
     public function index()
     {
-    	// variáveis locais
         $tituloPagina   = SISTEMA.' - Página Inicial';
 
         $this->loadModel('Usuarios');
@@ -30,7 +29,7 @@ class PainelController extends AppController
     }
 
     /**
-     * Executa o logout da aplicação
+     * Executa o logout do sistema.
      *
      * @return  \Cake\Http\Response|null
      */
@@ -38,7 +37,6 @@ class PainelController extends AppController
     {
         $this->loadModel('Auditorias');
 
-        // auditando o acesso do usuário
         $this->Auditorias->auditar('acessos', 'O Usuário saiu do sistema');
 
         $this->Flash->success( __('Logout efetuado com sucesso.') );

@@ -9,6 +9,7 @@
 namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Utility\Inflector;
 /**
  * Mantém o controlador pai de todos
  */
@@ -32,10 +33,14 @@ class AppController extends Controller {
         $Sessao = $this->request->getSession();
 
         // configurando o pca
-        /*$pca = '/'.$this->request->getParam('controller').'/'.$this->request->getParam('action');
-        if ( !empty($this->request->getParam('plugin')) ) { $pca = '/'.$this->request->getParam('plugin').$pca; }
-        $this->pca = $pca;*/
-        $this->pca = '/'.strtolower($this->request->url);
+        $pca = '/'.Inflector::dasherize($this->request->getParam('controller'));
+        $pca .= '/'.Inflector::dasherize($this->request->getParam('action'));
+        if ( !empty($this->request->getParam('plugin')) )
+        {
+            $pca = '/'.Inflector::dasherize($this->request->getParam('plugin')).$pca;
+        }
+        $pca = strtolower($pca);
+        $this->pca = $pca;
 
         parent::initialize();
 
@@ -74,6 +79,7 @@ class AppController extends Controller {
     /**
      * Verifica a autenticação
      *
+     * @param   array   $user   Dados do Usuário logado, incluindo registro e permissões no formato PERFIL-UNIDADE-PERMISSÕES.
      * @return  void 
      */
     public function isAuthorized($user = null)
@@ -86,15 +92,14 @@ class AppController extends Controller {
         $this->viewBuilder()->setLayout('admin');
 
         // permitindo alguns pcas
-        $pcasSemPermissao = ['/', '/painel/index', '/logout', '/painel/logout', '/painel/acesso-negado', '/painel/escolher-papel'];
+        $pcasSemPermissao = ['/painel/index', '/painel/logout', '/painel/acesso-negado', '/painel/escolher-papel'];
         if ( in_array($this->pca, $pcasSemPermissao) || isset($user['Permissoes'][$papelAtivo][$this->pca]) )
         {
             //$this->log('tem permissão: '.$this->pca);
             return true;
-        } else
-        {
-            //$this->log('NÃO tem permissão: '.$this->pca);
-            return false;
         }
+        
+        //$this->log('NÃO tem permissão: '.$this->pca);
+        return false;
     }
 }
