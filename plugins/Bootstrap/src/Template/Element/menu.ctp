@@ -17,7 +17,7 @@
 
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><?= $menuPai ?></a>
 
-        <?= $Menu->getSubMenus($_arrProp['menu'], $permissoes); ?>
+        <?= $Menu->getSubMenus($_arrProp['menu'], $permissoes[$papelAtivo]); ?>
     </li>
     <?php endif; endforeach; endif; ?>
 

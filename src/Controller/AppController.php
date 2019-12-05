@@ -35,6 +35,7 @@ class AppController extends Controller {
         $pca = '/'.$this->request->getParam('controller').'/'.$this->request->getParam('action');
         if ( !empty($this->request->getParam('plugin')) ) { $pca = '/'.$this->request->getParam('plugin').$pca; }
         $this->pca = $pca;
+        $this->pca = '/'.strtolower($this->request->url);
 
         parent::initialize();
 
@@ -63,7 +64,7 @@ class AppController extends Controller {
             $this->Flash->error( __('O Papel ainda não foi definido !') );
 
             // se o papel não foi escolhido ainda, força sua escolha.
-            if ( !in_array(strtolower($this->pca), ['/painel/escolherpapel', '/painel/logout']) )
+            if ( !in_array(strtolower($this->pca), ['/painel/escolher-papel', '/painel/logout']) )
             {
                 return $this->redirect( ['controller'=>'Painel', 'action'=>'escolherPapel'] );
             }
@@ -78,18 +79,21 @@ class AppController extends Controller {
     public function isAuthorized($user = null)
     {
         // recuperando a sessão
-        $Sessao = $this->request->getSession();
-
+        $Sessao     = $this->request->getSession();
+        $papelAtivo = @$Sessao->read('Auth.User.PapelAtivo');
+        
         // alterando o layout administrativo.
         $this->viewBuilder()->setLayout('admin');
 
         // permitindo alguns pcas
-        $pcasSemPermissao = ['/painel/logout', '/painel/acessonegado', '/painel/index', '/painel/escolherpapel'];
-        if ( in_array(strtolower($this->pca), $pcasSemPermissao) || isset($user['Permissoes'][strtolower($this->pca)]) )
+        $pcasSemPermissao = ['/', '/painel/index', '/logout', '/painel/logout', '/painel/acesso-negado', '/painel/escolher-papel'];
+        if ( in_array($this->pca, $pcasSemPermissao) || isset($user['Permissoes'][$papelAtivo][$this->pca]) )
         {
+            //$this->log('tem permissão: '.$this->pca);
             return true;
         } else
         {
+            //$this->log('NÃO tem permissão: '.$this->pca);
             return false;
         }
     }

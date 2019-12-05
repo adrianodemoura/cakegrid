@@ -122,35 +122,31 @@ class UsuariosTable extends Table {
         $dataVinculacoes= $Vinculacoes->find()
             ->where( ['Vinculacoes.usuario_id'=>$idUsuario])
             ->contain( ['Unidades', 'Perfis'] )
+            ->order( ['Perfis.nome'] )
             ->toArray();
 
         foreach($dataVinculacoes as $_l => $_objVinculacao)
         {
             $papel = $_objVinculacao->perfi->nome.' - '.$_objVinculacao->unidade->nome;
-            $permissoes[$papel] = [];
-        }
-        //\Cake\Log\Log::write('debug', $permissoes);
-
-        /*foreach($dataUsuario['papeis'] as $_l => $_arrFields)
-        {
-            $idPapel = $_arrFields['id'];
-            $permissoes['papeis'][$idPapel] = $_arrFields['nome'];
-            $lista = $Recursos->find()
-                ->contain( ['Sistemas', 'Papeis'] )
-                ->where( ['Sistemas.nome'=>SISTEMA, 'Recursos.ativo'=>1] )
-                ->order( ['Recursos.id', 'Recursos.menu', 'Recursos.titulo'] )
+            $_permissoes = $Vinculacoes->Perfis->find()
+                ->contain( ['Recursos'] )
+                ->where( ['Perfis.id'=>$_objVinculacao->perfil_id] )
                 ->toArray();
-            foreach($lista as $_l => $_objRecurso)
+            foreach($_permissoes as $_l2 => $_arrFields)
             {
-                $indice = strtolower(str_replace('-','',$_objRecurso->url));
-                $permissoes['permissoes'][$indice] =
-                [
-                    'menu'      => $_objRecurso->menu, 
-                    'titulo'    => $_objRecurso->titulo,
-                    'url'       => $_objRecurso->url
-                ];
+                foreach($_arrFields['recursos'] as $_l2 => $_objRecurso)
+                {
+                    if ( !$_objRecurso->ativo ) { continue; }
+                    $url = $_objRecurso->url;
+                    $permissoes[$papel][$url] =
+                    [
+                        'url'       => $url,
+                        'titulo'    => $_objRecurso->titulo,
+                        'menu'      => $_objRecurso->menu
+                    ];
+                }
             }
-        }*/
+        }
 
         return $permissoes;
     }

@@ -51,9 +51,9 @@
     <div id="cabecalho" class="container bg-white py-2 rounded-bottom shadow bottom">
         <div class="row">
             <div class="col-10">
-                <span class="font-weight-bold">Usuário:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/info'); ?>
+                <span class="font-weight-bold">Usuário:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.nome'), '/painel/info'); ?>
                 <span class="mx-2">|</span>
-                <span class="font-weight-bold">Papel:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.PapelAtivo'), '/info'); ?>
+                <span class="font-weight-bold">Papel:</span> <?= $this->Html->link($this->request->getSession()->read('Auth.User.PapelAtivo'), '/painel/escolher-papel'); ?>
             </div>
             <div class="col-2 text-right">
                 <?= $this->Html->link('sair', '/logout'); ?>

@@ -15,7 +15,7 @@
 	<div class="row">
 		<div class="col-2"></div>
 
-		<div class="col-8 rounded-lg bordered bg-info py-2 px-5">
+		<div class="col-8 rounded-lg border bg-light py-2 px-5">
 		<?= $this->Form->create($EscolherPapelForm, ['class'=>'form']); ?>
 			<div class="mt-2">
 				<?= $this->Form->control('papel', $optionsPapeis); ?>

@@ -1,15 +1,15 @@
 <?php
-namespace Bootstrap\View\Helper;
-
-use Cake\View\Helper;
-use Cake\View\View;
-use Cake\View\Helper\UrlHelper;
-
 /**
  * Menu helper
  */
-class MenuHelper extends Helper
-{
+namespace Bootstrap\View\Helper;
+use Cake\View\Helper;
+use Cake\View\View;
+use Cake\View\Helper\UrlHelper;
+/**
+ * mantém o Menu
+ */
+class MenuHelper extends Helper {
 
     /**
      * Default configuration.

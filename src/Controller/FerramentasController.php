@@ -50,14 +50,9 @@ class FerramentasController extends AppController {
         $this->loadModel('Usuarios');
         $this->log('passei aqui ao recarregar permissões');
 
-        $permissoes = $this->Usuarios->getPermissoes( $idUsuario );
-
-        $Sessao->write('Auth.User.Perfis',      $permissoes['perfis']);
-        $Sessao->write('Auth.User.Unidades',    $permissoes['unidades']);
-        $Sessao->write('Auth.User.Permissoes',  $permissoes['permissoes']);
+        $Sessao->write('Auth.User.Permissoes', $this->Usuarios->getPermissoes( $idUsuario ) );
 
         $this->Flash->success(__('As permissões foram atualizadas com sucesso !'));
-        $this->log($Sessao->read('Auth.User'), 'debug');
 
         return $this->redirect('/');
     }
