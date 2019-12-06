@@ -22,12 +22,20 @@ class RelatoriosController extends AppController {
 	}
 
 	/**
-	 * Exibe o relatório de usuários
+	 * Exibe o relatório, paginado, de usuários.
 	 *
 	 * @return 	\Cake\Http\Response|null
 	 */
 	public function usuarios()
 	{
-		//
+		$this->loadModel('Usuarios');
+
+		$this->paginate =
+		[
+			'limite' 	=> 10,
+			'contain' 	=> ['Municipios']
+		];
+
+		$this->request->data = $this->paginate($this->Usuarios);
 	}
 }

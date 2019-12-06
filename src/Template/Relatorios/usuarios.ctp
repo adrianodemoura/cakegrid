@@ -3,6 +3,7 @@
 	echo $this->Html->css( ['relatorios/usuarios'],		['block'=>true] );
 	$optionsExportar 	= ['id'=>'btnExportar', 'name'=>'btnExportar', 	'escape'=>false, 'class'=>'btn btn-primary   btn-aguarde-download'];
 	$optionsFechar 		= ['id'=>'btnFechar', 	'name'=>'btnFechar', 	'escape'=>false, 'class'=>'btn btn-secondary btn-aguarde'];
+	$paginacao 			= $this->request->paging['Usuarios'];
 ?>
 
 <div class="container bg-light">
@@ -25,17 +26,20 @@
 		<tbody>
 			<?php foreach($this->request->data as $_l => $_arrUsuarios) : ?>
 				<tr>
-					<td>00</td>
+					<td><?= ( $paginacao['page'] * ($_l+1)) ?></td>
 					<td class='tdNome'> <?= @$_arrUsuarios->nome ?> </td>
 					<td class='tdEmail'> <?= @$_arrUsuarios->email ?> </td>
 					<td class='tdDativo'> <?= @$_arrUsuarios->dativo ?> </td>
-					<td class='tdUltimoAcesso'> <?= @$_arrUsuarios->ultimo_acesso ?> </td>
-					<td class='tdMunicipio'> <?= @$_arrUsuarios->municipio ?> </td>
+					<td class='tdUltimoAcesso'> <?= @$_arrUsuarios->ultimo_acesso->format('d/m/Y H:i') ?> </td>
+					<td class='tdMunicipio'> <?= @$_arrUsuarios->cidade ?> </td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
-
 	</table>
+
+	<div>
+		<?= $this->Paginator->numbers();?>
+	</div>
 </div>
 
 <div class="container">

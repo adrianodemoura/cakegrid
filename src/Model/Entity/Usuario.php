@@ -29,7 +29,7 @@ class Usuario extends Entity
     protected $_accessible = [
         'nome' => true,
         'email' => true,
-        'senha' => true,
+        'senha' => false,
         'ativo' => true,
         'ultimo_acesso' => true,
         'municipio_id' => true
@@ -48,5 +48,27 @@ class Usuario extends Entity
     protected function _setSenha($senha)
     {
         return (new DefaultPasswordHasher)->hash($senha);
+    }
+
+    /**
+     * Retorna a Descrição do campo ativo
+     *
+     * @return  string  string  Descrição do campo ativo.
+     */
+    protected function _getDativo()
+    {
+        $listaSimNao = [0=>'Não', 1=>'Sim'];
+
+        return $listaSimNao[$this->ativo];
+    }
+
+    /**
+     * Retorna a descrição do campo município_id.
+     *
+     * @return  string  $municipio  Descrição do campo município.
+     */
+    public function _getCidade()
+    {
+        return $this->municipio->nome . '/' . $this->municipio->uf;
     }
 }
