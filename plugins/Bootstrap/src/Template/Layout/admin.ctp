@@ -6,7 +6,7 @@
     $varJs['URL']       = "'".$this->Url->build(null, true)."'";
     $varJs['tempoFlash']= isset($tempoFlash) ? $tempoFlash : 3000;
     $varJs['txtAguarde']= isset($txtAguarde) ? $txtAguarde : "'Aguarde ...'";
-    $aqui = str_replace('/', ' > ',$this->request->url);
+    $aqui = str_replace('/', ' > ',$this->request->getPath());
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="col-6 text-right">
-                <?= date('d/m/Y H:i'); ?>
+                <?= date('d/m/Y H:i') . ' | ' . VERSAO; ?>
             </div>
         </div>
     </div>
