@@ -64,7 +64,7 @@
     	       <?= $this->element('menu'); ?>
            </div>
            <div class="col-4 mt-2 text-right">
-                <small class="font-italic">Você está aqui: <?= $aqui; ?></small>
+                <small class="font-italic">Você está aqui <?= $aqui; ?></small>
            </div>
         </div>
     </div>

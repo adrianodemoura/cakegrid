@@ -78,4 +78,44 @@ class MunicipiosTable extends Table
 
         return $validator;
     }
+
+    /**
+     * Retorna a lista de Ufs
+     *
+     * @return  array   $lista  Lista de ufs.
+     */
+    public function getListaUf()
+    {
+        $_lista = $this->find()
+            ->select( ['Municipios.uf', 'Municipios.uf'] )
+            ->group( ['Municipios.uf'] )
+            ->order( ['Municipios.uf'] )
+            ->toArray();
+        foreach($_lista as $_l => $_Municipio)
+        {
+            $lista[$_Municipio->uf] = $_Municipio->uf;
+        }
+
+        return $lista;
+    }
+
+    /**
+     * Retorna a lista de Ufs
+     *
+     * @return  array   $lista  Lista de ufs.
+     */
+    public function getListaEstado()
+    {
+        $_lista = $this->find()
+            ->select( ['Municipios.desc_estd', 'Municipios.desc_estd'] )
+            ->group( ['Municipios.desc_estd'] )
+            ->order( ['Municipios.desc_estd'] )
+            ->toArray();
+        foreach($_lista as $_l => $_Municipio)
+        {
+            $lista[$_Municipio->desc_estd] = $_Municipio->desc_estd;
+        }
+
+        return $lista;
+    }
 }
