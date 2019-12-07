@@ -8,28 +8,32 @@ $(document).ready(function()
 		})
 	}
 
-	$(".btn-aguarde").click(function()
-	{
-		txtAguarde = '<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde
-		$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado');
-	})
-
 	$(".btn-submit").click(function(e)
 	{
+		$(this).closest("form").submit()
+	})
+
+	$(".btn-aguarde").click(function(e)
+	{
 		let tipoElemento = e.target.localName
-		
+
 		switch (tipoElemento)
 		{
 			case 'input':
-				$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
+				$(this).val(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
 				this.form.submit()
-				return false;
+				return false
 				break;
 				
 			case 'a':
-				txtAguarde = '<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde
-				$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
-				return true;
+				if ( !$(this).hasClass('btn-bloqueado') )
+				{
+					$(this).html('<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde).addClass('btn-bloqueado')
+				} else
+				{
+					console.log('aguarde o carregamento da página !')
+					return false
+				}
 				break;
 		}
 	})

@@ -4,7 +4,7 @@
 	$Sessao 				= $this->request->getSession();
 	$optionsFiltroEstado 	= ['id'=>'filtroEstado','name'=>'Municipios.estado',  'label'=>false, 'class'=>'form-control', 'options'=>$listaEstado, 'empty'=>'-- Estado --', 'value'=>$Sessao->read($chave.'.Filtro.Municipios_estado')];
 	$optionsFiltroNome 		= ['id'=>'filtroNome', 'name'=>'Municipios.nome', 'label'=>false, 'class'=>'form-control mx-2', 'value'=>$Sessao->read($chave.'.Filtro.Municipios_nome'), 'placeholder'=>'-- nome --'];
-	$optionsFiltrar			= ['id'=>'btnFiltrar','name'=>'btnFiltrar', 'escape'=>false, 'class'=>'btn btn-primary btn-submit'];
+	$optionsFiltrar			= ['id'=>'btnFiltrar','name'=>'btnFiltrar', 'escape'=>false, 'class'=>'btn btn-primary btn-aguarde btn-submit'];
 	$optionsLimpar 			= ['id'=>'btnLimpar', 'name'=>'btnLimpar',  'escape'=>false, 'class'=>'btn btn-primary btn-aguarde'];
 	$paginacao 				= $this->request->getParam('paging')[$modelClass];
 

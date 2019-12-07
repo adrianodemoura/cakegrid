@@ -5,7 +5,7 @@
 
 	$optionsLogin = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'e-mail','name'=>'email', 'id'=>'inEmail', 'class'=>'form-control', 'autofocus'=>true, 'default'=>'admin@admin.com.br'];
 	$optionsSenha = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'senha', 'name'=>'senha', 'id'=>'inSenha', 'class'=>'form-control', 'type'=>'password', 'default'=>'admin1234'];
-	$optionsEnviar= ['name'=>'inEnviar', 'id'=>'btnEnviar', 'div'=>null, 'type'=>'submit', 'class'=>'btn btn-primary btn-submit'];
+	$optionsEnviar= ['name'=>'inEnviar', 'id'=>'btnEnviar', 'div'=>null, 'type'=>'submit', 'class'=>'btn btn-primary btn-aguarde'];
 ?>
 
 <div class="mh-100" style="height: 500px;">
