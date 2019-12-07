@@ -14,12 +14,23 @@ $(document).ready(function()
 		$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado');
 	})
 
-	$(".btn-submit").click(function()
+	$(".btn-submit").click(function(e)
 	{
-		txtAguarde = '<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde
-		$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
-		let idForm = $(this).closest("form").attr('id')
-		$("#"+idForm).submit()
-		return false;
+		let tipoElemento = e.target.localName
+		
+		switch (tipoElemento)
+		{
+			case 'input':
+				$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
+				this.form.submit()
+				return false;
+				break;
+				
+			case 'a':
+				txtAguarde = '<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde
+				$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
+				return true;
+				break;
+		}
 	})
 })
