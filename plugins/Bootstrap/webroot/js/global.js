@@ -8,11 +8,6 @@ $(document).ready(function()
 		})
 	}
 
-	$(".btn-submit").click(function(e)
-	{
-		$(this).closest("form").submit()
-	})
-
 	$(".btn-aguarde").click(function(e)
 	{
 		let tipoElemento = e.target.localName
@@ -29,6 +24,11 @@ $(document).ready(function()
 				if ( !$(this).hasClass('btn-bloqueado') )
 				{
 					$(this).html('<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde).addClass('btn-bloqueado')
+					if ( $(this).hasClass('btn-submit') )
+					{
+						$(this).closest("form").submit()
+						return false
+					}
 				} else
 				{
 					console.log('aguarde o carregamento da página !')
