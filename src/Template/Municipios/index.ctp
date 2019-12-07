@@ -8,6 +8,21 @@
 	$optionsLimpar 			= ['id'=>'btnLimpar', 'name'=>'btnLimpar',  'escape'=>false, 'class'=>'btn btn-primary btn-aguarde'];
 	$paginacao 				= $this->request->getParam('paging')[$modelClass];
 
+	$configTable =
+	[
+		'modelClass' 	=> $modelClass,
+		'dados' 		=> $dados,
+		'paginacao' 	=> $this->request->getParam('paging')[$modelClass],
+		'fieldsTable' 	=> ['id', 'nome', 'uf', 'desc_estd', 'codi_estd'],
+		'schema' 		=> 
+		[
+			'id' 		=> ['title'=>'Código', 'sort'=>true, 'th'=>['class'=>'text-center', 'width'=>'90px'], 'td'=>['class'=>'text-center']],
+			'nome' 		=> ['title'=>'Nome', 'th'=>['class'=>'text-center'], 'sort'=>true],
+			'uf' 		=> ['title'=>'Uf', 'th'=>['class'=>'text-center', 'width'=>'50px'], 'td'=>['class'=>'text-center']],
+			'desc_estd'	=> ['title'=>'Estado', 'th'=>['class'=>'text-center', 'width'=>'190px']],
+			'codi_estd'	=> ['title'=>'Código Estado', 'th'=>['class'=>'text-center', 'width'=>'140px'], 'td'=>['class'=>'text-center']]
+		],
+	];
 ?>
 
 <div class="container bg-light">
@@ -33,46 +48,8 @@
 	<?= $this->Form->end(); ?>
 	</div>
 	
-	<table class='table table-striped table-bordered table-sm'>
-		<thead>
-			<tr>
-				<th class='text-center' width="100px">
-					<?= $this->Paginator->sort('nome', _('Código')); ?>
-				</th>
-				<th class='text-center'>
-					<?= $this->Paginator->sort('nome', _('Município')); ?>
-				</th>
-				<th class='text-center' width="50px">UF</th>
-				<th class='text-center' width="220px">Estado</th>
-				<th class='text-center' width="120px">Cód. Estado</th>
-			</tr>
-		</thead>
+	
 
-		<tbody>
-			<?php foreach($dados as $_l => $_objMunicipio) : ?>
-				<tr>
-					<td class='tdId text-center'><?= @$_objMunicipio->id ?></td>
-					<td class='tdNome'><?= @$_objMunicipio->nome ?></td>
-					<td class='tdUf text-center'><?= @$_objMunicipio->uf ?></td>
-					<td class='tdDescEstd text-left'><?= @$_objMunicipio->desc_estd ?></td>
-					<td class='tdCodiEstd text-center'><?= @$_objMunicipio->codi_estd ?></td>
-				</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
+	<?= $this->element('Bootstrap.table', ['config'=>$configTable]); ?>
 
-	<div class='row border-top py-1'>
-		<div class='col-9'>
-			<nav aria-label="Page navigation example">
-  				<ul class="pagination small">
-					<?= $this->Paginator->numbers(['templates'=>'Bootstrap.paginator-template']);?>
-				</ul>
-			</nav>
-		</div>
-
-		<div class='col-3 text-right font-italic pt-2'>
-			exibindo <?= $paginacao['current'] ?> de <?= $this->Number->format($paginacao['count']) ?>
-		</div>
-
-	</div>
 </div>
