@@ -4,7 +4,7 @@
 	foreach($Sessao->read('Auth.User.Permissoes') as $_Papel => $_arrPermissoes) { $listaPapeis[$_Papel] = $_Papel;}
 
 	$optionsPapeis = ['name'=>'papel',    'id'=>'inPapel',  'type'=>'select',  'class'=>'form-control', 'required'=>'required', 'label'=>['text'=>'PAPEL: Perfil - Unidade', 'class'=>'required'], 'autofocus'=>true, 'options'=>$listaPapeis, 'default'=>$Sessao->read('Auth.User.PapelAtivo')];
-	$optionsEnviar = ['name'=>'inEnviar', 'id'=>'btnEnviar', 'type'=>'submit', 'class'=>'btn btn-secondary btn-submit mx-3', 'placeholder'=>'&#xf075;'];
+	$optionsEnviar = ['name'=>'inEnviar', 'id'=>'btnEnviar', 'type'=>'submit', 'class'=>'btn btn-secondary btn-submit mx-3'];
 
 ?>
 
