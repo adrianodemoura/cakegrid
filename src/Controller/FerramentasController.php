@@ -67,20 +67,20 @@ class FerramentasController extends AppController {
     {
         $tituloPagina       = 'Escolhendo o Papel';
         $Sessao             = $this->request->getSession();
-        $EscolherPapelForm  = new \App\Form\EscolherPapelForm();
+        $FormTrocarPapel    = new \App\Form\FormTrocarPapel();
 
         if ( $this->request->is('post') )
         {
             try
             {
-                if ( !$EscolherPapelForm->execute($this->request->getData()) )
+                if ( !$FormTrocarPapel->execute($this->request->getData()) )
                 {
                     throw new Exception(__('Erro ao escolher Papel !'), 1);
                 }
 
                 $Sessao->write('Auth.User.PapelAtivo', $this->request->data['papel']);
 
-                $this->Flash->success( __('Papel Atualizado com sucesso !') );
+                $this->Flash->success( __('Papel Atualizado com sucesso para: '.$Sessao->read('Auth.User.PapelAtivo')) );
             } catch (Exception $e)
             {
                 $this->Flash->error( $e->getMessage() );
@@ -89,6 +89,6 @@ class FerramentasController extends AppController {
         }
 
         // populando a view
-        $this->set( compact('tituloPagina', 'EscolherPapelForm') );
+        $this->set( compact('tituloPagina', 'FormTrocarPapel') );
     }
 }
