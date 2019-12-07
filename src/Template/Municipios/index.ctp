@@ -1,12 +1,13 @@
 <?php
 	//echo $this->Html->script( ['municipios/index'],	['block'=>true] );
 	//echo $this->Html->css( ['municipios/index'], 	['block'=>true] );
-	$Sessao = $this->request->getSession();
-
+	$Sessao 				= $this->request->getSession();
 	$optionsFiltroEstado 	= ['id'=>'filtroEstado','name'=>'Municipios.estado',  'label'=>false, 'class'=>'form-control', 'options'=>$listaEstado, 'empty'=>'-- Estado --', 'value'=>$Sessao->read($chave.'.Filtro.Municipios_estado')];
-	$optionsFiltrar 		= ['id'=>'btnFiltrar','name'=>'btnFiltrar', 'type'=>'submit', 'class'=>'btn btn-primary btn-aguarde', 'inputContainer'=>'{{content}}'];
+	$optionsFiltroNome 		= ['id'=>'filtroNome', 'name'=>'Municipios.nome', 'label'=>false, 'class'=>'form-control mx-2', 'value'=>$Sessao->read($chave.'.Filtro.Municipios_nome'), 'placeholder'=>'-- nome --'];
+	$optionsFiltrar 		= ['id'=>'btnFiltrar','name'=>'btnFiltrar', 'type'=>'submit', 'class'=>'btn btn-primary btn-aguarde'];
 	$optionsLimpar 			= ['id'=>'btnLimpar', 'name'=>'btnLimpar', 'escape'=>false, 'class'=>'btn btn-primary btn-aguarde'];
 	$paginacao 				= $this->request->getParam('paging')['Municipios'];
+
 ?>
 
 <div class="container bg-light">
@@ -15,13 +16,13 @@
 
 <div class="container">
 	<div class="container border my-3">
-	<?= $this->Form->create('FiltroMunicipios', ['class'=>'form', 'inputContainer'=>'{{content}}']); ?>
+	<?= $this->Form->create('FiltroMunicipios', ['url'=>['action'=>'index'], 'class'=>'form', 'templates'=>'Bootstrap.input-filter-template']); ?>
 		<div class="row py-2">
-			<div class="col-3">
-				<?= $this->Form->control('estado', $optionsFiltroEstado); ?>
-			</div>
-
-			<div class="col-5">
+			<div class="col-8">
+				<div class="input-group">
+					<?= $this->Form->control('estado', $optionsFiltroEstado); ?>
+					<?= $this->Form->control('nome', $optionsFiltroNome); ?>
+				</div>
 			</div>
 
 			<div class="col-4 text-right">
@@ -50,11 +51,11 @@
 		<tbody>
 			<?php foreach($dados as $_l => $_objMunicipio) : ?>
 				<tr>
-					<td class='tdId text-center'> 		<?= @$_objMunicipio->id ?> </td>
-					<td class='tdNome'> 	<?= @$_objMunicipio->nome ?> </td>
-					<td class='tdUf text-center'> 		<?= @$_objMunicipio->uf ?> </td>
-					<td class='tdDescEstd text-left'> <?= @$_objMunicipio->desc_estd ?> </td>
-					<td class='tdCodiEstd text-center'> <?= @$_objMunicipio->codi_estd ?> </td>
+					<td class='tdId text-center'><?= @$_objMunicipio->id ?></td>
+					<td class='tdNome'><?= @$_objMunicipio->nome ?></td>
+					<td class='tdUf text-center'><?= @$_objMunicipio->uf ?></td>
+					<td class='tdDescEstd text-left'><?= @$_objMunicipio->desc_estd ?></td>
+					<td class='tdCodiEstd text-center'><?= @$_objMunicipio->codi_estd ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

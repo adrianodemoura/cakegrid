@@ -16,55 +16,15 @@ class MunicipiosController extends AppController {
 	 */
 	public function index()
 	{
-		$chave 		= $this->name;
-		$Sessao 	= $this->request->getSession();
-		$pass0 		= @strtolower($this->request->getParam('pass')[0]);
-		$filtros 	= [];
-
-		if ( $pass0 === 'limpar')
-		{
-			$Sessao->delete($chave);
-			return $this->redirect( ['action'=>'index'] );
-		}
-
-		if ( $this->request->is('post') )
-        {
-        	$Sessao->write($chave.'.Filtro', $this->request->getData());
-        	return $this->redirect( ['action'=>'index'] );
-        }
-        if ( $Sessao->check($chave.'.Filtro.Municipios_estado') )
-        {
-        	$filtros[] = ['Municipios.desc_estd' => $Sessao->read($chave.'.Filtro.Municipios_estado')];
-        }
-
-
 		$this->loadModel('Municipios');
 		$listaEstado= $this->Municipios->getListaEstado();
+		$this->set( compact('listaEstado') );
 
-		$ordem 		= $Sessao->check($chave.'.ordem') 	? $Sessao->read($chave.'.ordem') 	: $this->Municipios->displayField();
-		$direcao	= $Sessao->check($chave.'.direcao') ? $Sessao->read($chave.'.direcao') 	: 'ASC';
-		$pagina		= $Sessao->check($chave.'.pagina') 	? $Sessao->read($chave.'.pagina') 	: 1;
+		$this->loadComponent('Bootstrap.Filtro');
 
-		$pagina 	= isset($this->request->getParam('?')['page'])		? $this->request->getParam('?')['page'] 		: $pagina;
-		$ordem 		= isset($this->request->getParam('?')['sort']) 		? $this->request->getParam('?')['sort'] 		: $ordem;
-		$direcao 	= isset($this->request->getParam('?')['direction']) ? $this->request->getParam('?')['direction'] 	: $direcao;
-
-		$Sessao->write($chave.'.ordem', $ordem);
-		$Sessao->write($chave.'.direcao', $direcao);
-		$Sessao->write($chave.'.pagina', $pagina);
-
-		$this->paginate =
-		[
-			'limit' 	=> 10,
-			'page' 		=> $Sessao->read($chave.'.pagina'),
-			'sort' 		=> $Sessao->read($chave.'.ordem'),
-			'direction' => $Sessao->read($chave.'.direcao'),
-			'conditions'=> $filtros
-			//'contain' 	=> ['Usuarios']
-		];
-
-		$dados = $this->paginate($this->Municipios);
-
-		$this->set( compact('dados', 'listaEstado', 'chave') );
+		$params = [];
+		$params['Municipios_estado']= ['name'=>'Municipios.desc_estd'];
+		$params['Municipios_nome'] 	= ['name'=>'Municipios.nome', 'operator'=>'like', 'mask'=>'%u%'];
+		$this->Filtro->setPaginacao($params);
 	}
 }
