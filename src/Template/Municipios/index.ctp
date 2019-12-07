@@ -1,6 +1,6 @@
 <?php
-	//echo $this->Html->script( ['municipios/index'],	['block'=>true] );
-	//echo $this->Html->css( ['municipios/index'], 	['block'=>true] );
+	echo $this->Html->script( ['municipios/index'],	['block'=>true] );
+	echo $this->Html->css( ['municipios/index'], 	['block'=>true] );
 	$Sessao 				= $this->request->getSession();
 
 	$configFilter =
@@ -14,9 +14,6 @@
 
 	$configTable =
 	[
-		'modelClass' 	=> $modelClass,
-		'dados' 		=> $dados,
-		'paginacao' 	=> $this->request->getParam('paging')[$modelClass],
 		'fields' 		=> ['id', 'nome', 'uf', 'desc_estd', 'codi_estd'],
 		'schema' 		=> 
 		[

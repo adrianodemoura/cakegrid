@@ -28,3 +28,8 @@
 {
 	background-color: #5d9ad8;
 }
+
+.table thead th
+{
+	text-align: center;
+}

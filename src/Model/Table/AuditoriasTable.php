@@ -40,6 +40,8 @@ class AuditoriasTable extends Table
         $this->setDisplayField('motivo');
         $this->setPrimaryKey('id');
         $this->setEntityClass('Auditoria');
+
+        $this->belongsTo('Usuarios',  ['foreignKey' => 'usuario_id']);
     }
 
     /**

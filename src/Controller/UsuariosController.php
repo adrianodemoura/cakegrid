@@ -17,5 +17,10 @@ class UsuariosController extends AppController {
      */
     public function index()
     {
+        $this->loadModel('Usuarios');
+		$this->loadComponent('Bootstrap.Filtro');
+
+		$params = ['contain'=>'Municipios'];
+		$this->Filtro->setPaginacao($params);
     }
 }

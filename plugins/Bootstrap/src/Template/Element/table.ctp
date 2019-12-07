@@ -1,3 +1,6 @@
+<?php 
+    $paginacao = $this->request->getParam('paging')[$this->request->getParam('modelClass')];
+?>
 <table class='table table-striped table-bordered table-sm'>
     <thead>
         <tr>
@@ -16,7 +19,7 @@
     </thead>
 
     <tbody>
-        <?php foreach($config['dados'] as $_l => $_Entity) : ?>
+        <?php foreach($this->request->data as $_l => $_Entity) : ?>
             <tr>
                 <?php 
                     foreach($config['fields'] as $_l2 => $_field) :
@@ -36,14 +39,16 @@
 
 <div class='row border-top py-1'>
     <div class='col-9'>
+        <?php if ( $paginacao ) : ?>
         <nav aria-label="Page navigation example">
             <ul class="pagination small">
                 <?= $this->Paginator->numbers(['templates'=>'Bootstrap.paginator-template']);?>
             </ul>
         </nav>
+        <?php endif; ?>
     </div>
 
     <div class='col-3 text-right font-italic pt-2'>
-        exibindo <?= $config['paginacao']['current'] ?> de <?= $this->Number->format($config['paginacao']['count']) ?>
+        exibindo <?= @$paginacao['current'] ?> de <?= @$this->Number->format($paginacao['count']) ?>
     </div>
 </div>

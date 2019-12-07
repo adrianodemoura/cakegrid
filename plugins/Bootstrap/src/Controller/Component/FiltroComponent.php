@@ -98,6 +98,8 @@ class FiltroComponent extends Component
         $Sessao->write($this->chave.'.limite', $limite);
 
         // populando a view
+        $this->request->params['modelClass']= $modelClass;
+        $this->request->params['chave']     = $this->chave;
         $controller->set( ['chave'=>$this->chave] );
     }
 
@@ -109,11 +111,13 @@ class FiltroComponent extends Component
      */
     public function setPaginacao( array $config=[] )
     {
+        // variáveis locais
         $controller                 = $this->_registry->getController();
+        $Sessao                     = $this->request->getSession();
         $modelClass                 = $controller->modelClass;
-        $Sessao                     = $controller->request->getSession();
         $filtros                    = [];
 
+        // configurando o filtro da sessão
         $sessaoFiltros = $Sessao->read($this->chave.'.Filtro');
         if ( count($sessaoFiltros) )
         {
@@ -134,12 +138,13 @@ class FiltroComponent extends Component
             }
         }
 
+        // incrementando filtros obrigatórios
         if ( isset($config['conditions']) )
         {
             $filtros += $config['conditions'];
         }
 
-        // paginando
+        // configurando a paginação
         $paramsPaginate = 
 		[
 			'limit' 	=> $Sessao->read($this->chave.'.limite'),
@@ -150,11 +155,8 @@ class FiltroComponent extends Component
 			'contain' 	=> isset($config['contain']) ? $config['contain'] : null
         ];
 
-        // executando a paginação
-        $controller->paginate = $paramsPaginate;
-		$dados = $controller->paginate($controller->$modelClass);
-
-        // populando a view
-        $controller->set( compact('dados', 'modelClass') );
+        // populando a view com a paginação e mais alguns atributos gerais
+        $controller->paginate   = $paramsPaginate;
+		$this->request->data    = $controller->paginate($controller->$modelClass);
     }
 }

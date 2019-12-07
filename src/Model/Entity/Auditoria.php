@@ -35,4 +35,14 @@ class Auditoria extends Entity
         'data' => true,
         'usuario' => true
     ];
+
+    /**
+     * Retorna o nome do usuário
+     *
+     * @return  string  $usuario  Nome do usuário
+     */
+    protected function _getNomeUsuario()
+    {
+        return $this->usuario->nome;
+    }
 }

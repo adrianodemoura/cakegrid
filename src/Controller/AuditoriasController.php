@@ -13,6 +13,14 @@ class AuditoriasController extends AppController {
 	 */
 	public function index()
 	{
+		$this->loadModel('Auditorias');
+		$this->loadComponent('Bootstrap.Filtro');
 
+		$params = [];
+		$params['contain'] 				= 'Usuarios';
+		$params['Auditorias_descricao'] = ['name'=>'Auditorias.descricao', 'operator'=>'like', 'mask'=>'%u%'];
+		$params['Auditorias_ip'] 		= ['name'=>'Auditorias.ip'];
+
+		$this->Filtro->setPaginacao( $params );
 	}
 }
