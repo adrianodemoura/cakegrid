@@ -4,9 +4,9 @@
 	$Sessao 				= $this->request->getSession();
 	$optionsFiltroEstado 	= ['id'=>'filtroEstado','name'=>'Municipios.estado',  'label'=>false, 'class'=>'form-control', 'options'=>$listaEstado, 'empty'=>'-- Estado --', 'value'=>$Sessao->read($chave.'.Filtro.Municipios_estado')];
 	$optionsFiltroNome 		= ['id'=>'filtroNome', 'name'=>'Municipios.nome', 'label'=>false, 'class'=>'form-control mx-2', 'value'=>$Sessao->read($chave.'.Filtro.Municipios_nome'), 'placeholder'=>'-- nome --'];
-	$optionsFiltrar 		= ['id'=>'btnFiltrar','name'=>'btnFiltrar', 'type'=>'submit', 'class'=>'btn btn-primary btn-aguarde'];
-	$optionsLimpar 			= ['id'=>'btnLimpar', 'name'=>'btnLimpar', 'escape'=>false, 'class'=>'btn btn-primary btn-aguarde'];
-	$paginacao 				= $this->request->getParam('paging')['Municipios'];
+	$optionsFiltrar			= ['id'=>'btnFiltrar','name'=>'btnFiltrar', 'escape'=>false, 'class'=>'btn btn-primary btn-submit'];
+	$optionsLimpar 			= ['id'=>'btnLimpar', 'name'=>'btnLimpar',  'escape'=>false, 'class'=>'btn btn-primary btn-aguarde'];
+	$paginacao 				= $this->request->getParam('paging')[$modelClass];
 
 ?>
 
@@ -16,7 +16,7 @@
 
 <div class="container">
 	<div class="container border my-3">
-	<?= $this->Form->create('FiltroMunicipios', ['url'=>['action'=>'index'], 'class'=>'form', 'templates'=>'Bootstrap.input-filter-template']); ?>
+	<?= $this->Form->create('FormFiltro', ['id'=>'FormFiltro', 'url'=>['action'=>'index'], 'class'=>'form', 'templates'=>'Bootstrap.input-filter-template']); ?>
 		<div class="row py-2">
 			<div class="col-8">
 				<div class="input-group">
@@ -26,7 +26,7 @@
 			</div>
 
 			<div class="col-4 text-right">
-				<?= $this->Form->control('Filtrar', $optionsFiltrar); ?>
+				<?= $this->Html->link('<i class="fas fa-search"></i>&nbsp;' . __('Filtrar'),'/municipios/index', $optionsFiltrar); ?>
 				<?= $this->Html->link('<i class="fas fa-trash"></i>&nbsp;'  . __('Limpar'), '/municipios/index/limpar', $optionsLimpar); ?>
 			</div>
 		</div>

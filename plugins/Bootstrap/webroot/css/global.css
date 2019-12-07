@@ -23,3 +23,8 @@
 	text-align: center;
 	width: 972px;
 }
+
+.btn-bloqueado
+{
+	background-color: #5d9ad8;
+}

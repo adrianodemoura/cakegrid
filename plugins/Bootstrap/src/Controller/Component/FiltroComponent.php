@@ -155,6 +155,6 @@ class FiltroComponent extends Component
 		$dados = $controller->paginate($controller->$modelClass);
 
         // populando a view
-        $controller->set( compact('dados') );
+        $controller->set( compact('dados', 'modelClass') );
     }
 }

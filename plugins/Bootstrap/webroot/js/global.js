@@ -8,9 +8,18 @@ $(document).ready(function()
 		})
 	}
 
-	$(".form").submit(function()
+	$(".btn-aguarde").click(function()
 	{
-		let $focado = $(':focus');
-		$($focado).val(txtAguarde).prop('disabled', 'disabled');
+		txtAguarde = '<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde
+		$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado');
+	})
+
+	$(".btn-submit").click(function()
+	{
+		txtAguarde = '<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde
+		$(this).html(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
+		let idForm = $(this).closest("form").attr('id')
+		$("#"+idForm).submit()
+		return false;
 	})
 })
