@@ -1,7 +1,7 @@
 <?php
 	echo $this->Html->script( ['municipios/index'],	['block'=>true] );
 	echo $this->Html->css( ['municipios/index'], 	['block'=>true] );
-	$Sessao 				= $this->request->getSession();
+	$Sessao = $this->request->getSession();
 
 	$configFilter =
 	[
@@ -17,11 +17,11 @@
 		'fields' 		=> ['id', 'nome', 'uf', 'desc_estd', 'codi_estd'],
 		'schema' 		=> 
 		[
-			'id' 		=> ['title'=>'Código', 'sort'=>true, 'th'=>['class'=>'text-center', 'width'=>'90px'], 'td'=>['class'=>'text-center']],
-			'nome' 		=> ['title'=>'Nome', 'th'=>['class'=>'text-center'], 'sort'=>true],
-			'uf' 		=> ['title'=>'Uf', 'th'=>['class'=>'text-center', 'width'=>'50px'], 'td'=>['class'=>'text-center']],
-			'desc_estd'	=> ['title'=>'Estado', 'th'=>['class'=>'text-center', 'width'=>'190px']],
-			'codi_estd'	=> ['title'=>'Código Estado', 'th'=>['class'=>'text-center', 'width'=>'140px'], 'td'=>['class'=>'text-center']]
+			'id' 		=> ['title'=>'Código', 'sort'=>true, 'th'=>['width'=>'90px'], 'td'=>['class'=>'text-center']],
+			'nome' 		=> ['title'=>'Nome', 'sort'=>true],
+			'uf' 		=> ['title'=>'Uf', 'th'=>['width'=>'50px'], 'td'=>['class'=>'text-center']],
+			'desc_estd'	=> ['title'=>'Estado', 'th'=>['width'=>'190px']],
+			'codi_estd'	=> ['title'=>'Código Estado', 'th'=>['width'=>'140px'], 'td'=>['class'=>'text-center']]
 		],
 	];
 ?>

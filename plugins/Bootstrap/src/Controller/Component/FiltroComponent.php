@@ -69,6 +69,7 @@ class FiltroComponent extends Component
         if ( $controller->request->is('post') )
         {
             $postData = $this->request->getData();
+            $this->log($postData, 'debug');
             foreach($postData as $_campo => $_vlr)
             {
                 if ( !strlen($_vlr) )
@@ -123,15 +124,23 @@ class FiltroComponent extends Component
         {
             foreach($sessaoFiltros as $_campo => $_vlr)
             {
-                $operador   = isset($config[$_campo]['operator'])   ? $config[$_campo]['operator'] : '';
-                $field      = isset($config[$_campo]['name'])       ? $config[$_campo]['name'] : '';
-                $mask       = isset($config[$_campo]['mask'])       ? $config[$_campo]['mask'] : '';
+                $field      = isset($config[$_campo]['name'])       ? $config[$_campo]['name']      : '';
+                $field      = empty($field)                         ? str_replace('_','.',$_campo)  : $field;
+                $operador   = isset($config[$_campo]['operator'])   ? $config[$_campo]['operator']  : '';
+                $mask       = isset($config[$_campo]['mask'])       ? $config[$_campo]['mask']      : '';
                 if ( strlen(trim($_vlr)) && strlen($field) )
                 {
                     $vlr = $_vlr;
-                    if ( strlen($mask) && strpos($mask,'u')>-1 )
+                    if ( strlen($mask) )
                     {
-                        $vlr = str_replace( 'u', mb_strtoupper($vlr), $mask );
+                        if ( strpos($mask,'u') > -1 )
+                        {
+                            $vlr = str_replace( 'u', mb_strtoupper($vlr), $mask );
+                        }
+                        if ( strpos($mask,'v') > -1 )
+                        {
+                            $vlr = str_replace( 'v', $vlr, $mask );
+                        }
                     }
                     $filtros[] = [trim($field.' '.$operador) => $vlr];
                 }
@@ -157,6 +166,6 @@ class FiltroComponent extends Component
 
         // populando a view com a paginação e mais alguns atributos gerais
         $controller->paginate   = $paramsPaginate;
-		$this->request->data    = $controller->paginate($controller->$modelClass);
+        $this->request->data    = $controller->paginate($controller->$modelClass);
     }
 }

@@ -41,10 +41,12 @@ class FakeUsuariosCommand extends Command
 
         for($i=0; $i<$total; $i++)
         {
-            $email = str_repeat("email $i ", 100);
-            $senha = str_repeat("senha $i ", 100);
+            $nome   = str_repeat("nome $i ", 100);
+            $email  = str_repeat("email $i ", 100);
+            $senha  = str_repeat("senha $i ", 100);
 
             $Usuario = $this->Usuarios->newEntity();
+            $Usuario->nome  = $nome;
             $Usuario->email = $email;
             $Usuario->senha = $senha;
             $Usuario->ativo = rand(0,1);

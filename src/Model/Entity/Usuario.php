@@ -15,24 +15,39 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property \Cake\I18n\FrozenTime $ultimo_acesso
  * @property int $municipio_id
  */
-class Usuario extends Entity
-{
+class Usuario extends Entity {
     /**
-     * Fields that can be mass assigned using newEntity() or patchEntity().
+     * Campos que p odem ser atribuídos usando newEntity() or patchEntiry().
      *
-     * Note that when '*' is set to true, this allows all unspecified fields to
-     * be mass assigned. For security purposes, it is advised to set '*' to false
-     * (or remove it), and explicitly make individual fields accessible as needed.
+     * Observe que quando '*' é definido para verdadeiro, isso permite todos os campos não especificado 
+     * sejam atribuídos em massa. Por questões de segurança, é recomendável definir '*' como false ou removido
+     * e configure cada campo individualmente.
      *
      * @var array
      */
-    protected $_accessible = [
-        'nome' => true,
-        'email' => true,
-        'senha' => false,
-        'ativo' => true,
-        'ultimo_acesso' => true,
-        'municipio_id' => true
+    protected $_accessible =
+    [
+        'nome'              => true,
+        'email'             => true,
+        'senha'             => false,
+        'ativo'             => true,
+        'ultimo_acesso'     => true,
+        'municipio_id'      => true
+    ];
+
+    /**
+     * Alias para da campo.
+     * 
+     * @var     array
+     */
+    protected $_aliasField =
+    [
+        'Código'        => 'id',
+        'Nome'          => 'nome',
+        'Senha'         => 'senha',
+        'Ativo'         => 'ativo',
+        'Ult. Acesso'   => 'ultimo_acesso',
+        'id Município'  => 'municipio_id'
     ];
 
     /**

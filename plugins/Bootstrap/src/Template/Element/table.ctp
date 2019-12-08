@@ -7,7 +7,13 @@
             <?php foreach($config['fields'] as $_l2 => $_field) : 
                 $field  = $_field;
                 $th     = isset($config['schema'][$field]['th']) ? $config['schema'][$field]['th'] : null;
-                $thHtml = isset($config['schema'][$field]['title']) ? $config['schema'][$field]['title'] : $field;
+                $title  = isset($config['schema'][$field]['title']) ? $config['schema'][$field]['title'] : $field;
+                $title  = isset($this->request->getParam('aliasField')[$field]) ? $this->request->getParam('aliasField')[$field] : $title;
+                $thHtml = $title;
+                if ( isset($config['schema'][$field]['sort']) )
+                {
+                    $thHtml = $this->Paginator->sort($field, $title);
+                }
             ?>
 
             <th <?php if ( isset($th) ) { foreach($th as $_tag => $_vlr) { echo "$_tag='$_vlr' "; }} ?>>

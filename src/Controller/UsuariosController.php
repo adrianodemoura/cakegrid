@@ -1,26 +1,35 @@
 <?php
+/**
+ * Controller Usuarios
+ * 
+ * @package     cakeGrid.Controller
+ * @author      Adriano Moura
+ */
 namespace App\Controller;
-
 use App\Controller\AppController;
 use Exception;
-
 /**
- * Usuarios Controller
- *
- * @method \App\Model\Entity\Usuario[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * Mantém o cadastro de usuários.
  */
 class UsuariosController extends AppController {
     /**
-     * Index method
+     * Método index
      *
      * @return \Cake\Http\Response|null
      */
     public function index()
     {
         $this->loadModel('Usuarios');
-		$this->loadComponent('Bootstrap.Filtro');
+        $this->loadComponent('Bootstrap.Filtro');
+        
+        $listaMunicipios = $this->Usuarios->Municipios->getLista();
 
-		$params = ['contain'=>'Municipios'];
-		$this->Filtro->setPaginacao($params);
+        $params                     = ['contain'=>'Municipios'];
+        $params['Usuarios_codigo']  = ['name'=>'Usuarios.id'];
+        $params['Usuarios_nome']        = ['name'=>'Usuarios.nome', 'operator'=>'LIKE', 'mask'=>'%v%'];
+        $params['Usuarios_municipio']   = ['name'=>'Usuarios.municipio_id'];
+        $this->Filtro->setPaginacao($params);
+        
+        $this->set( compact('listaMunicipios') );
     }
 }
