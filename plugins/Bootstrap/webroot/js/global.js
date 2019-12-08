@@ -23,12 +23,23 @@ $(document).ready(function()
 			case 'a':
 				if ( !$(this).hasClass('btn-bloqueado') )
 				{
+					let htmlAntigo = $(this).html();
 					$(this).html('<i class="fas fa-sync-alt" aria-hidden="true"></i>&nbsp;'+txtAguarde).addClass('btn-bloqueado')
 					if ( $(this).hasClass('btn-submit') )
 					{
 						$(this).closest("form").submit()
 						return false
-					} else return true;
+					} else if ( $(this).hasClass('btn-exportar') )
+					{
+						$(this).delay(1000).promise().done(function()
+						{
+							$(this).removeClass('btn-bloqueado').html(htmlAntigo);
+						})
+						return true;
+					} else
+					{
+						return true;
+					}
 				} else
 				{
 					console.log('aguarde o carregamento da página !')

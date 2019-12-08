@@ -22,9 +22,11 @@ if ( count($config['fields']) ) :
             </div>
         </div>
 
-        <div class="col-5 text-right">
+        <div class="col-5 text-right mt-1">
             <?= $this->Html->link('<i class="fas fa-search"></i>&nbsp;' . __('Filtrar'),$config['url'], $config['btnFiltrar']); ?>
+            <?php if ( $totalRegistros>0 ) : ?>
             <?= $this->Html->link('<i class="fas fa-file-csv"></i>&nbsp;'  . __('Exportar').' ('. $this->Number->format($totalRegistros) .')', $config['url'].'/exportar', $config['btnExportar']); ?>
+            <?php endif; ?>
             <?php if ( $totalFiltros>0 ) : ?>
             <?= $this->Html->link('<i class="fas fa-trash"></i>&nbsp;'  . __('Limpar').' ('.$totalFiltros.')', $config['url'].'/limpar', $config['btnLimpar']); ?>
             <?php endif; ?>

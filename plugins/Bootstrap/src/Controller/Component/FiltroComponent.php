@@ -110,6 +110,7 @@ class FiltroComponent extends Component
         $controller                 = $this->_registry->getController();
         $Sessao                     = $this->request->getSession();
         $modelClass                 = $controller->modelClass;
+        $pass0                      = @strtolower($this->request->getParam('pass')[0]);
         $filtros                    = [];
 
         // configurando o filtro da sessão
@@ -154,12 +155,36 @@ class FiltroComponent extends Component
 			'page' 		=> $Sessao->read($this->chave.'.pagina'),
 			'sort' 		=> $Sessao->read($this->chave.'.ordem'),
 			'direction' => $Sessao->read($this->chave.'.direcao'),
-			'conditions'=> $filtros,
-			'contain' 	=> isset($config['contain']) ? $config['contain'] : null
+            'conditions'=> $filtros,
+			'contain' 	=> isset($config['contain'])    ? $config['contain']: null,
+			'group' 	=> isset($config['group'])      ? $config['group']  : null
         ];
 
-        // populando a view com a paginação e mais alguns atributos gerais
-        $controller->paginate   = $paramsPaginate;
-        $controller->request->data    = $controller->paginate($controller->$modelClass);
+        if ( $pass0 === 'exportar' )
+        {
+            unset($paramsPaginate['limit']);
+            unset($paramsPaginate['page']);
+
+            // definindo o layout padrão
+            $controller->viewBuilder()->setLayout('csv');
+            //$controller->viewBuilder()->setClassName('csv');
+
+            //$controller->layout     = NULL;
+            //$controller->autoRender = false;
+
+            $data = $controller->$modelClass->find('all', $paramsPaginate)->toArray();
+
+            $controller->set( compact('data') );
+            $controller->render('/Csv/csv');
+            
+            return $controller->response->download($controller->name.'Csv-'.date('d-m-Y_H:i:s').".csv");
+            return;
+        } else
+        {
+            // populando a view com a paginação e mais alguns atributos gerais
+            $controller->paginate       = $paramsPaginate;
+            $controller->request->data  = $controller->paginate($controller->$modelClass);
+        }
+
     }
 }
