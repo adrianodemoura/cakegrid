@@ -23,6 +23,7 @@ class MunicipiosController extends AppController {
 		$this->loadComponent('Bootstrap.Filtro');
 
 		$params = [];
+		$params['contain'] 			= ['Usuarios'];
 		$params['Municipios_estado']= ['name'=>'Municipios.desc_estd'];
 		$params['Municipios_nome'] 	= ['name'=>'Municipios.nome', 'operator'=>'like', 'mask'=>'%u%'];
 		$this->Filtro->setPaginacao($params);

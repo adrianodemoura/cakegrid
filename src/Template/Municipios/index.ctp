@@ -14,14 +14,15 @@
 
 	$configTable =
 	[
-		'fields' 		=> ['id', 'nome', 'uf', 'desc_estd', 'codi_estd'],
+		'fields' 		=> ['id', 'nome', 'uf', 'desc_estd', 'codi_estd','usuarios.nome'],
 		'schema' 		=> 
 		[
 			'id' 		=> ['title'=>'Código', 'sort'=>true, 'th'=>['width'=>'90px'], 'td'=>['class'=>'text-center']],
 			'nome' 		=> ['title'=>'Nome', 'sort'=>true],
 			'uf' 		=> ['title'=>'Uf', 'th'=>['width'=>'50px'], 'td'=>['class'=>'text-center']],
 			'desc_estd'	=> ['title'=>'Estado', 'th'=>['width'=>'190px']],
-			'codi_estd'	=> ['title'=>'Código Estado', 'th'=>['width'=>'140px'], 'td'=>['class'=>'text-center']]
+			'codi_estd'	=> ['title'=>'Código Estado', 'th'=>['width'=>'140px'], 'td'=>['class'=>'text-center']],
+			'usuarios.nome' => ['title'=>'Usuários']
 		],
 	];
 ?>

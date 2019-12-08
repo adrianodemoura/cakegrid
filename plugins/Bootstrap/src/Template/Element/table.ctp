@@ -31,10 +31,20 @@
                     foreach($config['fields'] as $_l2 => $_field) :
                     $td     = isset($config['schema'][$_field]['td']) ? $config['schema'][$_field]['td'] : null;
                     $field  = $_field;
+                    $vlr    = $_Entity->$field;
+                    if ( strpos($field,'.')>-1 )
+                    {
+                        $vlr = '';
+                        $arrField = explode('.', $field); 
+                        foreach( $_Entity[$arrField[0]] as $_l3 => $_arrFields)
+                        {
+                            $vlr .= $_arrFields[$arrField[1]].', ';
+                        }
+                    }
                 ?>
 
                 <td <?php if ( isset($td) ) { foreach($td as $_tag => $_vlr) { echo "$_tag='$_vlr' "; }} ?>>
-                    <?= $_Entity->$field; ?>
+                    <?= $vlr ?>
                 </td>
 
                 <?php endforeach; ?>
