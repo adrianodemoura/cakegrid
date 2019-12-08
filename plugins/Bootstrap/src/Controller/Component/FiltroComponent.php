@@ -69,7 +69,7 @@ class FiltroComponent extends Component
         // se o form foi postado
         if ( $controller->request->is('post') )
         {
-            $postData = $this->request->getData();
+            $postData = $controller->request->getData();
 
             foreach($postData as $_campo => $_vlr) { if ( !strlen($_vlr) ) { unset($postData[$_campo]); }}
 
@@ -94,9 +94,7 @@ class FiltroComponent extends Component
         $Sessao->write($this->chave.'.limite', $limite);
 
         // populando a view
-        $this->request->params['modelClass']    = $modelClass;
-        $this->request->params['chave']         = $this->chave;
-        $this->request->params['totalFiltros']  = $totalFiltros;
+        $controller->request->addParams(['modelClass'=>$modelClass, 'chave'=>$this->chave, 'totalFiltros'=>$totalFiltros]);
         $controller->set( ['chave'=>$this->chave] );
     }
 
@@ -162,6 +160,6 @@ class FiltroComponent extends Component
 
         // populando a view com a paginação e mais alguns atributos gerais
         $controller->paginate   = $paramsPaginate;
-        $this->request->data    = $controller->paginate($controller->$modelClass);
+        $controller->request->data    = $controller->paginate($controller->$modelClass);
     }
 }
