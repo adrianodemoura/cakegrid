@@ -8,10 +8,11 @@
 	[
 		'fields' 	=>
 		[
-			'codigo' 	=> ['id'=>'filtroCodigo', 'name'=>'Usuarios.codigo','label'=>false, 'class'=>'form-control',      	'value'=>$Sessao->read($chave.'.Filtro.Usuarios_codigo'), 'placeholder'=>'-- código --'],
-			'ativo' 	=> ['id'=>'filtroAtivo', 'name'=>'Usuarios.ativo',  'label'=>false, 'class'=>'form-control ml-1',   'value'=>$Sessao->read($chave.'.Filtro.Usuarios_ativo'), 'options'=>[0=>'Não', 1=>'Sim'], 'empty'=>'-- Ativo --'],
-			'nome' 		=> ['id'=>'filtroNome',  'name'=>'Usuarios.nome',   'label'=>false, 'class'=>'form-control ml-1',	'value'=>$Sessao->read($chave.'.Filtro.Usuarios_nome'), 'placeholder'=>'-- nome --'],
-			'municipio'	=> ['id'=>'filtroMunicipio','name'=>'Usuarios.municipio','label'=>false, 'class'=>'form-control selectpicker ml-1', 'data-live-search'=>true, 'value'=>$Sessao->read($chave.'.Filtro.Usuarios_municipio'), 'options'=>$listaMunicipios, 'empty'=>'-- Cidade --']
+			'codigo' 	=> ['id'=>'filtroCodigo','name'=>'Usuarios.codigo', 'label'=>false, 'class'=>'form-control',      	 'value'=>$Sessao->read($chave.'.Filtro.Usuarios_codigo'), 'placeholder'=>'-- código --'],
+			'ativo' 	=> ['id'=>'filtroAtivo', 'name'=>'Usuarios.ativo',  'label'=>false, 'class'=>'form-control ml-1',    'value'=>$Sessao->read($chave.'.Filtro.Usuarios_ativo'), 'options'=>[0=>'Não', 1=>'Sim'], 'empty'=>'-- Ativo --'],
+			'nome' 		=> ['id'=>'filtroNome',  'name'=>'Usuarios.nome',   'label'=>false, 'class'=>'form-control ml-1',	 'value'=>$Sessao->read($chave.'.Filtro.Usuarios_nome'), 'placeholder'=>'-- nome --'],
+			'uf'		=> ['id'=>'filtroUf', 	 'name'=>'Municipios.uf',   'label'=>false, 'class'=>'form-control ml-1', 	 'value'=>$Sessao->read($chave.'.Filtro.Municipios_uf'), 'options'=>$listaUfs, 'empty'=>'-- Uf --'],
+			'municipio'	=> ['id'=>'filtroMunicipio','name'=>'Usuarios.municipio','label'=>false, 'class'=>'form-control ml-1','value'=>$Sessao->read($chave.'.Filtro.Usuarios_municipio'), 'options'=>$listaMunicipios, 'empty'=>'-- Cidade --']
 		]
 	];
 

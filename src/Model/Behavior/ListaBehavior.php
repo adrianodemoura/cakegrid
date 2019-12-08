@@ -19,15 +19,17 @@ class ListaBehavior extends Behavior
     /**
      * Retorna a lista
      *
-     * @return 	array 	$lista
+     * @param   boolean $cache      Se verdadeiro joga a lista no cache, se Falso não.
+     * @param   array   $arrFields  Primeiro e segundo campo da lista.
+     * @return 	array 	$lista      Lista no formato campo1 = campo2
      */
-    public function getLista($cache=false)
+    public function getLista( Array $arrFields=[], $cache=false )
     {
     	$alias 			= $this->_table->getAlias();
-    	$pk 			= $this->_table->getPrimaryKey();
-    	$displayField 	= $this->_table->getDisplayField();
+    	$pk 			= isset($arrFields[0]) ? $arrFields[0] : $this->_table->getPrimaryKey();
+        $displayField 	= isset($arrFields[1]) ? $arrFields[1] : $this->_table->getDisplayField();
 
-    	$_lista = $this->_table->find()
+        $_lista = $this->_table->find()
     		->select( [$alias .'.'. $pk, $alias .'.'.$displayField] )
     		->order( [$alias .'.'. $displayField] )
     		->toArray();

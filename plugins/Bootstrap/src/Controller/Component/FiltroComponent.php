@@ -69,7 +69,6 @@ class FiltroComponent extends Component
         if ( $controller->request->is('post') )
         {
             $postData = $this->request->getData();
-            $this->log($postData, 'debug');
 
             foreach($postData as $_campo => $_vlr) { if ( !strlen($_vlr) ) { unset($postData[$_campo]); }}
 
