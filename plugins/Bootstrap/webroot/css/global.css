@@ -27,6 +27,14 @@
 .btn-bloqueado
 {
 	background-color: #5d9ad8;
+	color: #fff;
+}
+.btn-bloqueado:hover
+{
+	background-color: #eee;
+	border: none !important;
+	border-color: none !important;
+	color: #aaa !important;
 }
 
 .table thead th

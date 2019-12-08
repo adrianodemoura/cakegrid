@@ -16,7 +16,7 @@ $(document).ready(function()
 		{
 			case 'input':
 				$(this).val(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
-				this.form.submit()
+				$(this).closest("form").submit()
 				return false
 				break;
 				
@@ -28,7 +28,7 @@ $(document).ready(function()
 					{
 						$(this).closest("form").submit()
 						return false
-					}
+					} else return true;
 				} else
 				{
 					console.log('aguarde o carregamento da página !')
@@ -36,5 +36,6 @@ $(document).ready(function()
 				}
 				break;
 		}
+		return false;
 	})
 })

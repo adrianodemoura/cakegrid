@@ -70,13 +70,8 @@ class FiltroComponent extends Component
         {
             $postData = $this->request->getData();
             $this->log($postData, 'debug');
-            foreach($postData as $_campo => $_vlr)
-            {
-                if ( !strlen($_vlr) )
-                {
-                    unset($postData[$_campo]);
-                }
-            }
+
+            foreach($postData as $_campo => $_vlr) { if ( !strlen($_vlr) ) { unset($postData[$_campo]); }}
 
             $Sessao->write($this->chave.'.Filtro', $postData );
             $Sessao->write($this->chave.'.pagina', 1);
