@@ -23,9 +23,9 @@ class ListaBehavior extends Behavior
      */
     public function getLista($cache=false)
     {
-    	$alias 			= $this->_table->alias();
-    	$pk 			= $this->_table->primaryKey();
-    	$displayField 	= $this->_table->displayField();
+    	$alias 			= $this->_table->getAlias();
+    	$pk 			= $this->_table->getPrimaryKey();
+    	$displayField 	= $this->_table->getDisplayField();
 
     	$_lista = $this->_table->find()
     		->select( [$alias .'.'. $pk, $alias .'.'.$displayField] )
