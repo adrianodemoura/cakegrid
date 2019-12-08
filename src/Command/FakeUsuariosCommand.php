@@ -37,7 +37,9 @@ class FakeUsuariosCommand extends Command
     {
         $this->loadModel('Usuarios');
 
-        $total  = (int) $args->getArgumentAt(0);
+        $total              = (int) $args->getArgumentAt(0);
+        $listaMunicipios    = $this->Usuarios->Municipios->getLista();
+        $totalMunicipios    = (count($listaMunicipios)-1);
 
         for($i=0; $i<$total; $i++)
         {
@@ -45,12 +47,15 @@ class FakeUsuariosCommand extends Command
             $email  = str_repeat("email $i ", 100);
             $senha  = str_repeat("senha $i ", 100);
 
+            $itemSorteado = rand(0,$totalMunicipios);
+
             $Usuario = $this->Usuarios->newEntity();
             $Usuario->nome  = $nome;
             $Usuario->email = $email;
             $Usuario->senha = $senha;
             $Usuario->ativo = rand(0,1);
             $Usuario->ultimo_acesso = rand(100000000,200000000);
+            $Usuario->municipio_id  = array_keys($listaMunicipios)[$itemSorteado];
 
             if ( !$this->Usuarios->save($Usuario) )
             {
