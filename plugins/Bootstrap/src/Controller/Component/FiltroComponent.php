@@ -56,6 +56,7 @@ class FiltroComponent extends Component
         $this->actionRedirect       = isset($config['actionRedirect']) ? $config['actionRedirect'] : $this->actionRedirect;
         $modelClass                 = isset($config['modelClass']) ? $config['modelClass'] : $controller->modelClass;
         $Sessao                     = $controller->request->getSession();
+        $totalFiltros               = count($Sessao->read($this->chave.'.Filtro'));
 
         // se pediu pra limpar o filtro
         $pass0 = @strtolower($this->request->getParam('pass')[0]);
@@ -93,8 +94,9 @@ class FiltroComponent extends Component
         $Sessao->write($this->chave.'.limite', $limite);
 
         // populando a view
-        $this->request->params['modelClass']= $modelClass;
-        $this->request->params['chave']     = $this->chave;
+        $this->request->params['modelClass']    = $modelClass;
+        $this->request->params['chave']         = $this->chave;
+        $this->request->params['totalFiltros']  = $totalFiltros;
         $controller->set( ['chave'=>$this->chave] );
     }
 

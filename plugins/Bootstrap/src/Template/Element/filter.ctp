@@ -1,5 +1,6 @@
 <?php
 use Cake\Utility\Inflector;
+$totalFiltros = $this->request->getParam('totalFiltros');
 
 $config['btnFiltrar']	= isset($config['btnFiltrar'])  ? $config['btnFiltrar']     : ['id'=>'btnFiltrar','name'=>'btnFiltrar', 'escape'=>false, 'class'=>'btn btn-primary btn-aguarde btn-submit'];
 $config['btnLimpar']	= isset($config['btnLimpar'])   ? $config['btnLimpar']      : ['id'=>'btnLimpar', 'name'=>'btnLimpar',  'escape'=>false, 'class'=>'btn btn-primary btn-aguarde'];
@@ -21,7 +22,9 @@ if ( count($config['fields']) ) :
 
         <div class="col-4 text-right">
             <?= $this->Html->link('<i class="fas fa-search"></i>&nbsp;' . __('Filtrar'),$config['url'], $config['btnFiltrar']); ?>
-            <?= $this->Html->link('<i class="fas fa-trash"></i>&nbsp;'  . __('Limpar'), $config['url'].'/limpar', $config['btnLimpar']); ?>
+            <?php if ( $totalFiltros>0 ) : ?>
+            <?= $this->Html->link('<i class="fas fa-trash"></i>&nbsp;'  . __('Limpar').' ('.$totalFiltros.')', $config['url'].'/limpar', $config['btnLimpar']); ?>
+            <?php endif; ?>
         </div>
     </div>
 <?= $this->Form->end(); ?>
