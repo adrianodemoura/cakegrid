@@ -164,21 +164,39 @@ class FiltroComponent extends Component
         {
             unset($paramsPaginate['limit']);
             unset($paramsPaginate['page']);
+            $arquivo = $controller->name.'Csv-'.date('d-m-Y_H:i:s').".csv";
 
-            // definindo o layout padrão
+            $textoCsv   = '';
+            $separador  = ';';
+            $data       = $controller->$modelClass->find('all', $paramsPaginate)->toArray();
+            foreach($data as $_l => $_Entity)
+            {
+                $arrFields = $_Entity->toArray();
+                if ( !$_l)
+                {
+                    foreach($arrFields as $_field => $_vlrField)
+                    {
+                        $textoCsv .= $_field . $separador;
+                    }
+                    $textoCsv .= "\n";
+                }
+                foreach($arrFields as $_field => $_vlrField)
+                {
+                    if ( !is_array($_vlrField) )
+                    {
+                        $textoCsv .= $_vlrField . $separador;
+                    }
+                }
+
+                $textoCsv .= "\n";
+            }
+
             $controller->viewBuilder()->setLayout('csv');
-            //$controller->viewBuilder()->setClassName('csv');
-
-            //$controller->layout     = NULL;
-            //$controller->autoRender = false;
-
-            $data = $controller->$modelClass->find('all', $paramsPaginate)->toArray();
-
-            $controller->set( compact('data') );
-            $controller->render('/Csv/csv');
-            
-            return $controller->response->download($controller->name.'Csv-'.date('d-m-Y_H:i:s').".csv");
-            return;
+            $controller->autoRender = false;
+            $controller->response = $controller->response->withStringBody($textoCsv);
+            $controller->response = $controller->response->withType('csv');
+            $controller->response = $controller->response->withDownload($arquivo);
+            return $controller->response;
         } else
         {
             // populando a view com a paginação e mais alguns atributos gerais
