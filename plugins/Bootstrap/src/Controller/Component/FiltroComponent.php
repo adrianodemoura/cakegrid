@@ -8,6 +8,7 @@
 namespace Bootstrap\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
+use Cake\Utility\Inflector;
 /**
  * Mantém o filtro do plugin Bootstrap.
  */
@@ -156,6 +157,7 @@ class FiltroComponent extends Component
 			'sort' 		=> $Sessao->read($this->chave.'.ordem'),
 			'direction' => $Sessao->read($this->chave.'.direcao'),
             'conditions'=> $filtros,
+			'fields' 	=> isset($config['fields'])     ? $config['fields'] : null,
 			'contain' 	=> isset($config['contain'])    ? $config['contain']: null,
 			'group' 	=> isset($config['group'])      ? $config['group']  : null
         ];
@@ -169,14 +171,18 @@ class FiltroComponent extends Component
             $textoCsv   = '';
             $separador  = ';';
             $data       = $controller->$modelClass->find('all', $paramsPaginate)->toArray();
+            $Entity     = $controller->$modelClass->newEntity();
+            $this->log($Entity->aliasFields);
             foreach($data as $_l => $_Entity)
             {
-                $arrFields = $_Entity->toArray();
+                $arrFields      = $_Entity->toArray();
+                $aliasFields    = $_Entity->_aliasFields;
                 if ( !$_l)
                 {
                     foreach($arrFields as $_field => $_vlrField)
                     {
-                        $textoCsv .= $_field . $separador;
+                        $field = Inflector::camelize($_field);
+                        $textoCsv .= $field . $separador;
                     }
                     $textoCsv .= "\n";
                 }
@@ -185,6 +191,21 @@ class FiltroComponent extends Component
                     if ( !is_array($_vlrField) )
                     {
                         $textoCsv .= $_vlrField . $separador;
+                    } else
+                    {
+                        foreach($_vlrField as $_field2 => $_vlrField2)
+                        {
+                            if ( !is_array($_vlrField2) )
+                            {
+                                $textoCsv .= $_vlrField2.', ';
+                            } else
+                            {
+                                foreach($_vlrField2 as $_field3 => $_vlrField3)
+                                {
+                                    $textoCsv .= $_vlrField3.', ';
+                                }
+                            }
+                        }
                     }
                 }
 

@@ -32,4 +32,19 @@ class Municipio extends Entity
         'desc_estd' => true,
         'usuarios' => true
     ];
+
+    /**
+     * Alias name para os campos.
+     * 
+     * @var     array
+     */
+    protected $_aliasFields =
+    [
+        'id'            => 'Código',
+        'nome'          => 'Nome',
+        'uf'            => 'UF',
+        'codi_estd'     => 'Código Estado',
+        'desc_estd'     => 'Estado',
+        'usuarios'      => 'Usuários'
+    ];
 }
