@@ -41,3 +41,9 @@
 {
 	text-align: center;
 }
+
+.div-form-filter input:focus,
+.div-form-filter select:focus
+{
+	background-color: #F2F2F2;
+}

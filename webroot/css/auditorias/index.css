@@ -1,0 +1,6 @@
+table.table td:nth-child(1),
+table.table td:nth-child(3),
+table.table td:nth-child(5)
+{  
+    text-align: center;
+}

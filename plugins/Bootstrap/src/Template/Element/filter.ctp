@@ -11,7 +11,7 @@ $config['fields']       = isset($config['fields'])      ? $config['fields']     
 
 if ( count($config['fields']) ) :
 ?>
-<div class="container border my-3">
+<div class="div-form-filter container border my-3">
 <?= $this->Form->create('FormFiltro', ['id'=>'FormFiltro', 'url'=>$config['url'], 'class'=>'form', 'templates'=>'Bootstrap.input-filter-template']); ?>
     <div class="row py-2">
         <div class="col-7">
