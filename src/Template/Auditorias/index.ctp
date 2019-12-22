@@ -1,27 +1,29 @@
 <?php
 
-	echo $this->Html->script( ['auditorias/index'],	['block'=>true] );
-	echo $this->Html->css( ['auditorias/index'], 	['block'=>true] );
-	$Sessao = $this->request->getSession();
+echo $this->Html->script( ['auditorias/index'],	['block'=>true] );
+echo $this->Html->css( ['auditorias/index'], 	['block'=>true] );
+$Sessao = $this->request->getSession();
 
-	$configFilter =
+$configFilter =
+[
+	'fields' 	=>
 	[
-		'fields' 	=>
-		[
-			'descricao'	=> ['id'=>'filtroDescricao',  'name'=>'Auditorias.descricao', 'label'=>false, 'class'=>'form-control mx-2', 'value'=>$Sessao->read($chave.'.Filtro.Auditorias_descricao'), 'placeholder'=>'-- descrição --'],
-			'ip'		=> ['id'=>'filtroIp',  'name'=>'Auditorias.ip', 'label'=>false, 'class'=>'form-control mx-2', 'value'=>$Sessao->read($chave.'.Filtro.Auditorias_ip'), 'placeholder'=>'-- ip --']
-		]
-	];
+		'descricao'	=> ['id'=>'filtroDescricao',  'name'=>'Auditorias.descricao', 'label'=>false, 'class'=>'form-control mx-2', 'value'=>$Sessao->read($chave.'.Filtro.Auditorias_descricao'), 'placeholder'=>'-- descrição --'],
+		'ip'		=> ['id'=>'filtroIp',  'name'=>'Auditorias.ip', 'label'=>false, 'class'=>'form-control mx-2', 'value'=>$Sessao->read($chave.'.Filtro.Auditorias_ip'), 'placeholder'=>'-- ip --']
+	]
+];
 
-	$configTable =
+$configTable =
+[
+	'fields' 	=> ['id', 'motivo', 'ip', 'descricao', 'data', 'nome_usuario'],
+	'schema' 	=>
 	[
-		'fields' 	=> ['id', 'motivo', 'ip', 'descricao', 'data', 'nome_usuario'],
-		'schema' 	=>
-		[
-			'id' 			=> ['title'=>'Código'],
-			'nome_usuario' 	=> ['title'=>'Usuário']
-		]
-	];
+		'id' 			=> ['title'=>'Código', 'sort'=>true],
+		'descricao' 	=> ['title'=>'Descrição'],
+		'ip' 			=> ['title'=>'Ip'],
+		'nome_usuario' 	=> ['title'=>'Usuário']
+	]
+];
 
 ?>
 

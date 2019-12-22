@@ -26,7 +26,7 @@ class FiltroComponent extends Component
      * 
      * @var     string
      */
-    private $chave  = '';
+    private $chave              = '';
 
     /**
      * Controller de redirecionamentos.
@@ -40,7 +40,14 @@ class FiltroComponent extends Component
      * 
      * @var     string
      */
-    private $actionRedirect = 'index';
+    private $actionRedirect     = 'index';
+
+    /**
+     * Propriedades de cada campo.
+     * 
+     * @var     array
+     */
+    private $schema             = [];
 
     /**
      * Método de inicilização do componente.
@@ -48,11 +55,13 @@ class FiltroComponent extends Component
      * ### Config
      * 
      * @param   array   $config     Configurações do componente.
+     * @return  \Cake\Http\Response|null
      */
     public function initialize( array $config=[] )
     {
         $controller                 = $this->_registry->getController();
-        $this->chave                = isset($config['chave']) ? $config['chave'] : $controller->name;
+        $this->schema               = isset($config['schema']) ? $config['schema'] : [];
+        $this->chave                = isset($config['chave'])  ? $config['chave'] : $controller->name;
         $this->controllerRedirect   = isset($config['controllerRedirect']) ? $config['controllerRedirect'] : $controller->name;
         $this->actionRedirect       = isset($config['actionRedirect']) ? $config['actionRedirect'] : $this->actionRedirect;
         $modelClass                 = isset($config['modelClass']) ? $config['modelClass'] : $controller->modelClass;
@@ -60,7 +69,7 @@ class FiltroComponent extends Component
         $totalFiltros               = count($Sessao->read($this->chave.'.Filtro'));
         $params                     = @$controller->request->getParam('?');
         $pass                       = @$controller->request->getParam('pass');
-        $pagina                     = 1;
+        $chave                      = $this->chave;
 
         // se pediu pra limpar o filtro
         if ( @strtolower($pass[0]) === 'limpar')
@@ -68,68 +77,105 @@ class FiltroComponent extends Component
 			$Sessao->delete($this->chave);
 			return $controller->redirect( ['controller'=>$this->controllerRedirect, 'action'=>$this->actionRedirect] );
         }
-        
-        // se o form foi postado
-        if ( $controller->request->is('post') )
-        {
-            $postData = $controller->request->getData();
-
-            foreach($postData as $_campo => $_vlr) { if ( !strlen($_vlr) ) { unset($postData[$_campo]); }}
-
-            $Sessao->write($this->chave.'.Filtro', $postData );
-            $Sessao->write($this->chave.'.pagina', 1);
-
-            return $controller->redirect( ['controller'=>$this->controllerRedirect, 'action'=>$this->actionRedirect] );
-        }
-
-        // gravando o filtro na sessão
-        $ordem 		= $Sessao->check($this->chave.'.ordem') 	? $Sessao->read($this->chave.'.ordem') 	: $controller->$modelClass->displayField();
-		$direcao	= $Sessao->check($this->chave.'.direcao')   ? $Sessao->read($this->chave.'.direcao') 	: 'ASC';
-		$limite		= $Sessao->check($this->chave.'.limite') 	? $Sessao->read($this->chave.'.limite') 	: 10;
-		$pagina		= $Sessao->check($this->chave.'.pagina') 	? $Sessao->read($this->chave.'.pagina') 	: $pagina;
-		$pagina 	= isset($params['page'])		? $params['page'] 		: $pagina;
-		$ordem 		= isset($params['sort']) 		? $params['sort'] 		: $ordem;
-		$direcao 	= isset($params['direction'])   ? $params['direction'] 	: $direcao;
-        $limite 	= isset($params['limit'])       ? $params['limit'] 	    : $limite;
-        if ( !@$params['page'] && @$params['sort'] ) // primeira página porque o filho de uma égua do PaginatorHelper não escreve o page na url.
-        {
-            $pagina = 1;
-        }
-		$Sessao->write($this->chave.'.ordem', $ordem);
-		$Sessao->write($this->chave.'.direcao', $direcao);
-        $Sessao->write($this->chave.'.pagina', $pagina);
-        $Sessao->write($this->chave.'.limite', $limite);
 
         // populando a view
         $controller->request->addParams(['modelClass'=>$modelClass, 'chave'=>$this->chave, 'totalFiltros'=>$totalFiltros]);
-        $controller->set( ['chave'=>$this->chave] );
+        $controller->set( compact('chave') );
     }
 
     /**
-     * Executa a paginação.
-     * *
-     * @param   array   $config     Parâmetros da paginação
+     * Configura as propriedades de um campo do schema.
+     * 
+     * @param   string  $field      Nome do campo, no formato Table_field
+     * @param   array   $params     Propriedades do campo.
      * @return  \Cake\Http\Response|null
      */
-    public function setPaginacao( array $config=[] )
+    public function setSchema( $field='', $params=[] )
     {
-        // variáveis locais
-        $controller                 = $this->_registry->getController();
-        $Sessao                     = $this->request->getSession();
-        $modelClass                 = $controller->modelClass;
-        $pass0                      = @strtolower($this->request->getParam('pass')[0]);
-        $filtros                    = [];
+        $this->schema[ str_replace('.','_',$field) ] = $params;
+    }
+
+    /**
+     * Retorna o parâmetro de um campo do schema.
+     * 
+     * @param   string  $fieldParam     Nome do campo e do parâmetro, exemplo: Usuario.nome.name
+     * @return  string  $valor          Valor da chave.
+     */
+    public function getSchema( $fieldParam='' )
+    {
+        $arrFieldParam  = explode( '.', $fieldParam );
+        $field          = $arrFieldParam[0].'_'.$arrFieldParam[1];
+        $fieldPonto     = $arrFieldParam[0].'.'.$arrFieldParam[1];
+        $parametro      = str_replace($fieldPonto.'.','', $fieldParam);
+        $arrOriginal    = $this->schema[$field];
+        $total          = (int) substr_count($parametro, '.');
+        $retorno        = @$arrOriginal[$parametro];
+
+        if ( $total )
+        {
+            $arrLoop    = explode('.', $parametro);
+            $arr        = @$arrOriginal[$arrLoop[0]];
+            unset($arrLoop[0]);
+            foreach( $arrLoop as $_l => $_tag )
+            {
+                if ( !isset($arr[$_tag]) ) return null;
+
+                if ( is_array( $arr[$_tag] ) )
+                {
+                    $arr        = $arr[$_tag];
+                    $retorno    = $arr;
+                } else
+                {
+                    $retorno    = $arr[$_tag];
+                }
+            }
+        }
+
+        return $retorno;
+    }
+
+    /**
+     * Configura o filtro na sessão e redireciona, caso o form seja postado.
+     * 
+     * @return  \Cake\Http\Response|null
+     */
+    private function setFiltro()
+    {
+        $controller = $this->_registry->getController();
+        $Sessao     = $controller->request->getSession();
+        if ( $controller->request->is('post') )
+        {
+            $postData = $controller->request->getData();
+    
+            foreach($postData as $_campo => $_vlr) { if ( !strlen($_vlr) ) { unset($postData[$_campo]); }}
+    
+            $Sessao->write($this->chave.'.Filtro', $postData );
+            $Sessao->write($this->chave.'.pagina', 1);
+    
+            return $controller->redirect( ['controller'=>$this->controllerRedirect, 'action'=>$this->actionRedirect] );
+        }
+    }
+
+    /**
+     * Retorna os filtros da sessão.
+     */
+    private function getFiltros()
+    {
+        $filtros        = [];
+        $controller     = $this->_registry->getController();
+        $Sessao         = $controller->request->getSession();
 
         // configurando o filtro da sessão
-        $sessaoFiltros = $Sessao->read($this->chave.'.Filtro');
+        $sessaoFiltros  = $Sessao->read($this->chave.'.Filtro');
         if ( count($sessaoFiltros) )
         {
             foreach($sessaoFiltros as $_campo => $_vlr)
             {
-                $field      = isset($config[$_campo]['name'])       ? $config[$_campo]['name']      : '';
+                $propField  = isset($this->schema[$_campo])         ? $this->schema[$_campo]        : [];
+                $field      = isset($propField['name'])             ? $propField['name']      : '';
                 $field      = empty($field)                         ? str_replace('_','.',$_campo)  : $field;
-                $operador   = isset($config[$_campo]['operator'])   ? $config[$_campo]['operator']  : '';
-                $mask       = isset($config[$_campo]['mask'])       ? $config[$_campo]['mask']      : '';
+                $operador   = isset($propField['operator'])         ? $propField['operator']  : '';
+                $mask       = isset($propField['mask'])             ? $propField['mask']      : '';
                 if ( strlen(trim($_vlr)) && strlen($field) )
                 {
                     $vlr = $_vlr;
@@ -148,6 +194,25 @@ class FiltroComponent extends Component
                 }
             }
         }
+    }
+
+    /**
+     * Executa a paginação.
+     * *
+     * @param   array   $config     Parâmetros da paginação
+     * @return  \Cake\Http\Response|null
+     */
+    public function setPaginacao( array $config=[] )
+    {
+        // variáveis locais
+        $controller                 = $this->_registry->getController();
+        $Sessao                     = $controller->request->getSession();
+        $modelClass                 = $controller->modelClass;
+        $pass0                      = @strtolower($controller->request->getParam('pass')[0]);
+        $filtros                    = $this->getFiltros( $config );
+
+        // configura o filtro
+        $this->setFiltro();
 
         // incrementando filtros obrigatórios
         if ( isset($config['conditions']) )

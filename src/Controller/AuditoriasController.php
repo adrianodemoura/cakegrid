@@ -13,15 +13,19 @@ class AuditoriasController extends AppController {
 	 */
 	public function index()
 	{
+		// carregando
 		$this->loadModel('Auditorias');
-		$this->loadComponent('Bootstrap.Filtro');
+		$this->loadComponent( 'Bootstrap.Filtro' );
 
-		$params = [];
-		$params['contain'] 				= 'Usuarios';
-		$params['fields'] 				= ['Auditorias.id', 'Auditorias.motivo', 'Auditorias.ip', 'Auditorias.descricao', 'Auditorias.data', 'Usuarios.nome'];
-		$params['Auditorias_descricao'] = ['name'=>'Auditorias.descricao', 'operator'=>'like', 'mask'=>'%u%'];
-		$params['Auditorias_ip'] 		= ['name'=>'Auditorias.ip'];
+		// configurando os campos de filtro.s
+		$this->Filtro->setSchema('Auditorias.descricao', 	['name'=>'Auditorias.descricao', 'operator'=>'like', 'mask'=>'%u%', 'arroz'=>['feijao'=>'batata','a'=>['b'=>'c']]] );
+		$this->Filtro->setSchema('Auditorias.ip', 			['name'=>'Auditorias.ip'] );
 
+		// paginando
+		$params 			= [];
+		$params['contain'] 	= 'Usuarios';
+		$params['fields'] 	= ['Auditorias.id', 'Auditorias.motivo', 'Auditorias.ip', 'Auditorias.descricao', 'Auditorias.data', 'Usuarios.nome'];
+		$params['sort'] 	= ['Auditorias.id'=>'DESC'];
 		$this->Filtro->setPaginacao( $params );
 	}
 }
