@@ -58,7 +58,7 @@
         <?php if ( $paginacao ) : ?>
         <nav aria-label="Page navigation example">
             <ul class="pagination small">
-                <?= $this->Paginator->numbers(['templates'=>'Bootstrap.paginator-template']);?>
+                <?php echo $this->Paginator->numbers(['templates'=>'Bootstrap.paginator-template', 'first'=>1]);?>
             </ul>
         </nav>
         <?php endif; ?>

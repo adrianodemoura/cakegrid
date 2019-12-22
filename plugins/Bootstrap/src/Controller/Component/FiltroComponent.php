@@ -58,10 +58,12 @@ class FiltroComponent extends Component
         $modelClass                 = isset($config['modelClass']) ? $config['modelClass'] : $controller->modelClass;
         $Sessao                     = $controller->request->getSession();
         $totalFiltros               = count($Sessao->read($this->chave.'.Filtro'));
+        $params                     = @$controller->request->getParam('?');
+        $pass                       = @$controller->request->getParam('pass');
+        $pagina                     = 1;
 
         // se pediu pra limpar o filtro
-        $pass0 = @strtolower($this->request->getParam('pass')[0]);
-        if ( $pass0 === 'limpar')
+        if ( @strtolower($pass[0]) === 'limpar')
 		{
 			$Sessao->delete($this->chave);
 			return $controller->redirect( ['controller'=>$this->controllerRedirect, 'action'=>$this->actionRedirect] );
@@ -84,11 +86,15 @@ class FiltroComponent extends Component
         $ordem 		= $Sessao->check($this->chave.'.ordem') 	? $Sessao->read($this->chave.'.ordem') 	: $controller->$modelClass->displayField();
 		$direcao	= $Sessao->check($this->chave.'.direcao')   ? $Sessao->read($this->chave.'.direcao') 	: 'ASC';
 		$limite		= $Sessao->check($this->chave.'.limite') 	? $Sessao->read($this->chave.'.limite') 	: 10;
-		$pagina		= $Sessao->check($this->chave.'.pagina') 	? $Sessao->read($this->chave.'.pagina') 	: 1;
-		$pagina 	= isset($this->request->getParam('?')['page'])		? $this->request->getParam('?')['page'] 		: $pagina;
-		$ordem 		= isset($this->request->getParam('?')['sort']) 		? $this->request->getParam('?')['sort'] 		: $ordem;
-		$direcao 	= isset($this->request->getParam('?')['direction']) ? $this->request->getParam('?')['direction'] 	: $direcao;
-		$limite 	= isset($this->request->getParam('?')['limit'])     ? $this->request->getParam('?')['limit'] 	    : $limite;
+		$pagina		= $Sessao->check($this->chave.'.pagina') 	? $Sessao->read($this->chave.'.pagina') 	: $pagina;
+		$pagina 	= isset($params['page'])		? $params['page'] 		: $pagina;
+		$ordem 		= isset($params['sort']) 		? $params['sort'] 		: $ordem;
+		$direcao 	= isset($params['direction'])   ? $params['direction'] 	: $direcao;
+        $limite 	= isset($params['limit'])       ? $params['limit'] 	    : $limite;
+        if ( !@$params['page'] && @$params['sort'] ) // primeira página porque o filho de uma égua do PaginatorHelper não escreve o page na url.
+        {
+            $pagina = 1;
+        }
 		$Sessao->write($this->chave.'.ordem', $ordem);
 		$Sessao->write($this->chave.'.direcao', $direcao);
         $Sessao->write($this->chave.'.pagina', $pagina);
