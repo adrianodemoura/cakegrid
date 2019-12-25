@@ -25,7 +25,7 @@
     </thead>
 
     <tbody>
-        <?php foreach($this->request->data as $_l => $_Entity) : ?>
+        <?php foreach( $this->request->getParam('data') as $_l => $_Entity ) : ?>
             <tr>
                 <?php 
                     foreach($config['fields'] as $_l2 => $_field) :

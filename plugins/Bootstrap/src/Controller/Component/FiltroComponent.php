@@ -22,25 +22,18 @@ class FiltroComponent extends Component
     protected $_defaultConfig = [];
 
     /**
+     * Destino usado para redirecionamento quando o form de filtro é postado.
+     * 
+     * @var     string
+     */
+    private $redirect           = '';
+
+    /**
      * Nome da chave.
      * 
      * @var     string
      */
     private $chave              = '';
-
-    /**
-     * Controller de redirecionamentos.
-     * 
-     * @var     string
-     */
-    private $controllerRedirect = '';
-
-    /**
-     * Action de redirecionamentos
-     * 
-     * @var     string
-     */
-    private $actionRedirect     = 'index';
 
     /**
      * Propriedades de cada campo.
@@ -60,22 +53,22 @@ class FiltroComponent extends Component
     public function initialize( array $config=[] )
     {
         $controller                 = $this->_registry->getController();
-        $this->schema               = isset($config['schema']) ? $config['schema'] : [];
-        $this->chave                = isset($config['chave'])  ? $config['chave'] : $controller->name;
-        $this->controllerRedirect   = isset($config['controllerRedirect']) ? $config['controllerRedirect'] : $controller->name;
-        $this->actionRedirect       = isset($config['actionRedirect']) ? $config['actionRedirect'] : $this->actionRedirect;
-        $modelClass                 = isset($config['modelClass']) ? $config['modelClass'] : $controller->modelClass;
+        $this->schema               = isset($config['schema'])      ? $config['schema'] : [];
+        $this->chave                = isset($config['chave'])       ? $config['chave'] : $controller->name;
+        $this->redirect             = isset($config['redirect'])    ? $config['redirect'] : '/'.Inflector::dasherize($controller->name);
+        $modelClass                 = isset($config['modelClass'])  ? $config['modelClass'] : $controller->modelClass;
         $Sessao                     = $controller->request->getSession();
         $totalFiltros               = count($Sessao->read($this->chave.'.Filtro'));
         $params                     = @$controller->request->getParam('?');
         $pass                       = @$controller->request->getParam('pass');
         $chave                      = $this->chave;
+        $this->log($controller->request);
 
         // se pediu pra limpar o filtro
         if ( @strtolower($pass[0]) === 'limpar')
 		{
 			$Sessao->delete($this->chave);
-			return $controller->redirect( ['controller'=>$this->controllerRedirect, 'action'=>$this->actionRedirect] );
+			return $controller->redirect( $this->redirect );
         }
 
         // populando a view
@@ -152,7 +145,7 @@ class FiltroComponent extends Component
             $Sessao->write($this->chave.'.Filtro', $postData );
             $Sessao->write($this->chave.'.pagina', 1);
     
-            return $controller->redirect( ['controller'=>$this->controllerRedirect, 'action'=>$this->actionRedirect] );
+            return $controller->redirect( $this->redirect );
         }
     }
 
@@ -213,12 +206,8 @@ class FiltroComponent extends Component
 
         // configura o filtro
         $this->setFiltro();
-
         // incrementando filtros obrigatórios
-        if ( isset($config['conditions']) )
-        {
-            $filtros += $config['conditions'];
-        }
+        if ( isset($config['conditions']) ) { $filtros += $config['conditions']; }
 
         // configurando a paginação
         $paramsPaginate = 
@@ -233,68 +222,72 @@ class FiltroComponent extends Component
 			'group' 	=> isset($config['group'])      ? $config['group']  : null
         ];
 
-        if ( $pass0 === 'exportar' )
-        {
-            unset($paramsPaginate['limit']);
-            unset($paramsPaginate['page']);
-            $arquivo = $controller->name.'Csv-'.date('d-m-Y_H:i:s').".csv";
+        // populando a view com a paginação e mais alguns atributos gerais
+        $controller->paginate       = $paramsPaginate;
+        $data                       = $controller->paginate($controller->$modelClass);
+        $controller->request->addParams( ['data'=>$data]);
+    }
 
-            $textoCsv   = '';
-            $separador  = ';';
-            $data       = $controller->$modelClass->find('all', $paramsPaginate)->toArray();
-            $Entity     = $controller->$modelClass->newEntity();
-            $this->log($Entity->aliasFields);
-            foreach($data as $_l => $_Entity)
+    /**
+     * Exportando o filtro
+     * 
+     * @return  \Cake\Http\Response|null
+     */
+    public function exportar()
+    {
+        unset($paramsPaginate['limit']);
+        unset($paramsPaginate['page']);
+        $arquivo = $controller->name.'Csv-'.date('d-m-Y_H:i:s').".csv";
+
+        $textoCsv   = '';
+        $separador  = ';';
+        $data       = $controller->$modelClass->find('all', $paramsPaginate)->toArray();
+        $Entity     = $controller->$modelClass->newEntity();
+        $this->log($Entity->aliasFields);
+        foreach($data as $_l => $_Entity)
+        {
+            $arrFields      = $_Entity->toArray();
+            $aliasFields    = $_Entity->_aliasFields;
+            if ( !$_l)
             {
-                $arrFields      = $_Entity->toArray();
-                $aliasFields    = $_Entity->_aliasFields;
-                if ( !$_l)
-                {
-                    foreach($arrFields as $_field => $_vlrField)
-                    {
-                        $field = Inflector::camelize($_field);
-                        $textoCsv .= $field . $separador;
-                    }
-                    $textoCsv .= "\n";
-                }
                 foreach($arrFields as $_field => $_vlrField)
                 {
-                    if ( !is_array($_vlrField) )
+                    $field = Inflector::camelize($_field);
+                    $textoCsv .= $field . $separador;
+                }
+                $textoCsv .= "\n";
+            }
+            foreach($arrFields as $_field => $_vlrField)
+            {
+                if ( !is_array($_vlrField) )
+                {
+                    $textoCsv .= $_vlrField . $separador;
+                } else
+                {
+                    foreach($_vlrField as $_field2 => $_vlrField2)
                     {
-                        $textoCsv .= $_vlrField . $separador;
-                    } else
-                    {
-                        foreach($_vlrField as $_field2 => $_vlrField2)
+                        if ( !is_array($_vlrField2) )
                         {
-                            if ( !is_array($_vlrField2) )
+                            $textoCsv .= $_vlrField2.', ';
+                        } else
+                        {
+                            foreach($_vlrField2 as $_field3 => $_vlrField3)
                             {
-                                $textoCsv .= $_vlrField2.', ';
-                            } else
-                            {
-                                foreach($_vlrField2 as $_field3 => $_vlrField3)
-                                {
-                                    $textoCsv .= $_vlrField3.', ';
-                                }
+                                $textoCsv .= $_vlrField3.', ';
                             }
                         }
                     }
                 }
-
-                $textoCsv .= "\n";
             }
 
-            $controller->viewBuilder()->setLayout('csv');
-            $controller->autoRender = false;
-            $controller->response = $controller->response->withStringBody($textoCsv);
-            $controller->response = $controller->response->withType('csv');
-            $controller->response = $controller->response->withDownload($arquivo);
-            return $controller->response;
-        } else
-        {
-            // populando a view com a paginação e mais alguns atributos gerais
-            $controller->paginate       = $paramsPaginate;
-            $controller->request->data  = $controller->paginate($controller->$modelClass);
+            $textoCsv .= "\n";
         }
 
+        $controller->viewBuilder()->setLayout('csv');
+        $controller->autoRender = false;
+        $controller->response = $controller->response->withStringBody($textoCsv);
+        $controller->response = $controller->response->withType('csv');
+        $controller->response = $controller->response->withDownload($arquivo);
+        return $controller->response;
     }
 }
