@@ -14,18 +14,22 @@ class AuditoriasController extends AppController {
 	public function index()
 	{
 		// carregando
-		$this->loadModel('Auditorias');
+		$this->loadModel( 'Auditorias' );
 		$this->loadComponent( 'Bootstrap.Filtro' );
 
-		// configurando os campos de filtro.s
-		$this->Filtro->setSchema('Auditorias.descricao', 	['name'=>'Auditorias.descricao', 'operator'=>'like', 'mask'=>'%u%', 'arroz'=>['feijao'=>'batata','a'=>['b'=>'c']]] );
-		$this->Filtro->setSchema('Auditorias.ip', 			['name'=>'Auditorias.ip'] );
+		// configurando os campos de filtros.
+		$this->Filtro->setSchema('Auditorias.id', 			['title'=>'Código', 'order'=>true, 'filter'=>true, 'table'=>true] );
+		$this->Filtro->setSchema('Auditorias.descricao', 	['title'=>'Descrição', 'table'=>true, 'operator'=>'like', 'mask'=>'%u%', 'arroz'=>['feijao'=>'batata','a'=>['b'=>'c']]] );
+		$this->Filtro->setSchema('Auditorias.motivo', 		['title'=>'Motivo', 'table'=>true] );
+		$this->Filtro->setSchema('Auditorias.ip', 			['title'=>'Ip', 'table'=>true, 'order'=>true] );
+		$this->Filtro->setSchema('Usuarios.nome', 			['title'=>'Usuário', 'table'=>true] );
 
 		// paginando
-		$params 			= [];
-		$params['contain'] 	= 'Usuarios';
-		$params['fields'] 	= ['Auditorias.id', 'Auditorias.motivo', 'Auditorias.ip', 'Auditorias.descricao', 'Auditorias.data', 'Usuarios.nome'];
-		$params['sort'] 	= ['Auditorias.id'=>'DESC'];
+		$params 				= [];
+		$params['contain'] 		= 'Usuarios';
+		$params['conditions'] 	= ['Auditorias.motivo'=>'cache'];
+		$params['fields'] 		= ['Auditorias.id', 'Auditorias.motivo', 'Auditorias.ip', 'Auditorias.descricao', 'Auditorias.data', 'Usuarios.nome'];
+		$params['order'] 		= ['Auditorias.id'=>'DESC'];
 		$this->Filtro->setPaginacao( $params );
 	}
 }

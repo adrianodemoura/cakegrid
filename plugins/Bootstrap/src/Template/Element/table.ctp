@@ -1,18 +1,18 @@
-<?php 
-    $paginacao = $this->request->getParam('paging')[$this->request->getParam('modelClass')];
+<?php
+    $schema     = $this->request->getParam('schema');
+    $modelClass = $this->request->getParam('modelClass');
+    $paginacao  = $this->request->getParam('paging')[$modelClass];
 ?>
 <table class='table table-striped table-bordered table-sm'>
     <thead>
         <tr>
-            <?php foreach($config['fields'] as $_l2 => $_field) : 
-                $field  = $_field;
-                $th     = isset($config['schema'][$field]['th']) ? $config['schema'][$field]['th'] : null;
-                $title  = isset($config['schema'][$field]['title']) ? $config['schema'][$field]['title'] : $field;
-                $title  = isset($this->request->getParam('aliasField')[$field]) ? $this->request->getParam('aliasField')[$field] : $title;
+            <?php foreach($schema as $_l => $_field) : 
+                $th     = isset($schema['th'])              ? $schema['th'] : null;
+                $title  = isset($schema['title'])           ? $schema['title'] : $_field;
                 $thHtml = $title;
-                if ( isset($config['schema'][$field]['sort']) )
+                if ( isset($schema['sort']) )
                 {
-                    $thHtml = $this->Paginator->sort($field, $title);
+                    $thHtml = $this->Paginator->sort($_field, $title);
                 }
             ?>
 
@@ -29,7 +29,7 @@
             <tr>
                 <?php 
                     foreach($config['fields'] as $_l2 => $_field) :
-                    $td     = isset($config['schema'][$_field]['td']) ? $config['schema'][$_field]['td'] : null;
+                    $td     = isset($schema['td']) ? $schema['td'] : null;
                     $field  = $_field;
                     $vlr    = $_Entity->$field;
                     if ( strpos($field,'.')>-1 )
