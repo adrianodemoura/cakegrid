@@ -293,6 +293,7 @@ class FiltroComponent extends Component
         $modelClass                 = $this->controller->modelClass;
         $Sessao                     = $this->controller->request->getSession();
         //$pass0                      = @strtolower($this->controller->request->getParam('pass')[0]);
+        $config['conditions']       = isset($config['conditions']) ? $config['conditions'] : [];
 
         // se possui ordem padrão
         if ( isset($config['order']) )
@@ -301,7 +302,7 @@ class FiltroComponent extends Component
         }
 
         // configura o filtro na sessão.
-        $this->setFiltro( @$config['conditions'] );
+        $this->setFiltro( $config['conditions'] );
 
         // configurando a paginação
         $paramsPaginate = 

@@ -31,7 +31,7 @@ class AuditoriasController extends AppController {
 		// paginando
 		$params 				= [];
 		$params['contain'] 		= 'Usuarios';
-		$params['conditions'] 	= ['Auditorias.motivo'=>'cache'];
+		//$params['conditions'] 	= ['Auditorias.motivo'=>'cache'];
 		$params['fields'] 		= ['Auditorias.id', 'Auditorias.motivo', 'Auditorias.ip', 'Auditorias.descricao', 'Auditorias.data', 'Usuarios.nome'];
 		$params['order'] 		= ['Auditorias.id'=>'DESC'];
 		$this->Filtro->setPaginacao( $params );

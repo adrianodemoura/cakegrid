@@ -4,7 +4,7 @@ $modelClass     = $this->request->getParam('modelClass');
 $chave          = $this->request->getParam('chave');
 $schema         = $this->request->getParam('schema');
 $filterFields   = $this->request->getParam('filterFields');
-$filterStatics  = $this->request->getParam('filterStatics');
+$filterStatics  = @$this->request->getParam('filterStatics');
 $totalRegs      = $this->request->getParam('paging')[$modelClass]['count'];
 $Sessao         = $this->request->getSession();
 $totalFilters   = $Sessao->read($chave.'.totalFiltros');
@@ -26,8 +26,8 @@ $config['fields']       = isset($config['fields'])      ? $config['fields']     
                     if ( !@$schema[$_field]['filter'] ) continue; 
                     $field      = Inflector::camelize(str_replace('.','_',$_field));
                     $title      = isset($schema[$_field]['title']) ? $schema[$_field]['title'] : $field;
-                    $arrOptions = ['id'=>'Filter'.$field, 'name'=>$field, 'label'=>false, 'class'=>'form-control ml-1', 'placeholder'=>'--'.$title.' --', 'value'=>$Sessao->read($chave.'.filtros.'.$field)];
-                    if ( in_array($field, $filterStatics) ) $arrOptions['readonly'] = 'readonly';
+                    $arrOptions = ['id'=>'Filter'.$field, 'name'=>$field, 'label'=>false, 'class'=>'form-control ml-1', 'placeholder'=>'--'.$title.' --', 'title'=>$title, 'value'=>$Sessao->read($chave.'.filtros.'.$field)];
+                    if ( isset($filterStatics[$field]) ) $arrOptions['readonly'] = 'readonly';
 
                     echo $this->Form->control($_field, $arrOptions);
                 endforeach;
