@@ -6,11 +6,11 @@
 <table class='table table-striped table-bordered table-sm'>
     <thead>
         <tr>
-            <?php foreach($schema as $_l => $_field) : 
-                $th     = isset($schema['th'])              ? $schema['th'] : null;
-                $title  = isset($schema['title'])           ? $schema['title'] : $_field;
+            <?php foreach($schema as $_field => $_arrProp) : if ( !@$_arrProp['table'] ) continue;
+                $th     = isset($_arrProp['th'])              ? $_arrProp['th'] : null;
+                $title  = isset($_arrProp['title'])           ? $_arrProp['title'] : $_field;
                 $thHtml = $title;
-                if ( isset($schema['sort']) )
+                if ( isset($_arrProp['sort']) )
                 {
                     $thHtml = $this->Paginator->sort($_field, $title);
                 }
@@ -28,19 +28,19 @@
         <?php foreach( $this->request->getParam('data') as $_l => $_Entity ) : ?>
             <tr>
                 <?php 
-                    foreach($config['fields'] as $_l2 => $_field) :
-                    $td     = isset($schema['td']) ? $schema['td'] : null;
-                    $field  = $_field;
+                    foreach($schema as $_field => $_arrProp) : if ( !@$_arrProp['table'] ) continue;
+                    $td     = isset($_arrProp['td']) ? $_arrProp['td'] : null;
+                    $field  = str_replace($modelClass.'.','',$_field);
                     $vlr    = $_Entity->$field;
+
+                    // recuperando campos belongsTo
                     if ( strpos($field,'.')>-1 )
                     {
-                        $vlr = '';
-                        $arrField = explode('.', $field); 
-                        foreach( $_Entity[$arrField[0]] as $_l3 => $_arrFields)
-                        {
-                            $vlr .= $_arrFields[$arrField[1]].', ';
-                        }
+                        $arrField   = explode( '.', strtolower($field) );
+                        $vlr        = $_Entity[$arrField[0]][$arrField[1]];
                     }
+
+                    // recuperando campos hasMany
                 ?>
 
                 <td <?php if ( isset($td) ) { foreach($td as $_tag => $_vlr) { echo "$_tag='$_vlr' "; }} ?>>
@@ -67,4 +67,4 @@
     <div class='col-3 text-right font-italic pt-2'>
         exibindo <?= @$paginacao['current'] ?> de <?= @$this->Number->format($paginacao['count']) ?>
     </div>
-</div>
+</div><?php $data = $this->request->getParam('data');

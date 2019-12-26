@@ -9,6 +9,7 @@ namespace Bootstrap\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Utility\Inflector;
+use Bootstrap\Utility\Schema;
 /**
  * Mantém o filtro do plugin Bootstrap.
  */
@@ -59,27 +60,26 @@ class FiltroComponent extends Component
      */
     public function initialize( array $config=[] )
     {
-        $controller                 = $this->_registry->getController();
         $this->controller           = $this->_registry->getController();
         $this->schema               = isset($config['schema'])      ? $config['schema'] : [];
-        $this->chave                = isset($config['chave'])       ? $config['chave'] : $controller->name;
-        $this->redirect             = isset($config['redirect'])    ? $config['redirect'] : '/'.Inflector::dasherize($controller->name);
-        $modelClass                 = isset($config['modelClass'])  ? $config['modelClass'] : $controller->modelClass;
-        $Sessao                     = $controller->request->getSession();
-        $params                     = @$controller->request->getParam('?');
-        $pass                       = @$controller->request->getParam('pass');
+        $this->chave                = isset($config['chave'])       ? $config['chave'] : $this->controller->name;
+        $this->redirect             = isset($config['redirect'])    ? $config['redirect'] : '/'.Inflector::dasherize($this->controller->name);
+        $modelClass                 = isset($config['modelClass'])  ? $config['modelClass'] : $this->controller->modelClass;
+        $Sessao                     = $this->controller->request->getSession();
+        $params                     = @$this->controller->request->getParam('?');
+        $pass                       = @$this->controller->request->getParam('pass');
         $chave                      = $this->chave;
 
         // se pediu pra limpar o filtro
         if ( @strtolower($pass[0]) === 'limpar')
 		{
 			$Sessao->delete($this->chave);
-			return $controller->redirect( $this->redirect );
+			return $this->controller->redirect( $this->redirect );
         }
 
         // populando a view
-        $controller->request->addParams( ['modelClass'=>$modelClass, 'chave'=>$this->chave] );
-        $controller->set( compact('chave') );
+        $this->controller->request->addParams( ['modelClass'=>$modelClass, 'chave'=>$this->chave] );
+        $this->controller->set( compact('chave') );
     }
 
     /**
@@ -139,34 +139,68 @@ class FiltroComponent extends Component
      * @param   Array   $config     Configurações padrão do filtro.
      * @return  \Cake\Http\Response|null
      */
-    private function setFiltro( array $config=[] )
+    private function setFiltro( array $filtros=[] )
     {
-        $controller = $this->_registry->getController();
-        $Sessao     = $controller->request->getSession();
+        $Sessao             = $this->controller->request->getSession();
+        $params             = @$this->controller->request->getParam('?');
+        $pass               = @$this->controller->request->getParam('pass');
+        $pagina             = $Sessao->check($this->chave.'.pagina') ? $Sessao->read($this->chave.'.pagina') : 1;
+        $limite             = $Sessao->check($this->chave.'.limite') ? $Sessao->read($this->chave.'.limite') : 10;
+        $paramsPagina       = isset( $params['page'] )  ? (int) $params['page']   : $pagina;
+        $paramsPagina       = isset( $params['pagina'] )? (int) $params['pagina'] : $paramsPagina;
+        $paramsLimite       = isset( $params['limit'] ) ? (int) $params['limit']  : $limite;
+        $paramsLimite       = isset( $params['limite'] )? (int) $params['limite'] : $paramsLimite;
+        $filtrosEstaticos   = [];
 
-        // se o form filtro foi postado
-        if ( $controller->request->is('post') )
+        // gravando a página na sessão
+        if ( $paramsPagina !== $pagina || !$Sessao->check($this->chave.'.pagina'))
         {
-            $postData = $controller->request->getData();
-            $this->controller->log($postData);
-    
-            foreach($postData as $_campo => $_vlr)
-            {
-                if ( !strlen($_vlr) )
-                {
-                    unset($postData[$_campo]);
-                }
-            }
-    
-            $Sessao->write($this->chave.'.filtros', $postData );
-            $Sessao->write($this->chave.'.pagina', 1);
-    
-            return $controller->redirect( $this->redirect );
+            $Sessao->write($this->chave.'.pagina', $paramsPagina);
+        }
+        // gravando o limite na sessão
+        if ( $paramsLimite != $limite || !$Sessao->check($this->chave.'.limite'))
+        {
+            $Sessao->write($this->chave.'.limite', $paramsLimite);
         }
 
-        // calculando o total de filtros e jogando na request para ser recuperada na view.
-        $totalFiltros = count( $Sessao->read($this->chave.'.filtros') );
-        $controller->request->addParams( ['totalFiltros'=>$totalFiltros] );
+        // se possui filtro padrão
+        foreach( $filtros as $_field => $_vlr)
+        {
+            $field = Inflector::camelize(str_replace('.','_',$_field));
+            $filtrosEstaticos[] = $field;
+            if ( !$Sessao->check($this->chave.'.filtros.'.$field) ) $Sessao->write($this->chave.'.filtros.'.$field, $_vlr);
+        }
+        $this->controller->request->addParams( ['filterStatics'=>$filtrosEstaticos] );
+
+        // se o form filtro foi postado
+        if ( $this->controller->request->is('post') )
+        {
+            $totalFilters   = 0;
+            $postData       = $this->controller->request->getData();
+            $Sessao->write($this->chave.'.pagina', 1);
+            $Sessao->delete($this->chave.'.totalFiltros');
+
+            foreach($postData as $_field => $_vlr)
+            {
+                if ( in_array($_field, $filtrosEstaticos) ) continue;
+
+                if ( !strlen($_vlr) )
+                {
+                    $Sessao->delete($this->chave.'.filtros.'.$_field);
+                } else
+                {
+                    $Sessao->write($this->chave.'.filtros.'.$_field, $_vlr);
+                    $totalFilters++;
+                }
+            }
+
+            if ( $totalFilters )
+            {
+                $Sessao->write($this->chave.'.totalFiltros', $totalFilters);
+            }
+
+            return $this->controller->redirect( $this->redirect );
+        }
     }
 
     /**
@@ -175,8 +209,7 @@ class FiltroComponent extends Component
     private function getFiltros()
     {
         $filtros        = [];
-        $controller     = $this->_registry->getController();
-        $Sessao         = $controller->request->getSession();
+        $Sessao         = $this->controller->request->getSession();
 
         // configurando o filtro da sessão
         $sessaoFiltros  = $Sessao->read($this->chave.'.filtros');
@@ -216,79 +249,59 @@ class FiltroComponent extends Component
     /**
      * Configura os campos que serão filtrados na paginação.
      *
-     * @param   Array   $fields     Campos do filtro, no formato Table.field
      * @return  \Cake\Http\Response|null
      */
     private function setFilterFields()
     {
-        $configFilter   = [];
-        $Sessao         = $this->controller->request->getSession();
-
-        foreach( $this->schema as $_field => $_arrProp)
+        $filterFields = [];
+        foreach($this->schema as $_field => $_arrProp)
         {
-            $title      = isset($_arrProp['title']) ? $_arrProp['title'] : Inflector::singularize($_field);
-            $field      = Inflector::camelize(str_replace('.', '_', $_field));
-            $configFilter['fields'][$field] =
-            [
-                'id'            => 'Filtro'.$field,
-                'name'          => $field,
-                'label'         => false,
-                'class'         => 'form-control mx-2',
-                'value'         => $Sessao->read($this->chave.'.filtros.'.$field),
-                'placeholder'   => "-- $title --"
-            ];
+            if ( @$this->schema[$_field]['filter'] )
+            {
+                $filterFields[] = $_field;
+            }
         }
 
-        $this->controller->set( compact('configFilter') );
+        $this->controller->request->addParams( ['filterFields'=>$filterFields]);
     }
 
     /**
      * Configura os campos da table
      *
+     * @param   Array   $fields     Campos do filtro, no formato Table.field
      * @return  \Cake\Http\Response|null
      */
-    private function setTableFields ()
+    private function setTableFields ( array $fields=[] )
     {
-        $modelClass     = $this->controller->modelClass;
-        foreach( $this->schema as $_field => $_arrProp)
+        foreach($fields as $_l => $_field)
         {
-            $naTable = @$_arrProp['table'];
-            if ( $naTable )
-            {
-                $configTable['fields'][] = $_field;
-            }
+            $this->schema[$_field]['table'] = true;
         }
 
-        $this->controller->set( compact('configTable') );
+        $this->controller->request->addParams( ['tableFields'=>$fields]);
     }
 
     /**
      * Executa a paginação.
-     * *
+     *
      * @param   array   $config     Parâmetros da paginação
      * @return  \Cake\Http\Response|null
      */
     public function setPaginacao( array $config=[] )
     {
-        // configura o filtro na sessão.
-        $this->setFiltro( $config );
-
         // variáveis locais
-        $controller                 = $this->_registry->getController();
-        $Sessao                     = $controller->request->getSession();
-        $modelClass                 = $controller->modelClass;
-        $pass0                      = @strtolower($controller->request->getParam('pass')[0]);
+        $modelClass                 = $this->controller->modelClass;
+        $Sessao                     = $this->controller->request->getSession();
+        //$pass0                      = @strtolower($this->controller->request->getParam('pass')[0]);
 
         // se possui ordem padrão
         if ( isset($config['order']) )
         {
             $Sessao->write($this->chave.'.ordem', $config['order']);
         }
-        // se possui filtro padrão
-        if ( isset($config['conditions']) )
-        {
-            $Sessao->write($this->chave.'.filtros', $config['conditions']);
-        }
+
+        // configura o filtro na sessão.
+        $this->setFiltro( @$config['conditions'] );
 
         // configurando a paginação
         $paramsPaginate = 
@@ -308,9 +321,9 @@ class FiltroComponent extends Component
         $this->setTableFields();
 
         // populando a view com a paginação e mais alguns atributos gerais
-        $controller->paginate       = $paramsPaginate;
-        $data                       = $controller->paginate($controller->$modelClass);
-        $controller->request->addParams( ['data'=>$data, 'schema'=>$this->schema]);
+        $this->controller->paginate     = $paramsPaginate;
+        $data                           = $this->controller->paginate($this->controller->$modelClass);
+        $this->controller->request->addParams( ['data'=>$data, 'schema'=>$this->schema]);
     }
 
     /**
@@ -322,12 +335,12 @@ class FiltroComponent extends Component
     {
         unset($paramsPaginate['limit']);
         unset($paramsPaginate['page']);
-        $arquivo = $controller->name.'Csv-'.date('d-m-Y_H:i:s').".csv";
+        $arquivo = $this->controller->name.'Csv-'.date('d-m-Y_H:i:s').".csv";
 
         $textoCsv   = '';
         $separador  = ';';
-        $data       = $controller->$modelClass->find('all', $paramsPaginate)->toArray();
-        $Entity     = $controller->$modelClass->newEntity();
+        $data       = $this->controller->$modelClass->find('all', $paramsPaginate)->toArray();
+        $Entity     = $this->controller->$modelClass->newEntity();
 
         foreach($data as $_l => $_Entity)
         {
@@ -368,11 +381,11 @@ class FiltroComponent extends Component
             $textoCsv .= "\n";
         }
 
-        $controller->viewBuilder()->setLayout('csv');
-        $controller->autoRender = false;
-        $controller->response = $controller->response->withStringBody($textoCsv);
-        $controller->response = $controller->response->withType('csv');
-        $controller->response = $controller->response->withDownload($arquivo);
-        return $controller->response;
+        $this->controller->viewBuilder()->setLayout('csv');
+        $this->controller->autoRender = false;
+        $this->controller->response = $this->controller->response->withStringBody($textoCsv);
+        $this->controller->response = $this->controller->response->withType('csv');
+        $this->controller->response = $this->controller->response->withDownload($arquivo);
+        return $this->controller->response;
     }
 }

@@ -13,16 +13,20 @@ class AuditoriasController extends AppController {
 	 */
 	public function index()
 	{
-		// carregando
+		// carregando o model
 		$this->loadModel( 'Auditorias' );
-		$this->loadComponent( 'Bootstrap.Filtro' );
 
-		// configurando os campos de filtros.
-		$this->Filtro->setSchema('Auditorias.id', 			['title'=>'Código', 'order'=>true, 'filter'=>true, 'table'=>true] );
-		$this->Filtro->setSchema('Auditorias.descricao', 	['title'=>'Descrição', 'table'=>true, 'operator'=>'like', 'mask'=>'%u%', 'arroz'=>['feijao'=>'batata','a'=>['b'=>'c']]] );
-		$this->Filtro->setSchema('Auditorias.motivo', 		['title'=>'Motivo', 'table'=>true] );
-		$this->Filtro->setSchema('Auditorias.ip', 			['title'=>'Ip', 'table'=>true, 'order'=>true] );
-		$this->Filtro->setSchema('Usuarios.nome', 			['title'=>'Usuário', 'table'=>true] );
+		// carregando o componente filtro
+		$arrSchema = 
+		[
+			'Auditorias.id' 		=> ['table'=>true, 'title'=>'Código', 		'filter'=>true, 'order'=>true],
+			'Auditorias.ip' 		=> ['table'=>true, 'title'=>'Ip', 			'filter'=>true, 'order'=>true],
+			'Auditorias.motivo' 	=> ['table'=>true, 'title'=>'Motivo', 		'filter'=>true],
+			'Auditorias.descricao' 	=> ['table'=>true, 'title'=>'Descrição', 	'operator'=>'like', 'mask'=>'%u%'],
+			'Usuario.nome' 			=> ['table'=>true, 'title'=>'Usuário']
+		];
+		$this->loadComponent( 'Bootstrap.Filtro', ['schema'=>$arrSchema] );
+
 
 		// paginando
 		$params 				= [];
