@@ -96,6 +96,7 @@ class FiltroComponent extends Component {
     {
         $params             = @$this->controller->request->getParam('?');
         $pass               = @$this->controller->request->getParam('pass');
+        $pagina             = 1;
         $pagina             = $this->sessao->check($this->chave.'.pagina') ? $this->sessao->read($this->chave.'.pagina') : 1;
         $limite             = $this->sessao->check($this->chave.'.limite') ? $this->sessao->read($this->chave.'.limite') : 10;
         $paramsPagina       = isset( $params['page'] )  ? (int) $params['page']   : $pagina;
@@ -105,6 +106,11 @@ class FiltroComponent extends Component {
         $filtrosEstaticos   = [];
         $urlCorrente        = $this->controller->request->here;
         $urlAnterior        = $this->controller->referer();
+
+        if ( !isset($params['page']) && strpos($urlAnterior, $urlCorrente) )
+        {
+            $paramsPagina = 1;
+        }
 
         // gravando a página na sessão
         if ( $paramsPagina !== $pagina || !$this->sessao->check($this->chave.'.pagina'))
