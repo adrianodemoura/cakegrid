@@ -55,7 +55,7 @@
         <?php if ( $paginacao ) : ?>
         <nav aria-label="Page navigation example">
             <ul class="pagination small">
-                <?php echo $this->Paginator->numbers(['templates'=>'Bootstrap.paginator-template', 'first'=>1]);?>
+                <?php echo $this->Paginator->numbers(['templates'=>'Bootstrap.paginator-template']);?>
             </ul>
         </nav>
         <?php endif; ?>
@@ -64,4 +64,4 @@
     <div class='col-3 text-right font-italic pt-2'>
         exibindo <?= @$paginacao['current'] ?> de <?= @$this->Number->format($paginacao['count']) ?>
     </div>
-</div><?php $data = $this->request->getParam('data');
+</div>

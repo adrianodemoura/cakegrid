@@ -103,20 +103,15 @@ class FiltroComponent extends Component {
         $paramsLimite       = isset( $params['limit'] ) ? (int) $params['limit']  : $limite;
         $paramsLimite       = isset( $params['limite'] )? (int) $params['limite'] : $paramsLimite;
         $filtrosEstaticos   = [];
+        $urlCorrente        = $this->controller->request->here;
         $urlAnterior        = $this->controller->referer();
-        $urlCorrente        = $this->controller->request->getParam('here');
-
-        // verifican se foi a primeira página
-        /*if ( empty($params) )
-        {
-            $paramsPagina = 1;
-        }*/
 
         // gravando a página na sessão
         if ( $paramsPagina !== $pagina || !$this->sessao->check($this->chave.'.pagina'))
         {
             $this->sessao->write($this->chave.'.pagina', $paramsPagina);
         }
+
         // gravando o limite na sessão
         if ( $paramsLimite != $limite || !$this->sessao->check($this->chave.'.limite'))
         {
@@ -281,7 +276,7 @@ class FiltroComponent extends Component {
         // populando a view com a paginação e mais alguns atributos gerais
         $this->controller->paginate     = $paramsPaginate;
         $data                           = $this->controller->paginate($this->controller->$modelClass);
-        $this->controller->request->addParams( ['data'=>$data, 'schema'=>$this->schema]);
+        $this->controller->request->addParams( ['data'=>$data]);
     }
 
     /**
