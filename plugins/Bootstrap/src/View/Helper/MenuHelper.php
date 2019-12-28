@@ -10,7 +10,6 @@ use Cake\View\Helper\UrlHelper;
  * mantém o Menu
  */
 class MenuHelper extends Helper {
-
     /**
      * Default configuration.
      *

@@ -1,19 +1,16 @@
 <?php
-    $schema     = $this->request->getParam('schema');
+    $fields     = $this->Schema->fields();
     $modelClass = $this->request->getParam('modelClass');
     $paginacao  = $this->request->getParam('paging')[$modelClass];
 ?>
 <table class='table table-striped table-bordered table-sm'>
     <thead>
         <tr>
-            <?php foreach($schema as $_field => $_arrProp) : if ( !@$_arrProp['table'] ) continue;
+            <?php foreach($fields as $_field => $_arrProp) : if ( !@$_arrProp['table'] ) continue;
                 $th     = isset($_arrProp['th'])              ? $_arrProp['th'] : null;
                 $title  = isset($_arrProp['title'])           ? $_arrProp['title'] : $_field;
                 $thHtml = $title;
-                if ( isset($_arrProp['sort']) )
-                {
-                    $thHtml = $this->Paginator->sort($_field, $title);
-                }
+                if ( isset($_arrProp['order']) ) { $thHtml = $this->Paginator->sort($_field, $title); }
             ?>
 
             <th <?php if ( isset($th) ) { foreach($th as $_tag => $_vlr) { echo "$_tag='$_vlr' "; }} ?>>
@@ -28,7 +25,7 @@
         <?php foreach( $this->request->getParam('data') as $_l => $_Entity ) : ?>
             <tr>
                 <?php 
-                    foreach($schema as $_field => $_arrProp) : if ( !@$_arrProp['table'] ) continue;
+                    foreach($fields as $_field => $_arrProp) : if ( !@$_arrProp['table'] ) continue;
                     $td     = isset($_arrProp['td']) ? $_arrProp['td'] : null;
                     $field  = str_replace($modelClass.'.','',$_field);
                     $vlr    = $_Entity->$field;

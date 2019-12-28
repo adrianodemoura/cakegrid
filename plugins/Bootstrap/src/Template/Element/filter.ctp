@@ -2,7 +2,7 @@
 use Cake\Utility\Inflector;
 $modelClass     = $this->request->getParam('modelClass');
 $chave          = $this->request->getParam('chave');
-$schema         = $this->request->getParam('schema');
+$schema         = $this->Schema->fields();
 $filterFields   = $this->request->getParam('filterFields');
 $filterStatics  = @$this->request->getParam('filterStatics');
 $totalRegs      = $this->request->getParam('paging')[$modelClass]['count'];

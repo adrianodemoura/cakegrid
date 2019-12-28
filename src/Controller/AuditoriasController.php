@@ -3,7 +3,7 @@
  */
 namespace App\Controller;
 use App\Controller\AppController;
-use Exception;
+//use Exception;
 /**
  * Mantém o cadastro de auditorias
  */
@@ -20,13 +20,12 @@ class AuditoriasController extends AppController {
 		$arrSchema = 
 		[
 			'Auditorias.id' 		=> ['table'=>true, 'title'=>'Código', 		'filter'=>true, 'order'=>true],
-			'Auditorias.ip' 		=> ['table'=>true, 'title'=>'Ip', 			'filter'=>true, 'order'=>true],
-			'Auditorias.motivo' 	=> ['table'=>true, 'title'=>'Motivo', 		'filter'=>true],
+			'Auditorias.ip' 		=> ['table'=>true, 'title'=>'Ip', 			'filter'=>true],
+			'Auditorias.motivo' 	=> ['table'=>true, 'title'=>'Motivo', 		'filter'=>true, 'order'=>true],
 			'Auditorias.descricao' 	=> ['table'=>true, 'title'=>'Descrição', 	'operator'=>'like', 'mask'=>'%u%'],
 			'Usuario.nome' 			=> ['table'=>true, 'title'=>'Usuário']
 		];
 		$this->loadComponent( 'Bootstrap.Filtro', ['schema'=>$arrSchema] );
-
 
 		// paginando
 		$params 				= [];
