@@ -3,9 +3,9 @@
 	echo $this->Html->script( ['painel/login'],		['block'=>true] );
 	echo $this->Html->css( ['painel/login'], 		['block'=>true] );
 
-	$optionsLogin = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'e-mail','name'=>'email', 'id'=>'inEmail', 'class'=>'form-control', 'autofocus'=>true, 'default'=>'admin@admin.com.br'];
+	$optionsLogin = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'e-mail','name'=>'email', 'id'=>'inEmail', 'class'=>'form-control', 'autofocus'=>true, 'value'=>'admin@admin.com.brr'];
 	$optionsSenha = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'senha', 'name'=>'senha', 'id'=>'inSenha', 'class'=>'form-control', 'type'=>'password', 'default'=>'admin1234'];
-	$optionsEnviar= ['name'=>'inEnviar', 'id'=>'btnEnviar', 'div'=>null, 'type'=>'submit', 'class'=>'btn btn-primary btn-aguarde'];
+	$optionsEnviar= ['name'=>'inEnviar', 'id'=>'btnEnviar', 'div'=>null, 'type'=>'submit', 'class'=>'btn btn-primary'];
 ?>
 
 <div class="mh-100" style="height: 500px;">
@@ -16,7 +16,7 @@
 		<div class="col-4"></div>
 
 		<div class="col-4 rounded-lg bordered bg-info py-2 px-5">
-		<?= $this->Form->create($LoginForm, ['id'=>'LoginForm', 'url'=>['action'=>'login']]); ?>
+		<?= $this->Form->create($LoginForm, ['id'=>'LoginForm', 'class'=>'form-aguarde', 'url'=>['action'=>'login']]); ?>
 			<div class="mt-2">
 				<?= $this->Form->control('email', $optionsLogin); ?>
 			</div>

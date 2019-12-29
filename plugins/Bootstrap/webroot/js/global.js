@@ -8,19 +8,19 @@ $(document).ready(function()
 		})
 	}
 
+	$('.form-aguarde').submit(function()
+	{
+		$(this).find(':submit').val(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
+	})
+
 	$(".btn-aguarde").click(function(e)
 	{
 		let tipoElemento = e.target.localName
 
 		switch (tipoElemento)
-		{
-			case 'input':
-				$(this).val(txtAguarde).prop('disabled', 'disabled').addClass('btn-bloqueado')
-				$(this).closest("form").submit()
-				return false
-				break;
-				
+		{		
 			case 'a':
+			case 'i':
 				if ( !$(this).hasClass('btn-bloqueado') )
 				{
 					let htmlAntigo = $(this).html();
@@ -47,6 +47,5 @@ $(document).ready(function()
 				}
 				break;
 		}
-		return false;
 	})
 })
