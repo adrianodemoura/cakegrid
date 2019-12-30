@@ -36,9 +36,9 @@ class Base extends AbstractMigration {
 
         $this->table('unidades')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
-            ->addColumn('cnpj',         'float',  ['default' => 0, 'null' => false])
+            ->addColumn('cnpj',         'double', ['default' => 0, 'limit'=>14, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
-            ->addIndex(['cnpj'])
+            ->addIndex(['cnpj'], ['unique'=>true])
             ->create();
 
         $this->table('usuarios')
@@ -226,8 +226,8 @@ class Base extends AbstractMigration {
         $table = $this->table('unidades');
 
         $data   = [];
-        $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA), 'cnpj'=>11111111111111];
-        $data[] = ['nome'=> strtoupper('UNIDADE SECUNDÁRIA '.SISTEMA), 'cnpj'=>11111111111112];
+        $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA), 'cnpj'=> 12345678901234];
+        $data[] = ['nome'=> strtoupper('UNIDADE SECUNDÁRIA '.SISTEMA), 'cnpj'=> 12345678901235];
 
         // se estais rodando da kaka do windows, coisa que não recomendo.
         if ( strpos(strtolower(@$_SERVER['OS']), 'windows') > -1 )
