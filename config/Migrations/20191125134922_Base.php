@@ -20,6 +20,12 @@ class Base extends AbstractMigration {
      */
     public function up()
     {
+        // TABELAS DO SAC (Sistema de Autenticação Centralizada)
+        $this->table('sistemas')
+            ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
+            ->addColumn('ativo',        'boolean', ['default' => true, 'null' => false])
+            ->create();
+
         $this->table('municipios')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
             ->addColumn('uf',           'string', ['default' => '-', 'limit' => 2, 'null' => false])
@@ -28,24 +34,20 @@ class Base extends AbstractMigration {
             ->addIndex(['uf', 'nome'])
             ->create();
 
-        $this->table('perfis')
-            ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
-            ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
-            ->create(['nome']);
-
         $this->table('unidades')
             ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
             ->addColumn('cnpj',         'float',  ['default' => 0, 'null' => false])
             ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
-            ->create(['nome']);
+            ->addIndex(['cnpj'])
+            ->create();
 
         $this->table('usuarios')
             ->addColumn('nome',         'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('email',        'string', ['default' => '', 'limit' => 100, 'null' => false])
             ->addColumn('senha',        'string', ['default' => '', 'limit' => 100, 'null' => false])
-            ->addColumn('ativo',        'boolean',['default' => true, 'null' => false])
-            ->addColumn('ultimo_acesso','timestamp', ['default'=>date('Y-m-d H:i:s'), 'null' => false])
-            ->addColumn('municipio_id', 'integer',['default' => 3106200, 'limit' => 11, 'null' => false])
+            ->addColumn('ativo',        'boolean', ['default' => true, 'null' => false])
+            ->addColumn('ultimo_acesso', 'timestamp', ['default' => date('Y-m-d H:i:s'), 'null' => false])
+            ->addColumn('municipio_id', 'integer', ['default' => 3106200, 'limit' => 11, 'null' => false])
             ->addIndex(['municipio_id'])
             ->addIndex(['ativo'])
             ->create();
@@ -53,75 +55,113 @@ class Base extends AbstractMigration {
             ->addForeignKey('municipio_id', 'municipios', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
 
+        // TABELAS DO SISTEMA.
+
+        $this->table('perfis')
+            ->addColumn('nome',         'string', ['default' => '-', 'limit' => 100, 'null' => false])
+            ->addColumn('ativo',        'boolean', ['default' => true, 'null' => false])
+            ->addColumn('sistema_id',   'integer', ['default' => 1, 'limit' => 11, 'null' => false])
+            ->create(['nome']);
+        $this->table('perfis')
+            ->addForeignKey('sistema_id', 'sistemas', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->update();
+            
         $this->table('recursos')
             ->addColumn('url',          'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
             ->addColumn('titulo',       'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
             ->addColumn('menu',         'string',   ['default'=>'', 'limit'=>100, 'null'=>false])
             ->addColumn('ativo',        'boolean',  ['default' => true, 'null' => false])
+            ->addColumn('sistema_id',   'integer', ['default' => 1, 'limit' => 11, 'null' => false])
             ->addIndex(['url'])
             ->addIndex(['ativo'])
             ->create();
-
-        $this->table('perfis_recursos')
-            ->addColumn('perfil_id',  'integer',  ['limit'=>11])
-            ->addColumn('recurso_id', 'integer',  ['limit'=>11])
-            ->create();
-        $this->table('perfis_recursos')
-            ->addForeignKey('perfil_id',  'perfis',   'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
-            ->addForeignKey('recurso_id', 'recursos', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+        $this->table('recursos')
+            ->addForeignKey('sistema_id', 'sistemas', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
 
-        $this->table('vinculacoes')
-            ->addColumn('usuario_id',   'integer',  ['limit'=>11])
-            ->addColumn('unidade_id',   'integer',  ['limit'=>11])
-            ->addColumn('perfil_id',    'integer',  ['limit'=>11])
+        $this->table('papeis')
+            ->addColumn('sistema_id',   'integer',  ['limit'=> 11, 'null' => false])
+            ->addColumn('unidade_id',   'integer',  ['limit'=> 11, 'null' => false])
+            ->addColumn('usuario_id',   'integer',  ['limit'=> 11, 'null' => false])
+            ->addColumn('perfil_id',    'integer',  ['limit'=> 11, 'null' => false])
             ->create();
-        $this->table('vinculacoes')
+        $this->table('papeis')
+            ->addForeignKey('sistema_id',   'sistemas', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('usuario_id',   'usuarios', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('unidade_id',   'unidades', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->addForeignKey('perfil_id',    'perfis',   'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
 
-        $this->table('auditorias')
+        $this->table('papeis_recursos')
+            ->addColumn('papel_id',  'integer',  ['limit' => 11])
+            ->addColumn('recurso_id', 'integer',  ['limit' => 11])
+            ->create();
+        $this->table('papeis_recursos')
+            ->addForeignKey('papel_id',   'papeis',   'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('recurso_id', 'recursos', 'id', ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->update();
+
+       $this->table('auditorias')
             ->addColumn('ip',               'string',   ['default'=>'', 'limit'=>15,  'null'=>false])
             ->addColumn('motivo',           'string',   ['default'=>'', 'limit'=>50, 'null'=>false])
             ->addColumn('descricao',        'string',   ['default'=>'', 'limit'=>250, 'null'=>false])
             ->addColumn('usuario_id',       'integer',  ['default'=>0,'null'=>false])
+            ->addColumn('sistema_id',       'integer',  ['default'=>0,'null'=>false])
             ->addColumn('data',             'timestamp',['default'=>date('Y-m-d H:i:s'), 'null' => false])
             ->create();
         $this->table('auditorias')
             ->addIndex(['motivo'])
+            ->addForeignKey('usuario_id',   'usuarios', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
+            ->addForeignKey('sistema_id',   'sistemas', 'id',   ['update' => 'CASCADE', 'delete' => 'CASCADE'])
             ->update();
 
         // atualizando os dados.
+        $this->updateSistemas();
         $this->updateMunicipios();
         $this->updatePerfis();
         $this->updateUnidades();
         $this->updateUsuarios();
         $this->updateRecursos();
-        $this->updateVinculacoes();
-        $this->updatePerfisRecursos();
+        $this->updatePapeis();
+        $this->updatePapeisRecursos();
         $this->updateAuditorias();
 
         echo "\n";
     }
- 
+
     /**
      * Migrate Down.
      */
     public function down()
     {
+        //$this->table('usuarios')->dropForeignKey('municipio_id')->save();
+        $this->table('papeis_recursos')->drop()->save();
         $this->table('auditorias')->drop()->save();
-        $this->table('vinculacoes')->drop()->save();
-        $this->table('usuarios')->dropForeignKey('municipio_id')->save();
-        $this->table('municipios')->drop()->save();
+        $this->table('papeis')->drop()->save();
         $this->table('usuarios')->drop()->save();
-        $this->table('perfis_recursos')->drop()->save();
+        $this->table('municipios')->drop()->save();      
         $this->table('recursos')->drop()->save();
         $this->table('perfis')->drop()->save();
         $this->table('unidades')->drop()->save();
+        $this->table('sistemas')->drop()->save();
 
         echo "\n";
+    }
+
+    /**
+     * Atualiza a tabela de sistemas
+     *
+     * @return  void
+     */
+    private function updateSistemas()
+    {
+        $this->execute('delete from sistemas');
+        $table = $this->table('sistemas');
+
+        $data   = [];
+        $data[] = ['id'=>1, 'nome' => SISTEMA];
+
+        $table->insert($data)->save();
     }
 
     /**
@@ -131,7 +171,7 @@ class Base extends AbstractMigration {
         $this->execute('delete from auditorias');
         $table      = $this->table('auditorias');
         $data       = [];
-        $data[]     = ['ip'=>gethostbyname(gethostname()), 'motivo'=>'instalacao', 'descricao'=>'A instalação do sistema '.SISTEMA.' foi realizada', 'usuario_id'=>1, 'data'=>date('Y-m-d H:i:s')];
+        $data[]     = ['ip'=>gethostbyname(gethostname()), 'motivo'=>'instalacao', 'descricao'=>'A instalação do sistema '.SISTEMA.' foi realizada', 'usuario_id'=>1, 'sistema_id'=>1, 'data'=>date('Y-m-d H:i:s')];
         if ( strpos(strtolower(@$_SERVER['OS']), 'windows') > -1 )
         {
             $data[0]['descricao'] = utf8_decode($data[0]['descricao']);
@@ -186,8 +226,8 @@ class Base extends AbstractMigration {
         $table = $this->table('unidades');
 
         $data   = [];
-        $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA)];
-        $data[] = ['nome'=> strtoupper('UNIDADE SECUNDÁRIA '.SISTEMA)];
+        $data[] = ['nome'=> strtoupper('UNIDADE '.SISTEMA), 'cnpj'=>11111111111111];
+        $data[] = ['nome'=> strtoupper('UNIDADE SECUNDÁRIA '.SISTEMA), 'cnpj'=>11111111111112];
 
         // se estais rodando da kaka do windows, coisa que não recomendo.
         if ( strpos(strtolower(@$_SERVER['OS']), 'windows') > -1 )
@@ -285,16 +325,16 @@ class Base extends AbstractMigration {
      *
      * @return  void
      */
-    private function updateVinculacoes()
+    private function updatePapeis()
     {
-        $this->execute('delete from vinculacoes');
-        $table = $this->table('vinculacoes');
+        $this->execute('delete from papeis');
+        $table = $this->table('papeis');
 
         $data   = [];
-        $data[] = ['usuario_id'=>1, 'unidade_id'=>1, 'perfil_id'=>1];
-        $data[] = ['usuario_id'=>1, 'unidade_id'=>1, 'perfil_id'=>2];
-        $data[] = ['usuario_id'=>1, 'unidade_id'=>2, 'perfil_id'=>1];
-        $data[] = ['usuario_id'=>1, 'unidade_id'=>2, 'perfil_id'=>3];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'perfil_id'=>1];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>1, 'perfil_id'=>2];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>2, 'perfil_id'=>1];
+        $data[] = ['sistema_id'=>1, 'usuario_id'=>1, 'unidade_id'=>2, 'perfil_id'=>3];
 
         $table->insert($data)->save();
     }
@@ -304,10 +344,10 @@ class Base extends AbstractMigration {
      *
      * @return  void
      */
-    private function updatePerfisRecursos()
+    private function updatePapeisRecursos()
     {
         $arrRecursos    = $this->fetchAll('select id, menu, url from recursos order by 1');
-        $arrPerfis      = $this->fetchAll('select id from perfis order by 1');
+        $arrPerfis      = $this->fetchAll('select id from papeis order by 1');
         $naoVisitante   = ['/ferramentas/limpar-cache'];
 
         $data           = [];
@@ -322,12 +362,12 @@ class Base extends AbstractMigration {
                 }
 
                 $data[$l]['recurso_id'] = $_arrFields['id'];
-                $data[$l]['perfil_id']  = $_arrFields2['id'];
+                $data[$l]['papel_id']  = $_arrFields2['id'];
                 $l++;
             }
         }
 
-        $table  = $this->table('perfis_recursos');
+        $table  = $this->table('papeis_recursos');
         $table->insert($data)->save();
     }
 }
