@@ -67,7 +67,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('info',        ['controller' => 'Painel', 'action'=>'info']);
     $routes->connect('logout',      ['controller' => 'Painel', 'action'=>'logout']);
     $routes->connect('sair',        ['controller' => 'Painel', 'action'=>'logout']);
-    $routes->connect('permissoes',  ['controller' => 'Painel', 'action'=>'permissoes']);
+    $routes->connect('permissoes',  ['controller' => 'Usuarios', 'action'=>'permissoes']);
 
     /**
      * Connect catchall routes for all controllers.

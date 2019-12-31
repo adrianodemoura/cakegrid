@@ -41,6 +41,7 @@ class AuditoriasTable extends Table
         $this->setPrimaryKey('id');
         $this->setEntityClass('Auditoria');
 
+        $this->belongsTo('Sistemas',  ['foreignKey' => 'sistema_id']);
         $this->belongsTo('Usuarios',  ['foreignKey' => 'usuario_id']);
     }
 

@@ -1,13 +1,13 @@
 <?php
 /**
- * Papel Entity
+ * Sistema Entity
  */
 namespace App\Model\Entity;
 use Cake\ORM\Entity;
 /**
- * mantém o objeto perfil
+ * mantém o objeto sistema
  */
-class Perfil extends Entity {
+class Sistema extends Entity {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -20,6 +20,7 @@ class Perfil extends Entity {
     protected $_accessible = [
         'nome' => true,
         'ativo' => true,
-        'sistema' => true
+        'perfis' => true,
+        'recursos' => true
     ];
 }

@@ -28,12 +28,14 @@ class Auditoria extends Entity
      * @var array
      */
     protected $_accessible = [
-        'ip' => true,
-        'motivo' => true,
-        'descricao' => true,
-        'usuario_id' => true,
-        'data' => true,
-        'usuario' => true
+        'ip'            => true,
+        'motivo'        => true,
+        'descricao'     => true,
+        'usuario_id'    => true,
+        'sistema_id'    => true,
+        'data'          => true,
+        'usuario'       => true,
+        'sistema'       => true
     ];
 
     /**
@@ -44,5 +46,15 @@ class Auditoria extends Entity
     protected function _getNomeUsuario()
     {
         return $this->usuario->nome;
+    }
+
+    /**
+     * Retorna o nome do sistema
+     *
+     * @return  string  $sistema  Nome do sistema.
+     */
+    protected function _getNomeSistema()
+    {
+        return $this->sistema->nome;
     }
 }

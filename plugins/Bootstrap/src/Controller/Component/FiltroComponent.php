@@ -108,9 +108,9 @@ class FiltroComponent extends Component {
         $urlAnterior        = $this->controller->referer();
 
         // configurando a primeira página, pois o paginator helper não escreve a url completa (fio de uma égua).
-        if ( !isset($params['page']) && strpos($urlAnterior, $urlCorrente) )
+        if ( !isset($params['page']) && !isset($params['sort']) && strpos($urlAnterior, $urlCorrente) )
         {
-            $paramsPagina = 1;
+            //$paramsPagina = 1;
         }
 
         // gravando a página na sessão

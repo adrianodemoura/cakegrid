@@ -29,6 +29,8 @@ class RecursosTable extends Table {
         $this->setPrimaryKey('id');
         $this->setEntityClass('Recurso');
 
+        $this->belongsTo('Sistemas',  ['foreignKey' => 'sistema_id']);
+
         $this->belongsToMany('Perfis', [
             'foreignKey'        => 'recurso_id',
             'targetForeignKey'  => 'perfil_id',

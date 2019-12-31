@@ -38,7 +38,9 @@
 	</table>
 
 	<div>
-		<?= $this->Paginator->numbers();?>
+		<ul class="pagination small">
+			<?php echo $this->Paginator->numbers(['templates'=>'Bootstrap.paginator-template']);?>
+		</ul>
 	</div>
 </div>
 

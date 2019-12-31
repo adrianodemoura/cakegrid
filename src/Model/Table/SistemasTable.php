@@ -1,6 +1,6 @@
 <?php
 /**
- * Perfis Table
+ * Sistemas Table
  */
 namespace App\Model\Table;
 use Cake\ORM\Query;
@@ -8,9 +8,9 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 /**
- * maném a tabela perfis.
+ * maném a tabela Sistemas.
  */
-class PerfisTable extends Table {
+class SistemasTable extends Table {
     /**
      * Initialize method
      *
@@ -21,12 +21,21 @@ class PerfisTable extends Table {
     {
         parent::initialize($config);
 
-        $this->setTable('Perfis');
+        $this->setTable('sistemas');
         $this->setDisplayField('nome');
         $this->setPrimaryKey('id');
-        $this->setEntityClass('Perfil');
+        $this->setEntityClass('Sistema');
 
-        $this->belongsTo('Sistemas',  ['foreignKey' => 'sistema_id']);
+        $this->hasMany('Perfis',
+        [
+            'foreignKey'        => 'sistema_id',
+            'joinTable'         => 'perfis'
+        ]);
+        $this->hasMany('Recursos',
+        [
+            'foreignKey'        => 'sistema_id',
+            'joinTable'         => 'recursos'
+        ]);
     }
 
     /**
@@ -51,19 +60,5 @@ class PerfisTable extends Table {
             ->notEmptyString('ativo');
 
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param   \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return  \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['sistema_id'], 'Sistemas'));
-
-        return $rules;
     }
 }

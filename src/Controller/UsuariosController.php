@@ -34,4 +34,14 @@ class UsuariosController extends AppController {
         
         $this->set( compact('listaMunicipios', 'listaUfs') );
     }
+
+    /**
+     * Exibe a tela de permissões do usuário.
+     * 
+     * @return  \Cake\Http\Response:null
+     */
+    public function permissoes()
+    {
+
+    }
 }

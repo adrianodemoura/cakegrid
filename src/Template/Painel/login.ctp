@@ -3,7 +3,7 @@
 	echo $this->Html->script( ['painel/login'],		['block'=>true] );
 	echo $this->Html->css( ['painel/login'], 		['block'=>true] );
 
-	$optionsLogin = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'e-mail','name'=>'email', 'id'=>'inEmail', 'class'=>'form-control', 'autofocus'=>true, 'value'=>'admin@admin.com.brr'];
+	$optionsLogin = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'e-mail','name'=>'email', 'id'=>'inEmail', 'class'=>'form-control', 'autofocus'=>true, 'value'=>'admin@admin.com.br'];
 	$optionsSenha = ['required'=>'required', 'label'=>false, 'autocomplete'=>'off', 'placeholder'=>'senha', 'name'=>'senha', 'id'=>'inSenha', 'class'=>'form-control', 'type'=>'password', 'default'=>'admin1234'];
 	$optionsEnviar= ['name'=>'inEnviar', 'id'=>'btnEnviar', 'div'=>null, 'type'=>'submit', 'class'=>'btn btn-primary'];
 ?>

@@ -11,8 +11,7 @@ use Exception;
 /**
  * Mantém o painel do sistema.
  */
-class PainelController extends AppController
-{
+class PainelController extends AppController {
     /**
      * Index method
      *
